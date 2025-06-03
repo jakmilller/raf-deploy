@@ -4,10 +4,10 @@
 
 #include <string.h>
 
-#include "raf_interfaces/msg/detail/detected_food__functions.h"
-#include "raf_interfaces/msg/detail/detected_food__type_support.h"
 #include "rosidl_typesupport_interface/macros.h"
+#include "raf_interfaces/msg/detail/detected_food__functions.h"
 #include "raf_interfaces/msg/detail/detected_food__struct.h"
+#include "raf_interfaces/msg/detail/detected_food__type_support.h"
 
 #ifdef __cplusplus
 extern "C"

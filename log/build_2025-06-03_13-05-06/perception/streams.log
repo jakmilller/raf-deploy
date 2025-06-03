@@ -1,0 +1,29 @@
+[0.622s] Invoking command in '/home/mcrr-lab/raf-deploy/src/perception': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/mcrr-lab/raf-deploy/build/perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/mcrr-lab/raf-deploy/install/perception/lib/python3.12/site-packages:${PYTHONPATH} VIRTUAL_ENV_PROMPT=(deploy-env) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/perception build --build-base /home/mcrr-lab/raf-deploy/build/perception/build install --record /home/mcrr-lab/raf-deploy/build/perception/install.log --single-version-externally-managed install_data
+[0.747s] /home/mcrr-lab/deploy-env/lib/python3.12/site-packages/setuptools/_distutils/dist.py:289: UserWarning: Unknown distribution option: 'tests_require'
+[0.748s]   warnings.warn(msg)
+[0.858s] running egg_info
+[0.876s] writing ../../build/perception/perception.egg-info/PKG-INFO
+[0.876s] writing dependency_links to ../../build/perception/perception.egg-info/dependency_links.txt
+[0.876s] writing entry points to ../../build/perception/perception.egg-info/entry_points.txt
+[0.876s] writing requirements to ../../build/perception/perception.egg-info/requires.txt
+[0.876s] writing top-level names to ../../build/perception/perception.egg-info/top_level.txt
+[0.913s] reading manifest file '../../build/perception/perception.egg-info/SOURCES.txt'
+[0.914s] writing manifest file '../../build/perception/perception.egg-info/SOURCES.txt'
+[0.914s] running build
+[0.914s] running build_py
+[0.914s] copying perception/__init__.py -> /home/mcrr-lab/raf-deploy/build/perception/build/lib/perception
+[0.914s] copying perception/perception_node.py -> /home/mcrr-lab/raf-deploy/build/perception/build/lib/perception
+[0.914s] running install
+[0.918s] running install_lib
+[0.937s] copying /home/mcrr-lab/raf-deploy/build/perception/build/lib/perception/perception_node.py -> /home/mcrr-lab/raf-deploy/install/perception/lib/python3.12/site-packages/perception
+[0.937s] byte-compiling /home/mcrr-lab/raf-deploy/install/perception/lib/python3.12/site-packages/perception/perception_node.py to perception_node.cpython-312.pyc
+[0.940s] running install_data
+[0.940s] copying resource/perception -> /home/mcrr-lab/raf-deploy/install/perception/share/ament_index/resource_index/packages
+[0.940s] copying package.xml -> /home/mcrr-lab/raf-deploy/install/perception/share/perception
+[0.940s] running install_egg_info
+[0.959s] removing '/home/mcrr-lab/raf-deploy/install/perception/lib/python3.12/site-packages/perception-0.0.0-py3.12.egg-info' (and everything under it)
+[0.959s] Copying ../../build/perception/perception.egg-info to /home/mcrr-lab/raf-deploy/install/perception/lib/python3.12/site-packages/perception-0.0.0-py3.12.egg-info
+[0.959s] running install_scripts
+[0.996s] Installing perception_node script to /home/mcrr-lab/raf-deploy/install/perception/lib/perception
+[0.996s] writing list of installed files to '/home/mcrr-lab/raf-deploy/build/perception/install.log'
+[1.011s] Invoked command in '/home/mcrr-lab/raf-deploy/src/perception' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/mcrr-lab/raf-deploy/build/perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/mcrr-lab/raf-deploy/install/perception/lib/python3.12/site-packages:${PYTHONPATH} VIRTUAL_ENV_PROMPT=(deploy-env) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/perception build --build-base /home/mcrr-lab/raf-deploy/build/perception/build install --record /home/mcrr-lab/raf-deploy/build/perception/install.log --single-version-externally-managed install_data

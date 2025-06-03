@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CameraInfo
 from std_srvs.srv import Trigger
 from cv_bridge import CvBridge
 import cv2
@@ -13,6 +13,9 @@ from pathlib import Path
 from PIL import Image as PILImage
 import base64
 import requests
+import tf2_ros
+from geometry_msgs.msg import Pose, Point, Quaternion
+from tf_transformations import quaternion_from_euler
 
 # GroundedSAM2 imports
 from dds_cloudapi_sdk import Config, Client
@@ -20,19 +23,18 @@ from dds_cloudapi_sdk.tasks.v2_task import V2Task
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 
-# handles identifying image with ChatGPT and drawing boxes and segmenting with GroundedSAM2
-
 class PerceptionNode(Node):
     def __init__(self):
         super().__init__('perception_node')
         
         self.bridge = CvBridge()
-        self.latest_image = None
+        self.latest_color_image = None
+        self.latest_depth_image = None
+        self.camera_info = None
         
         # API keys
-        self.dinox_api_key = ''
-        self.openai_api_key = ''
-        
+        self.dinox_api_key = '460184632250394011a4f28a1779ccbd'
+        self.openai_api_key = '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'
         # Load prompt
         prompt_file = os.path.expanduser('~/raf-deploy/src/perception/prompts/identification.txt')
         try:
@@ -47,25 +49,41 @@ class PerceptionNode(Node):
         self.sam2_model_config = "configs/sam2.1/sam2.1_hiera_l.yaml"
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         
+        # Robot-specific parameters (adjust based on your setup)
+        self.z_offset = 0.01
+        self.camera_offset = 0.002
+        
         # API headers
         self.openai_headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.openai_api_key}"
         }
         
-        # Subscribe to camera
-        self.image_subscription = self.create_subscription(Image, '/camera/camera/color/image_raw', self.image_callback, 10)
+        # Subscribers
+        self.color_sub = self.create_subscription(
+            Image, '/camera/camera/color/image_raw', self.color_callback, 10)
+        self.depth_sub = self.create_subscription(
+            Image, '/camera/camera/depth/image_rect_raw', self.depth_callback, 10)
+        self.camera_info_sub = self.create_subscription(
+            CameraInfo, '/camera/camera/color/camera_info', self.camera_info_callback, 10)
         
         # Create service
-        self.process_service = self.create_service(Trigger, 'process_image_pipeline', self.handle_process_request)
+        self.process_service = self.create_service(
+            Trigger, 'process_image_pipeline', self.handle_process_request)
         
         # Initialize models
         self.setup_models()
         
-        self.get_logger().info('Perception node ready!')
+        self.get_logger().info('Perception node with pose visualization ready!')
     
-    def image_callback(self, msg):
-        self.latest_image = msg
+    def color_callback(self, msg):
+        self.latest_color_image = msg
+
+    def depth_callback(self, msg):
+        self.latest_depth_image = msg
+        
+    def camera_info_callback(self, msg):
+        self.camera_info = msg
 
     def setup_models(self):
         # Setup DINOX
@@ -170,15 +188,160 @@ class PerceptionNode(Node):
         except:
             return None, None
 
-    def visualize_results(self, image_path, input_boxes, masks, class_names, confidences, class_ids):
+    def get_mask_centroid(self, mask):
+        """Find the centroid of a binary mask"""
+        moments = cv2.moments(mask.astype(np.uint8))
+        if moments["m00"] == 0:
+            return None
+            
+        cx = int(moments["m10"] / moments["m00"])
+        cy = int(moments["m01"] / moments["m00"])
+        return (cx, cy)
+
+    def pixel_to_world(self, pixel_x, pixel_y, depth_image):
+        """Convert pixel coordinates to 3D world coordinates in camera frame"""
+        if self.camera_info is None:
+            return None, False
+            
+        # Camera intrinsics
+        fx = self.camera_info.k[0]
+        fy = self.camera_info.k[4] 
+        cx = self.camera_info.k[2]
+        cy = self.camera_info.k[5]
+        
+        # Get depth value at pixel
+        depth = depth_image[int(pixel_y), int(pixel_x)] / 1000.0  # Convert mm to m
+        
+        if depth <= 0:
+            return None, False
+            
+        # Convert to 3D camera coordinates
+        x = (pixel_x - cx) * depth / fx
+        y = (pixel_y - cy) * depth / fy
+        z = depth
+        
+        return np.array([x, y, z]), True
+
+    def calculate_orientation_from_mask(self, mask):
+        """Calculate orientation angle from mask shape using PCA"""
+        # Find contours
+        contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if not contours:
+            return 0.0
+            
+        # Get the largest contour
+        largest_contour = max(contours, key=cv2.contourArea)
+        
+        # Fit ellipse to get orientation
+        if len(largest_contour) >= 5:
+            ellipse = cv2.fitEllipse(largest_contour)
+            angle = ellipse[2]  # Angle in degrees
+            return np.radians(angle)  # Convert to radians
+        
+        return 0.0
+
+    def draw_pose_visualization(self, image, centroid, world_point, orientation_angle, confidence):
+        """Draw pose visualization on the image"""
+        vis_image = image.copy()
+        
+        # Draw centroid
+        cv2.circle(vis_image, centroid, 8, (0, 255, 0), -1)
+        
+        # Draw orientation arrow
+        arrow_length = 50
+        end_x = int(centroid[0] + arrow_length * np.cos(orientation_angle))
+        end_y = int(centroid[1] + arrow_length * np.sin(orientation_angle))
+        cv2.arrowedLine(vis_image, centroid, (end_x, end_y), (255, 0, 0), 3, tipLength=0.3)
+        
+        # Draw coordinate frame (smaller arrows for x, y, z axes)
+        frame_length = 30
+        
+        # X-axis (red)
+        x_end = (int(centroid[0] + frame_length), centroid[1])
+        cv2.arrowedLine(vis_image, centroid, x_end, (0, 0, 255), 2, tipLength=0.3)
+        cv2.putText(vis_image, 'X', (x_end[0] + 5, x_end[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+        
+        # Y-axis (green)
+        y_end = (centroid[0], int(centroid[1] + frame_length))
+        cv2.arrowedLine(vis_image, centroid, y_end, (0, 255, 0), 2, tipLength=0.3)
+        cv2.putText(vis_image, 'Y', (y_end[0] + 5, y_end[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        
+        # Add text information
+        if world_point is not None:
+            info_text = [
+                f"Confidence: {confidence:.2f}",
+                f"World X: {world_point[0]:.3f}m",
+                f"World Y: {world_point[1]:.3f}m", 
+                f"World Z: {world_point[2]:.3f}m",
+                f"Orientation: {np.degrees(orientation_angle):.1f}°"
+            ]
+            
+            for i, text in enumerate(info_text):
+                cv2.putText(vis_image, text, (10, 30 + i * 25), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                cv2.putText(vis_image, text, (10, 30 + i * 25), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
+        
+        return vis_image
+
+    def get_highest_confidence_object(self, input_boxes, masks, confidences, class_names, class_ids):
+        """Get the object with highest confidence"""
+        if len(confidences) == 0:
+            return None
+            
+        highest_idx = np.argmax(confidences)
+        
+        return {
+            'bbox': input_boxes[highest_idx],
+            'mask': masks[highest_idx],
+            'confidence': confidences[highest_idx],
+            'class_name': class_names[highest_idx],
+            'class_id': class_ids[highest_idx]
+        }
+
+    def visualize_results_with_pose(self, image_path, input_boxes, masks, class_names, confidences, class_ids):
+        """Visualize results with pose information for highest confidence object"""
         try:
             img = cv2.imread(image_path)
             
-            labels = [f"{class_name} {confidence:.2f}" for class_name, confidence in zip(class_names, confidences)]
+            # Get depth image
+            if self.latest_depth_image is None:
+                self.get_logger().error("No depth image available")
+                return False
+                
+            depth_image = self.bridge.imgmsg_to_cv2(self.latest_depth_image, desired_encoding='passthrough')
             
+            # Get highest confidence object
+            highest_obj = self.get_highest_confidence_object(input_boxes, masks, confidences, class_names, class_ids)
+            if highest_obj is None:
+                self.get_logger().error("No objects found")
+                return False
+            
+            self.get_logger().info(f"Highest confidence object: {highest_obj['class_name']} ({highest_obj['confidence']:.2f})")
+            
+            # Find centroid of highest confidence mask
+            centroid = self.get_mask_centroid(highest_obj['mask'])
+            if centroid is None:
+                self.get_logger().error("Could not find centroid")
+                return False
+                
+            # Calculate 3D world coordinates
+            world_point, valid = self.pixel_to_world(centroid[0], centroid[1], depth_image)
+            if not valid or world_point is None:
+                self.get_logger().error("Could not convert to world coordinates")
+                world_point = None
+            else:
+                self.get_logger().info(f"World coordinates: x={world_point[0]:.3f}, y={world_point[1]:.3f}, z={world_point[2]:.3f}")
+            
+            # Calculate orientation
+            orientation_angle = self.calculate_orientation_from_mask(highest_obj['mask'])
+            self.get_logger().info(f"Orientation angle: {np.degrees(orientation_angle):.1f} degrees")
+            
+            # Draw all detections first
+            labels = [f"{class_name} {confidence:.2f}" for class_name, confidence in zip(class_names, confidences)]
             detections = sv.Detections(xyxy=input_boxes, mask=masks.astype(bool), class_id=class_ids)
             
-            # Annotate
+            # Annotate with boxes and masks
             box_annotator = sv.BoxAnnotator()
             annotated_frame = box_annotator.annotate(scene=img.copy(), detections=detections)
             
@@ -188,26 +351,36 @@ class PerceptionNode(Node):
             mask_annotator = sv.MaskAnnotator()
             annotated_frame = mask_annotator.annotate(scene=annotated_frame, detections=detections)
             
-            # Display until key press
-            cv2.imshow('Food Segmentation Results', annotated_frame)
+            # Add pose visualization for highest confidence object
+            pose_vis = self.draw_pose_visualization(
+                annotated_frame, centroid, world_point, orientation_angle, highest_obj['confidence'])
+            
+            # Display result
+            cv2.imshow('Food Detection with Pose', pose_vis)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
             
             return True
-        except:
+        except Exception as e:
+            self.get_logger().error(f"Visualization failed: {str(e)}")
             return False
 
     def handle_process_request(self, request, response):
-        if self.latest_image is None:
+        if self.latest_color_image is None:
             response.success = False
-            response.message = "No image available"
+            response.message = "No color image available"
+            return response
+            
+        if self.latest_depth_image is None:
+            response.success = False
+            response.message = "No depth image available"
             return response
             
         try:
-            self.get_logger().info("Processing image...")
+            self.get_logger().info("Processing image with pose visualization...")
             
             # Identify objects
-            identified_objects = self.identify_with_chatgpt(self.latest_image)
+            identified_objects = self.identify_with_chatgpt(self.latest_color_image)
             if not identified_objects:
                 response.success = False
                 response.message = "Failed to identify objects"
@@ -216,7 +389,7 @@ class PerceptionNode(Node):
             self.get_logger().info(f"Identified: {', '.join(identified_objects)}")
             
             # Save temp image
-            cv_image = self.bridge.imgmsg_to_cv2(self.latest_image, "bgr8")
+            cv_image = self.bridge.imgmsg_to_cv2(self.latest_color_image, "bgr8")
             with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmpfile:
                 temp_path = tmpfile.name
             cv2.imwrite(temp_path, cv_image)
@@ -241,14 +414,14 @@ class PerceptionNode(Node):
                 response.message = "Segmentation failed"
                 return response
             
-            # Visualize
-            success = self.visualize_results(temp_path, input_boxes, masks, class_names, confidences, class_ids)
+            # Visualize with pose information
+            success = self.visualize_results_with_pose(temp_path, input_boxes, masks, class_names, confidences, class_ids)
             os.remove(temp_path)
             
             if success:
                 response.success = True
-                response.message = f"Success! Segmented: {', '.join(class_names)}"
-                self.get_logger().info("Pipeline completed successfully")
+                response.message = f"Success! Processed {len(class_names)} objects with pose visualization"
+                self.get_logger().info("Pipeline with pose visualization completed successfully")
             else:
                 response.success = False
                 response.message = "Visualization failed"
@@ -256,6 +429,7 @@ class PerceptionNode(Node):
         except Exception as e:
             response.success = False
             response.message = f"Pipeline failed: {str(e)}"
+            self.get_logger().error(f"Pipeline error: {str(e)}")
             
         return response
 
