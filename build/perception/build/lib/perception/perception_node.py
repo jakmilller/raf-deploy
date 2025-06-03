@@ -20,6 +20,7 @@ from dds_cloudapi_sdk.tasks.v2_task import V2Task
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 
+# handles identifying image with ChatGPT and drawing boxes and segmenting with GroundedSAM2
 
 class PerceptionNode(Node):
     def __init__(self):
@@ -29,8 +30,8 @@ class PerceptionNode(Node):
         self.latest_image = None
         
         # API keys
-        self.dinox_api_key = '460184632250394011a4f28a1779ccbd'
-        self.openai_api_key = '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'
+        self.dinox_api_key = ''
+        self.openai_api_key = ''
         
         # Load prompt
         prompt_file = os.path.expanduser('~/raf-deploy/src/perception/prompts/identification.txt')
