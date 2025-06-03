@@ -33,8 +33,8 @@ class PerceptionNode(Node):
         self.camera_info = None
         
         # API keys
-        self.dinox_api_key = '460184632250394011a4f28a1779ccbd'
-        self.openai_api_key = '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'
+        self.dinox_api_key = ''
+        self.openai_api_key = ''
         # Load prompt
         prompt_file = os.path.expanduser('~/raf-deploy/src/perception/prompts/identification.txt')
         try:

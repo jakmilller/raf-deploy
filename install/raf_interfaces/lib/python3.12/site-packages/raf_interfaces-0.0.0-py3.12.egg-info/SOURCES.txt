@@ -4,7 +4,3 @@ raf_interfaces.egg-info/PKG-INFO
 raf_interfaces.egg-info/SOURCES.txt
 raf_interfaces.egg-info/dependency_links.txt
 raf_interfaces.egg-info/top_level.txt
-raf_interfaces/msg/__init__.py
-raf_interfaces/msg/_detected_food.py
-raf_interfaces/srv/__init__.py
-raf_interfaces/srv/_identify_food.py
