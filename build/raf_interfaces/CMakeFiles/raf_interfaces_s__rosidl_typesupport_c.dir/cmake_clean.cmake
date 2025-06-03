@@ -1,0 +1,11 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/raf_interfaces_s__rosidl_typesupport_c.dir/rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_c.c.o"
+  "CMakeFiles/raf_interfaces_s__rosidl_typesupport_c.dir/rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_c.c.o.d"
+  "rosidl_generator_py/raf_interfaces/raf_interfaces_s__rosidl_typesupport_c.pdb"
+  "rosidl_generator_py/raf_interfaces/raf_interfaces_s__rosidl_typesupport_c.so"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C)
+  include(CMakeFiles/raf_interfaces_s__rosidl_typesupport_c.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

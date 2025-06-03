@@ -1,0 +1,18 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from raf_interfaces/srv/IdentifyFood.srv
+// generated code does not contain a copyright notice
+
+#include "sensor_msgs/msg/Image.idl"
+
+module raf_interfaces {
+  module srv {
+    struct IdentifyFood_Request {
+      sensor_msgs::msg::Image frame;
+    };
+    struct IdentifyFood_Response {
+      string food_items;
+
+      boolean success;
+    };
+  };
+};

@@ -1,0 +1,4 @@
+source;share/raf_interfaces/local_setup.bash
+source;share/raf_interfaces/local_setup.dsv
+source;share/raf_interfaces/local_setup.sh
+source;share/raf_interfaces/local_setup.zsh

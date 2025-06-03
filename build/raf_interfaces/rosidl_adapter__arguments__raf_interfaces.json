@@ -1,0 +1,7 @@
+{
+  "package_name": "raf_interfaces",
+  "non_idl_tuples": [
+    "/home/mcrr-lab/raf-deploy/src/raf_interfaces:msg/DetectedFood.msg",
+    "/home/mcrr-lab/raf-deploy/src/raf_interfaces:srv/IdentifyFood.srv"
+  ]
+}
