@@ -1,0 +1,26 @@
+{
+  "type_description_msg": {
+    "type_description": {
+      "type_name": "raf_interfaces/srv/SetGripper_Request",
+      "fields": [
+        {
+          "name": "position",
+          "type": {
+            "type_id": 11,
+            "capacity": 0,
+            "string_capacity": 0,
+            "nested_type_name": ""
+          },
+          "default_value": ""
+        }
+      ]
+    },
+    "referenced_type_descriptions": []
+  },
+  "type_hashes": [
+    {
+      "type_name": "raf_interfaces/srv/SetGripper_Request",
+      "hash_string": "RIHS01_b73d81431323a79ce95ae37c832f89eab074d79d7e99150078e80c39c3e202c7"
+    }
+  ]
+}

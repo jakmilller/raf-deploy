@@ -2,3 +2,15 @@ from raf_interfaces.srv._identify_food import IdentifyFood  # noqa: F401
 from raf_interfaces.srv._identify_food import IdentifyFood_Event  # noqa: F401
 from raf_interfaces.srv._identify_food import IdentifyFood_Request  # noqa: F401
 from raf_interfaces.srv._identify_food import IdentifyFood_Response  # noqa: F401
+from raf_interfaces.srv._set_gripper import SetGripper  # noqa: F401
+from raf_interfaces.srv._set_gripper import SetGripper_Event  # noqa: F401
+from raf_interfaces.srv._set_gripper import SetGripper_Request  # noqa: F401
+from raf_interfaces.srv._set_gripper import SetGripper_Response  # noqa: F401
+from raf_interfaces.srv._set_joint_angles import SetJointAngles  # noqa: F401
+from raf_interfaces.srv._set_joint_angles import SetJointAngles_Event  # noqa: F401
+from raf_interfaces.srv._set_joint_angles import SetJointAngles_Request  # noqa: F401
+from raf_interfaces.srv._set_joint_angles import SetJointAngles_Response  # noqa: F401
+from raf_interfaces.srv._set_pose import SetPose  # noqa: F401
+from raf_interfaces.srv._set_pose import SetPose_Event  # noqa: F401
+from raf_interfaces.srv._set_pose import SetPose_Request  # noqa: F401
+from raf_interfaces.srv._set_pose import SetPose_Response  # noqa: F401

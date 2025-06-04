@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: raf-kinova-controller
+Version: 0.1.0
+Summary: ROS2 controller for Kinova Gen3 arm using Kortex Python API
+Maintainer: Your Name
+Maintainer-email: user@example.com
+License: Apache License 2.0

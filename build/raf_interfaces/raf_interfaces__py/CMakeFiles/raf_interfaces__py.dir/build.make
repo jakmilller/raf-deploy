@@ -71,10 +71,16 @@ include /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeF
 /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_c.c
 /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/msg/_detected_food.py
 /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_identify_food.py
+/home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_gripper.py
+/home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_joint_angles.py
+/home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_pose.py
 /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/msg/__init__.py
 /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/__init__.py
 /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/msg/_detected_food_s.c
 /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c
+/home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c
+/home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c
+/home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c
 
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: /opt/ros/jazzy/lib/rosidl_generator_py/rosidl_generator_py
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: /opt/ros/jazzy/lib/python3.12/site-packages/rosidl_generator_py/__init__.py
@@ -91,6 +97,9 @@ rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastr
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: /opt/ros/jazzy/share/rosidl_generator_py/resource/_srv.py.em
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: rosidl_adapter/raf_interfaces/msg/DetectedFood.idl
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: rosidl_adapter/raf_interfaces/srv/IdentifyFood.idl
+rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: rosidl_adapter/raf_interfaces/srv/SetGripper.idl
+rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: rosidl_adapter/raf_interfaces/srv/SetJointAngles.idl
+rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: rosidl_adapter/raf_interfaces/srv/SetPose.idl
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: /opt/ros/jazzy/share/std_msgs/msg/Bool.idl
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: /opt/ros/jazzy/share/std_msgs/msg/Byte.idl
 rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c: /opt/ros/jazzy/share/std_msgs/msg/ByteMultiArray.idl
@@ -199,6 +208,15 @@ rosidl_generator_py/raf_interfaces/msg/_detected_food.py: rosidl_generator_py/ra
 rosidl_generator_py/raf_interfaces/srv/_identify_food.py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_identify_food.py
 
+rosidl_generator_py/raf_interfaces/srv/_set_gripper.py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_set_gripper.py
+
+rosidl_generator_py/raf_interfaces/srv/_set_joint_angles.py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_set_joint_angles.py
+
+rosidl_generator_py/raf_interfaces/srv/_set_pose.py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_set_pose.py
+
 rosidl_generator_py/raf_interfaces/msg/__init__.py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/msg/__init__.py
 
@@ -211,6 +229,15 @@ rosidl_generator_py/raf_interfaces/msg/_detected_food_s.c: rosidl_generator_py/r
 rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c
 
+rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c
+
+rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c
+
+rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c
+
 raf_interfaces__py: /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py
 raf_interfaces__py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_c.c
 raf_interfaces__py: rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
@@ -221,6 +248,12 @@ raf_interfaces__py: rosidl_generator_py/raf_interfaces/msg/_detected_food_s.c
 raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/__init__.py
 raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_identify_food.py
 raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c
+raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_gripper.py
+raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c
+raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_joint_angles.py
+raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c
+raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_pose.py
+raf_interfaces__py: rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c
 raf_interfaces__py: /home/mcrr-lab/raf-deploy/build/raf_interfaces/raf_interfaces__py/CMakeFiles/raf_interfaces__py.dir/build.make
 .PHONY : raf_interfaces__py
 

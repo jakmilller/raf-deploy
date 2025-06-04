@@ -79,6 +79,9 @@ rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosi
 rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: /opt/ros/jazzy/share/rosidl_typesupport_introspection_c/resource/srv__type_support.c.em
 rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: rosidl_adapter/raf_interfaces/msg/DetectedFood.idl
 rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: rosidl_adapter/raf_interfaces/srv/IdentifyFood.idl
+rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: rosidl_adapter/raf_interfaces/srv/SetGripper.idl
+rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: rosidl_adapter/raf_interfaces/srv/SetJointAngles.idl
+rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: rosidl_adapter/raf_interfaces/srv/SetPose.idl
 rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: /opt/ros/jazzy/share/std_msgs/msg/Bool.idl
 rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: /opt/ros/jazzy/share/std_msgs/msg/Byte.idl
 rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h: /opt/ros/jazzy/share/std_msgs/msg/ByteMultiArray.idl
@@ -178,11 +181,29 @@ rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosi
 rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__rosidl_typesupport_introspection_c.h: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__rosidl_typesupport_introspection_c.h
 
+rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__rosidl_typesupport_introspection_c.h: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__rosidl_typesupport_introspection_c.h
+
+rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__rosidl_typesupport_introspection_c.h: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__rosidl_typesupport_introspection_c.h
+
+rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__rosidl_typesupport_introspection_c.h: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__rosidl_typesupport_introspection_c.h
+
 rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c
 
 rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c
+
+rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+
+rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+
+rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c
 
 CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/flags.make
 CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c.o: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c
@@ -212,16 +233,64 @@ CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesup
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c -o CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c.s
 
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o -MF CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o.d -o CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c > CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.i
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c -o CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.s
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o -MF CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o.d -o CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c > CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.i
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c -o CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.s
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o -MF CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o.d -o CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c > CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.i
+
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c -o CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.s
+
 # Object files for target raf_interfaces__rosidl_typesupport_introspection_c
 raf_interfaces__rosidl_typesupport_introspection_c_OBJECTS = \
 "CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c.o" \
-"CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c.o"
+"CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o"
 
 # External object files for target raf_interfaces__rosidl_typesupport_introspection_c
 raf_interfaces__rosidl_typesupport_introspection_c_EXTERNAL_OBJECTS =
 
 libraf_interfaces__rosidl_typesupport_introspection_c.so: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c.o
 libraf_interfaces__rosidl_typesupport_introspection_c.so: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c.o
+libraf_interfaces__rosidl_typesupport_introspection_c.so: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o
+libraf_interfaces__rosidl_typesupport_introspection_c.so: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o
+libraf_interfaces__rosidl_typesupport_introspection_c.so: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o
 libraf_interfaces__rosidl_typesupport_introspection_c.so: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/build.make
 libraf_interfaces__rosidl_typesupport_introspection_c.so: libraf_interfaces__rosidl_generator_c.so
 libraf_interfaces__rosidl_typesupport_introspection_c.so: /opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_introspection_c.so
@@ -238,7 +307,7 @@ libraf_interfaces__rosidl_typesupport_introspection_c.so: /opt/ros/jazzy/lib/lib
 libraf_interfaces__rosidl_typesupport_introspection_c.so: /opt/ros/jazzy/lib/librosidl_runtime_c.so
 libraf_interfaces__rosidl_typesupport_introspection_c.so: /opt/ros/jazzy/lib/librcutils.so
 libraf_interfaces__rosidl_typesupport_introspection_c.so: CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C shared library libraf_interfaces__rosidl_typesupport_introspection_c.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C shared library libraf_interfaces__rosidl_typesupport_introspection_c.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -253,6 +322,12 @@ CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl
 CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c
 CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__rosidl_typesupport_introspection_c.h
 CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__rosidl_typesupport_introspection_c.h
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__rosidl_typesupport_introspection_c.h
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__rosidl_typesupport_introspection_c.h
+CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend: rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c
 	cd /home/mcrr-lab/raf-deploy/build/raf_interfaces && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mcrr-lab/raf-deploy/src/raf_interfaces /home/mcrr-lab/raf-deploy/src/raf_interfaces /home/mcrr-lab/raf-deploy/build/raf_interfaces /home/mcrr-lab/raf-deploy/build/raf_interfaces /home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/depend
 

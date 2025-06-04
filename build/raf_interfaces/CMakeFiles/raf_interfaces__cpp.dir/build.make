@@ -76,6 +76,21 @@ CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/i
 CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__struct.hpp
 CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__traits.hpp
 CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__type_support.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/set_gripper.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__builder.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__struct.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__traits.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__type_support.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/set_joint_angles.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__builder.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__struct.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__traits.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__type_support.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/set_pose.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__builder.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__struct.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__traits.hpp
+CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__type_support.hpp
 CMakeFiles/raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
 
 rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: /opt/ros/jazzy/lib/rosidl_generator_cpp/rosidl_generator_cpp
@@ -99,6 +114,9 @@ rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: /opt/ros/jazzy/share/
 rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: /opt/ros/jazzy/share/rosidl_generator_cpp/resource/srv__type_support.hpp.em
 rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: rosidl_adapter/raf_interfaces/msg/DetectedFood.idl
 rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: rosidl_adapter/raf_interfaces/srv/IdentifyFood.idl
+rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: rosidl_adapter/raf_interfaces/srv/SetGripper.idl
+rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: rosidl_adapter/raf_interfaces/srv/SetJointAngles.idl
+rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: rosidl_adapter/raf_interfaces/srv/SetPose.idl
 rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: /opt/ros/jazzy/share/std_msgs/msg/Bool.idl
 rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: /opt/ros/jazzy/share/std_msgs/msg/Byte.idl
 rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp: /opt/ros/jazzy/share/std_msgs/msg/ByteMultiArray.idl
@@ -222,6 +240,51 @@ rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__traits.hpp: rosidl
 rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__type_support.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__type_support.hpp
 
+rosidl_generator_cpp/raf_interfaces/srv/set_gripper.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/set_gripper.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__builder.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__builder.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__struct.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__struct.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__traits.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__traits.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__type_support.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__type_support.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/set_joint_angles.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/set_joint_angles.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__builder.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__builder.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__struct.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__struct.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__traits.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__traits.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__type_support.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__type_support.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/set_pose.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/set_pose.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__builder.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__builder.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__struct.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__struct.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__traits.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__traits.hpp
+
+rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__type_support.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__type_support.hpp
+
 rosidl_generator_cpp/raf_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp: rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/raf_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
 
@@ -236,7 +299,22 @@ raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/identify_foo
 raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__struct.hpp
 raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__traits.hpp
 raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__type_support.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__builder.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__struct.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__traits.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__type_support.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__builder.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__struct.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__traits.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__type_support.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__builder.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__struct.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__traits.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__type_support.hpp
 raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/identify_food.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/set_gripper.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/set_joint_angles.hpp
+raf_interfaces__cpp: rosidl_generator_cpp/raf_interfaces/srv/set_pose.hpp
 raf_interfaces__cpp: CMakeFiles/raf_interfaces__cpp.dir/build.make
 .PHONY : raf_interfaces__cpp
 

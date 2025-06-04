@@ -1,0 +1,364 @@
+[0.170s] Invoking command in '/home/mcrr-lab/raf-deploy/build/raf_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com VIRTUAL_ENV_PROMPT=(deploy-env) /usr/bin/cmake --build /home/mcrr-lab/raf-deploy/build/raf_interfaces -- -j32 -l32
+[0.194s] -- Found ament_cmake_auto: 2.5.4 (/opt/ros/jazzy/share/ament_cmake_auto/cmake)
+[0.222s] -- Found Python3: /home/mcrr-lab/deploy-env/bin/python3 (found version "3.12.3") found components: Interpreter 
+[0.278s] -- Found rosidl_default_generators: 1.6.0 (/opt/ros/jazzy/share/rosidl_default_generators/cmake)
+[0.279s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.304s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.323s] -- Found rosidl_adapter: 4.6.5 (/opt/ros/jazzy/share/rosidl_adapter/cmake)
+[0.324s] -- Found std_msgs: 5.3.6 (/opt/ros/jazzy/share/std_msgs/cmake)
+[0.343s] -- Found sensor_msgs: 5.3.6 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[0.652s] -- Found ament_cmake_ros: 0.12.0 (/opt/ros/jazzy/share/ament_cmake_ros/cmake)
+[0.817s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.034s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.035s] -- Found python_cmake_module: 0.11.1 (/opt/ros/jazzy/share/python_cmake_module/cmake)
+[1.418s] -- Found Python3: /home/mcrr-lab/deploy-env/bin/python3 (found version "3.12.3") found components: Interpreter Development NumPy Development.Module Development.Embed 
+[1.454s] -- Configuring done (1.3s)
+[1.485s] -- Generating done (0.0s)
+[1.494s] -- Build files have been written to: /home/mcrr-lab/raf-deploy/build/raf_interfaces
+[1.525s] [  1%] [34m[1mGenerating type hashes for ROS interfaces[0m
+[1.533s] [  1%] Built target ament_cmake_python_copy_raf_interfaces
+[1.680s] running egg_info
+[1.689s] writing raf_interfaces.egg-info/PKG-INFO
+[1.689s] writing dependency_links to raf_interfaces.egg-info/dependency_links.txt
+[1.689s] writing top-level names to raf_interfaces.egg-info/top_level.txt
+[1.701s] [  1%] Built target raf_interfaces__rosidl_generator_type_description
+[1.712s] [  2%] [34m[1mGenerating C code for ROS interfaces[0m
+[1.716s] reading manifest file 'raf_interfaces.egg-info/SOURCES.txt'
+[1.717s] writing manifest file 'raf_interfaces.egg-info/SOURCES.txt'
+[1.722s] [  4%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[1.740s] [  4%] Built target ament_cmake_python_build_raf_interfaces_egg
+[2.156s] [  4%] Built target raf_interfaces__cpp
+[2.247s] [  6%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/msg/detail/detected_food__functions.c.o[0m
+[2.247s] [  6%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o[0m
+[2.248s] [  9%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/msg/detail/detected_food__description.c.o[0m
+[2.249s] [  9%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o[0m
+[2.249s] [ 10%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o[0m
+[2.249s] [ 12%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o[0m
+[2.250s] [ 13%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o[0m
+[2.250s] [ 16%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/msg/detail/detected_food__type_support.c.o[0m
+[2.250s] [ 16%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__description.c.o[0m
+[2.251s] [ 17%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o[0m
+[2.251s] [ 18%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__functions.c.o[0m
+[2.251s] [ 20%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c.o[0m
+[2.252s] [ 21%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o[0m
+[2.253s] [ 22%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o[0m
+[2.253s] [ 24%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o[0m
+[2.340s] [ 25%] [32m[1mLinking C shared library libraf_interfaces__rosidl_generator_c.so[0m
+[2.377s] [ 25%] Built target raf_interfaces__rosidl_generator_c
+[2.393s] [ 29%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[2.393s] [ 29%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[2.393s] [ 29%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[2.394s] [ 32%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[2.394s] [ 32%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[2.394s] [ 33%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[2.664s] [ 36%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/raf_interfaces/msg/detected_food__type_support.cpp.o[0m
+[2.664s] [ 36%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/raf_interfaces/srv/identify_food__type_support.cpp.o[0m
+[2.665s] [ 37%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/raf_interfaces/srv/set_gripper__type_support.cpp.o[0m
+[2.665s] [ 39%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/raf_interfaces/srv/set_joint_angles__type_support.cpp.o[0m
+[2.665s] [ 40%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/raf_interfaces/srv/set_pose__type_support.cpp.o[0m
+[2.677s] [ 43%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/raf_interfaces/srv/identify_food__type_support.cpp.o[0m
+[2.677s] [ 43%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/raf_interfaces/srv/set_joint_angles__type_support.cpp.o[0m
+[2.677s] [ 44%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/raf_interfaces/msg/detected_food__type_support.cpp.o[0m
+[2.678s] [ 45%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/raf_interfaces/srv/set_gripper__type_support.cpp.o[0m
+[2.679s] [ 47%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/raf_interfaces/srv/set_pose__type_support.cpp.o[0m
+[2.712s] [ 48%] [32m[1mLinking CXX shared library libraf_interfaces__rosidl_typesupport_c.so[0m
+[2.738s] [ 54%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/raf_interfaces/srv/detail/set_gripper__type_support.cpp.o[0m
+[2.738s] [ 54%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/raf_interfaces/msg/detail/detected_food__type_support.cpp.o[0m
+[2.738s] [ 54%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/raf_interfaces/srv/detail/identify_food__type_support.cpp.o[0m
+[2.738s] [ 54%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/raf_interfaces/srv/detail/set_joint_angles__type_support.cpp.o[0m
+[2.738s] [ 55%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/raf_interfaces/srv/detail/set_pose__type_support.cpp.o[0m
+[2.748s] [ 55%] Built target raf_interfaces__rosidl_typesupport_c
+[2.764s] [ 62%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_pose__type_support.c.o[0m
+[2.764s] [ 62%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o[0m
+[2.764s] [ 62%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/identify_food__type_support.c.o[0m
+[2.764s] [ 62%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o[0m
+[2.764s] [ 62%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/raf_interfaces/msg/detail/detected_food__type_support.c.o[0m
+[2.822s] [ 63%] [32m[1mLinking C shared library libraf_interfaces__rosidl_typesupport_introspection_c.so[0m
+[2.863s] [ 63%] Built target raf_interfaces__rosidl_typesupport_introspection_c
+[2.911s] [ 70%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/raf_interfaces/srv/detail/dds_fastrtps/set_pose__type_support.cpp.o[0m
+[2.911s] [ 70%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/raf_interfaces/srv/detail/dds_fastrtps/identify_food__type_support.cpp.o[0m
+[2.911s] [ 70%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/raf_interfaces/srv/detail/dds_fastrtps/set_joint_angles__type_support.cpp.o[0m
+[2.911s] [ 70%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/raf_interfaces/srv/detail/dds_fastrtps/set_gripper__type_support.cpp.o[0m
+[2.912s] [ 70%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/raf_interfaces/msg/detail/dds_fastrtps/detected_food__type_support.cpp.o[0m
+[2.960s] [ 71%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/raf_interfaces/srv/detail/identify_food__type_support_c.cpp.o[0m
+[2.961s] [ 72%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/raf_interfaces/srv/detail/set_pose__type_support_c.cpp.o[0m
+[2.962s] [ 74%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/raf_interfaces/msg/detail/detected_food__type_support_c.cpp.o[0m
+[2.962s] [ 75%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/raf_interfaces/srv/detail/set_joint_angles__type_support_c.cpp.o[0m
+[2.963s] [ 77%] [32mBuilding CXX object CMakeFiles/raf_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/raf_interfaces/srv/detail/set_gripper__type_support_c.cpp.o[0m
+[3.140s] [ 78%] [32m[1mLinking CXX shared library libraf_interfaces__rosidl_typesupport_cpp.so[0m
+[3.218s] [ 78%] Built target raf_interfaces__rosidl_typesupport_cpp
+[3.241s] [ 79%] [32m[1mLinking CXX shared library libraf_interfaces__rosidl_typesupport_introspection_cpp.so[0m
+[3.328s] [ 79%] Built target raf_interfaces__rosidl_typesupport_introspection_cpp
+[3.419s] [ 81%] [32m[1mLinking CXX shared library libraf_interfaces__rosidl_typesupport_fastrtps_c.so[0m
+[3.479s] [ 81%] Built target raf_interfaces__rosidl_typesupport_fastrtps_c
+[3.494s] [ 82%] [32m[1mLinking CXX shared library libraf_interfaces__rosidl_typesupport_fastrtps_cpp.so[0m
+[3.572s] [ 82%] Built target raf_interfaces__rosidl_typesupport_fastrtps_cpp
+[3.598s] [ 82%] Built target raf_interfaces
+[3.628s] [ 83%] [34m[1mGenerating Python code for ROS interfaces[0m
+[4.369s] [ 83%] Built target raf_interfaces__py
+[4.400s] [ 85%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o[0m
+[4.402s] [ 86%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o[0m
+[4.402s] [ 87%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/msg/_detected_food_s.c.o[0m
+[4.402s] [ 90%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c.o[0m
+[4.402s] [ 90%] [32mBuilding C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o[0m
+[4.506s] [ 91%] [32m[1mLinking C shared library libraf_interfaces__rosidl_generator_py.so[0m
+[4.552s] [ 91%] Built target raf_interfaces__rosidl_generator_py
+[4.583s] [ 93%] [32mBuilding C object CMakeFiles/raf_interfaces_s__rosidl_typesupport_introspection_c.dir/rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[4.587s] [ 94%] [32mBuilding C object CMakeFiles/raf_interfaces_s__rosidl_typesupport_fastrtps_c.dir/rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[4.587s] [ 95%] [32mBuilding C object CMakeFiles/raf_interfaces_s__rosidl_typesupport_c.dir/rosidl_generator_py/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_c.c.o[0m
+[4.687s] [ 97%] [32m[1mLinking C shared module rosidl_generator_py/raf_interfaces/raf_interfaces_s__rosidl_typesupport_c.so[0m
+[4.687s] [ 98%] [32m[1mLinking C shared module rosidl_generator_py/raf_interfaces/raf_interfaces_s__rosidl_typesupport_introspection_c.so[0m
+[4.688s] [100%] [32m[1mLinking C shared module rosidl_generator_py/raf_interfaces/raf_interfaces_s__rosidl_typesupport_fastrtps_c.so[0m
+[4.713s] [100%] Built target raf_interfaces_s__rosidl_typesupport_fastrtps_c
+[4.713s] [100%] Built target raf_interfaces_s__rosidl_typesupport_introspection_c
+[4.713s] [100%] Built target raf_interfaces_s__rosidl_typesupport_c
+[4.723s] Invoked command in '/home/mcrr-lab/raf-deploy/build/raf_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com VIRTUAL_ENV_PROMPT=(deploy-env) /usr/bin/cmake --build /home/mcrr-lab/raf-deploy/build/raf_interfaces -- -j32 -l32
+[4.732s] Invoking command in '/home/mcrr-lab/raf-deploy/build/raf_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com VIRTUAL_ENV_PROMPT=(deploy-env) /usr/bin/cmake --install /home/mcrr-lab/raf-deploy/build/raf_interfaces
+[4.746s] -- Install configuration: ""
+[4.746s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/ament_index/resource_index/rosidl_interfaces/raf_interfaces
+[4.747s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/msg/DetectedFood.json
+[4.747s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/IdentifyFood.json
+[4.747s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetGripper.json
+[4.747s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetJointAngles.json
+[4.747s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetPose.json
+[4.747s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces
+[4.748s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv
+[4.748s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/set_gripper.h
+[4.748s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/set_joint_angles.h
+[4.748s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/identify_food.h
+[4.748s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail
+[4.748s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__functions.c
+[4.748s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__type_support.h
+[4.748s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__type_support.c
+[4.748s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__struct.h
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__functions.h
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__type_support.h
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__functions.c
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__struct.h
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__functions.c
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__type_support.c
+[4.749s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__struct.h
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__functions.c
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__type_support.h
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__struct.h
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__description.c
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__description.c
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__functions.h
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__description.c
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__type_support.h
+[4.750s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__functions.h
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__functions.h
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__type_support.c
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__description.c
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/set_pose.h
+[4.751s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detected_food.h
+[4.751s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__description.c
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__type_support.c
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__type_support.h
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__struct.h
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__functions.h
+[4.751s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__functions.c
+[4.752s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/rosidl_generator_c__visibility_control.h
+[4.752s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/library_path.sh
+[4.752s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/library_path.dsv
+[4.752s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_generator_c.so
+[4.752s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_generator_c.so" to ""
+[4.752s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces
+[4.752s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv
+[4.752s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail
+[4.752s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__rosidl_typesupport_fastrtps_c.h
+[4.753s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__rosidl_typesupport_fastrtps_c.h
+[4.753s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__rosidl_typesupport_fastrtps_c.h
+[4.753s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__rosidl_typesupport_fastrtps_c.h
+[4.754s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg
+[4.754s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_fastrtps_c.h
+[4.754s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_fastrtps_c.so
+[4.754s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_fastrtps_c.so" to ""
+[4.754s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces
+[4.754s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv
+[4.754s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__rosidl_typesupport_introspection_c.h
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__type_support.c
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__rosidl_typesupport_introspection_c.h
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__rosidl_typesupport_introspection_c.h
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__rosidl_typesupport_introspection_c.h
+[4.754s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__type_support.c
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__type_support.c
+[4.755s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg
+[4.755s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__type_support.c
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_c.h
+[4.755s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_introspection_c.so
+[4.755s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_introspection_c.so" to ""
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_c.so
+[4.755s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_c.so" to ""
+[4.755s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces
+[4.755s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/set_gripper.hpp
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/set_pose.hpp
+[4.755s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail
+[4.755s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__type_support.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__builder.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__struct.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__type_support.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__traits.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__type_support.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__struct.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__builder.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__struct.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__struct.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__builder.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__type_support.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__traits.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__traits.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__builder.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__traits.hpp
+[4.756s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/set_joint_angles.hpp
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/identify_food.hpp
+[4.757s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detected_food.hpp
+[4.757s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__builder.hpp
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__struct.hpp
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__type_support.hpp
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__traits.hpp
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
+[4.757s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces
+[4.757s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv
+[4.757s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__rosidl_typesupport_fastrtps_cpp.hpp
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__rosidl_typesupport_fastrtps_cpp.hpp
+[4.757s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__rosidl_typesupport_fastrtps_cpp.hpp
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__rosidl_typesupport_fastrtps_cpp.hpp
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/dds_fastrtps
+[4.758s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg
+[4.758s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/dds_fastrtps
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_fastrtps_cpp.hpp
+[4.758s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_fastrtps_cpp.so
+[4.758s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_fastrtps_cpp.so" to ""
+[4.758s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces
+[4.758s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv
+[4.758s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__rosidl_typesupport_introspection_cpp.hpp
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__type_support.cpp
+[4.758s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__type_support.cpp
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_joint_angles__type_support.cpp
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_pose__rosidl_typesupport_introspection_cpp.hpp
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/set_gripper__rosidl_typesupport_introspection_cpp.hpp
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__rosidl_typesupport_introspection_cpp.hpp
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/srv/detail/identify_food__type_support.cpp
+[4.759s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg
+[4.759s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__type_support.cpp
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/include/raf_interfaces/raf_interfaces/msg/detail/detected_food__rosidl_typesupport_introspection_cpp.hpp
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_introspection_cpp.so
+[4.759s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_introspection_cpp.so" to ""
+[4.759s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_cpp.so
+[4.760s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_typesupport_cpp.so" to ""
+[4.760s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/pythonpath.sh
+[4.760s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/pythonpath.dsv
+[4.760s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces-0.0.0-py3.12.egg-info
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces-0.0.0-py3.12.egg-info/dependency_links.txt
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces-0.0.0-py3.12.egg-info/top_level.txt
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces-0.0.0-py3.12.egg-info/PKG-INFO
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces-0.0.0-py3.12.egg-info/SOURCES.txt
+[4.760s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_fastrtps_c.so
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/__init__.py
+[4.760s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_pose_s.c
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_gripper_s.c
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_pose.py
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/__init__.py
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_joint_angles.py
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_identify_food.py
+[4.760s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_gripper.py
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_joint_angles_s.c
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_identify_food_s.c
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_c.so
+[4.761s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/msg
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/msg/__init__.py
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/msg/_detected_food_s.c
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/msg/_detected_food.py
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_introspection_c.c
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_introspection_c.so
+[4.761s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/_raf_interfaces_s.ep.rosidl_typesupport_c.c
+[4.799s] Listing '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/__init__.py'...
+[4.799s] Listing '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/msg'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/msg/__init__.py'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/msg/_detected_food.py'...
+[4.799s] Listing '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/__init__.py'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_identify_food.py'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_gripper.py'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_joint_angles.py'...
+[4.799s] Compiling '/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/srv/_set_pose.py'...
+[4.803s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_fastrtps_c.so
+[4.804s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_fastrtps_c.so" to ""
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_introspection_c.so
+[4.804s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_introspection_c.so" to ""
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_c.so
+[4.804s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/python3.12/site-packages/raf_interfaces/raf_interfaces_s__rosidl_typesupport_c.so" to ""
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_generator_py.so
+[4.804s] -- Set non-toolchain portion of runtime path of "/home/mcrr-lab/raf-deploy/install/raf_interfaces/lib/libraf_interfaces__rosidl_generator_py.so" to ""
+[4.804s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/msg/DetectedFood.idl
+[4.804s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/IdentifyFood.idl
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetGripper.idl
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetJointAngles.idl
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetPose.idl
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/msg/DetectedFood.msg
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/IdentifyFood.srv
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetGripper.srv
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetJointAngles.srv
+[4.804s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/srv/SetPose.srv
+[4.805s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/ament_index/resource_index/package_run_dependencies/raf_interfaces
+[4.805s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/ament_index/resource_index/parent_prefix_path/raf_interfaces
+[4.805s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/ament_prefix_path.sh
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/ament_prefix_path.dsv
+[4.805s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/path.sh
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/environment/path.dsv
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/local_setup.bash
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/local_setup.sh
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/local_setup.zsh
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/local_setup.dsv
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/package.dsv
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/ament_index/resource_index/packages/raf_interfaces
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_generator_cExport.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_generator_cExport-noconfig.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_typesupport_fastrtps_cExport.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_introspection_cExport.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_cExport.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_cExport-noconfig.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_generator_cppExport.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake
+[4.805s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_cppExport.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfaces__rosidl_typesupport_cppExport-noconfig.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_generator_pyExport.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/export_raf_interfaces__rosidl_generator_pyExport-noconfig.cmake
+[4.806s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/rosidl_cmake-extras.cmake
+[4.806s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+[4.806s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfacesConfig.cmake
+[4.806s] -- Up-to-date: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/cmake/raf_interfacesConfig-version.cmake
+[4.806s] -- Installing: /home/mcrr-lab/raf-deploy/install/raf_interfaces/share/raf_interfaces/package.xml
+[4.808s] Invoked command in '/home/mcrr-lab/raf-deploy/build/raf_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com VIRTUAL_ENV_PROMPT=(deploy-env) /usr/bin/cmake --install /home/mcrr-lab/raf-deploy/build/raf_interfaces

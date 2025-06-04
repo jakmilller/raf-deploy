@@ -2,3 +2,9 @@ msg/DetectedFood.idl
 msg/DetectedFood.msg
 srv/IdentifyFood.idl
 srv/IdentifyFood.srv
+srv/SetGripper.idl
+srv/SetGripper.srv
+srv/SetJointAngles.idl
+srv/SetJointAngles.srv
+srv/SetPose.idl
+srv/SetPose.srv

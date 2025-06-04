@@ -21,7 +21,22 @@ set(CMAKE_MULTIPLE_OUTPUT_PAIRS
   "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__struct.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
   "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__traits.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
   "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__type_support.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__builder.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__struct.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__traits.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__type_support.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__builder.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__struct.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__traits.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__type_support.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__builder.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__struct.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__traits.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__type_support.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
   "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/identify_food.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/set_gripper.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/set_joint_angles.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
+  "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/srv/set_pose.hpp" "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_cpp/raf_interfaces/msg/detected_food.hpp"
   )
 
 

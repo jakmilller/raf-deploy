@@ -1,0 +1,40 @@
+running egg_info
+creating ../../build/raf_kinova_controller/raf_kinova_controller.egg-info
+writing ../../build/raf_kinova_controller/raf_kinova_controller.egg-info/PKG-INFO
+writing dependency_links to ../../build/raf_kinova_controller/raf_kinova_controller.egg-info/dependency_links.txt
+writing entry points to ../../build/raf_kinova_controller/raf_kinova_controller.egg-info/entry_points.txt
+writing requirements to ../../build/raf_kinova_controller/raf_kinova_controller.egg-info/requires.txt
+writing top-level names to ../../build/raf_kinova_controller/raf_kinova_controller.egg-info/top_level.txt
+writing manifest file '../../build/raf_kinova_controller/raf_kinova_controller.egg-info/SOURCES.txt'
+reading manifest file '../../build/raf_kinova_controller/raf_kinova_controller.egg-info/SOURCES.txt'
+writing manifest file '../../build/raf_kinova_controller/raf_kinova_controller.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build
+creating /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib
+creating /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib/raf_kinova_controller
+copying raf_kinova_controller/__init__.py -> /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib/raf_kinova_controller
+copying raf_kinova_controller/kortex_api_utils.py -> /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib/raf_kinova_controller
+copying raf_kinova_controller/kinova_controller_node.py -> /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib/raf_kinova_controller
+running install
+running install_lib
+creating /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller
+copying /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib/raf_kinova_controller/__init__.py -> /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller
+copying /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib/raf_kinova_controller/kortex_api_utils.py -> /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller
+copying /home/mcrr-lab/raf-deploy/build/raf_kinova_controller/build/lib/raf_kinova_controller/kinova_controller_node.py -> /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller
+byte-compiling /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller/__init__.py to __init__.cpython-312.pyc
+byte-compiling /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller/kortex_api_utils.py to kortex_api_utils.cpython-312.pyc
+byte-compiling /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller/kinova_controller_node.py to kinova_controller_node.cpython-312.pyc
+running install_data
+creating /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/share/ament_index
+creating /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/share/ament_index/resource_index
+creating /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/share/ament_index/resource_index/packages
+copying resource/raf_kinova_controller -> /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/share/ament_index/resource_index/packages
+copying package.xml -> /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/share/raf_kinova_controller
+creating /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/share/raf_kinova_controller/launch
+copying launch/controller.launch.py -> /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/share/raf_kinova_controller/launch
+running install_egg_info
+Copying ../../build/raf_kinova_controller/raf_kinova_controller.egg-info to /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/python3.12/site-packages/raf_kinova_controller-0.1.0-py3.12.egg-info
+running install_scripts
+Installing kinova_controller script to /home/mcrr-lab/raf-deploy/install/raf_kinova_controller/lib/raf_kinova_controller
+writing list of installed files to '/home/mcrr-lab/raf-deploy/build/raf_kinova_controller/install.log'

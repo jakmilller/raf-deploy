@@ -4,7 +4,10 @@
   "template_dir": "/opt/ros/jazzy/share/rosidl_typesupport_c/resource",
   "idl_tuples": [
     "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces:msg/DetectedFood.idl",
-    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces:srv/IdentifyFood.idl"
+    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces:srv/IdentifyFood.idl",
+    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces:srv/SetGripper.idl",
+    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces:srv/SetJointAngles.idl",
+    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces:srv/SetPose.idl"
   ],
   "ros_interface_dependencies": [
     "std_msgs:/opt/ros/jazzy/share/std_msgs/msg/Bool.idl",
@@ -110,6 +113,9 @@
     "/opt/ros/jazzy/share/rosidl_typesupport_c/resource/srv__type_support.cpp.em",
     "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/msg/DetectedFood.idl",
     "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/srv/IdentifyFood.idl",
+    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/srv/SetGripper.idl",
+    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/srv/SetJointAngles.idl",
+    "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/srv/SetPose.idl",
     "/opt/ros/jazzy/share/std_msgs/msg/Bool.idl",
     "/opt/ros/jazzy/share/std_msgs/msg/Byte.idl",
     "/opt/ros/jazzy/share/std_msgs/msg/ByteMultiArray.idl",

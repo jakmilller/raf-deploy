@@ -1,0 +1,19 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from raf_interfaces/srv/SetJointAngles.srv
+// generated code does not contain a copyright notice
+
+
+module raf_interfaces {
+  module srv {
+    struct SetJointAngles_Request {
+      @verbatim (language="comment", text=
+        "in radians")
+      sequence<double> joint_angles;
+    };
+    struct SetJointAngles_Response {
+      boolean success;
+
+      string message;
+    };
+  };
+};

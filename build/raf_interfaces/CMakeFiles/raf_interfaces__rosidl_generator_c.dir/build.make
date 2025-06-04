@@ -90,6 +90,9 @@ rosidl_generator_c/raf_interfaces/msg/detected_food.h: /opt/ros/jazzy/share/rosi
 rosidl_generator_c/raf_interfaces/msg/detected_food.h: /opt/ros/jazzy/share/rosidl_generator_c/resource/srv__type_support.h.em
 rosidl_generator_c/raf_interfaces/msg/detected_food.h: rosidl_adapter/raf_interfaces/msg/DetectedFood.idl
 rosidl_generator_c/raf_interfaces/msg/detected_food.h: rosidl_adapter/raf_interfaces/srv/IdentifyFood.idl
+rosidl_generator_c/raf_interfaces/msg/detected_food.h: rosidl_adapter/raf_interfaces/srv/SetGripper.idl
+rosidl_generator_c/raf_interfaces/msg/detected_food.h: rosidl_adapter/raf_interfaces/srv/SetJointAngles.idl
+rosidl_generator_c/raf_interfaces/msg/detected_food.h: rosidl_adapter/raf_interfaces/srv/SetPose.idl
 rosidl_generator_c/raf_interfaces/msg/detected_food.h: /opt/ros/jazzy/share/std_msgs/msg/Bool.idl
 rosidl_generator_c/raf_interfaces/msg/detected_food.h: /opt/ros/jazzy/share/std_msgs/msg/Byte.idl
 rosidl_generator_c/raf_interfaces/msg/detected_food.h: /opt/ros/jazzy/share/std_msgs/msg/ByteMultiArray.idl
@@ -207,6 +210,42 @@ rosidl_generator_c/raf_interfaces/srv/detail/identify_food__struct.h: rosidl_gen
 rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.h
 
+rosidl_generator_c/raf_interfaces/srv/set_gripper.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/set_gripper.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__struct.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__struct.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.h
+
+rosidl_generator_c/raf_interfaces/srv/set_joint_angles.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/set_joint_angles.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__struct.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__struct.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.h
+
+rosidl_generator_c/raf_interfaces/srv/set_pose.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/set_pose.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_pose__struct.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_pose__struct.h
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.h: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.h
+
 rosidl_generator_c/raf_interfaces/msg/detail/detected_food__description.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/msg/detail/detected_food__description.c
 
@@ -224,6 +263,33 @@ rosidl_generator_c/raf_interfaces/srv/detail/identify_food__functions.c: rosidl_
 
 rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c
+
+rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c: rosidl_generator_c/raf_interfaces/msg/detected_food.h
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c
 
 CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/msg/detail/detected_food__description.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
 CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/msg/detail/detected_food__description.c.o: rosidl_generator_c/raf_interfaces/msg/detail/detected_food__description.c
@@ -309,6 +375,132 @@ CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfa
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c.s
 
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c > CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c -o CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.s
+
 # Object files for target raf_interfaces__rosidl_generator_c
 raf_interfaces__rosidl_generator_c_OBJECTS = \
 "CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/msg/detail/detected_food__description.c.o" \
@@ -316,7 +508,16 @@ raf_interfaces__rosidl_generator_c_OBJECTS = \
 "CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/msg/detail/detected_food__type_support.c.o" \
 "CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__description.c.o" \
 "CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__functions.c.o" \
-"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c.o"
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o"
 
 # External object files for target raf_interfaces__rosidl_generator_c
 raf_interfaces__rosidl_generator_c_EXTERNAL_OBJECTS =
@@ -327,6 +528,15 @@ libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_gene
 libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__description.c.o
 libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__functions.c.o
 libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c.o
+libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c.o
 libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/build.make
 libraf_interfaces__rosidl_generator_c.so: /opt/ros/jazzy/lib/libsensor_msgs__rosidl_generator_c.so
 libraf_interfaces__rosidl_generator_c.so: /opt/ros/jazzy/lib/libgeometry_msgs__rosidl_generator_c.so
@@ -336,7 +546,7 @@ libraf_interfaces__rosidl_generator_c.so: /opt/ros/jazzy/lib/libbuiltin_interfac
 libraf_interfaces__rosidl_generator_c.so: /opt/ros/jazzy/lib/librosidl_runtime_c.so
 libraf_interfaces__rosidl_generator_c.so: /opt/ros/jazzy/lib/librcutils.so
 libraf_interfaces__rosidl_generator_c.so: CMakeFiles/raf_interfaces__rosidl_generator_c.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking C shared library libraf_interfaces__rosidl_generator_c.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking C shared library libraf_interfaces__rosidl_generator_c.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/raf_interfaces__rosidl_generator_c.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -360,7 +570,28 @@ CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf
 CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/identify_food__struct.h
 CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.c
 CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/identify_food__type_support.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__description.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__functions.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__struct.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_gripper__type_support.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__description.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__functions.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__struct.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_joint_angles__type_support.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__description.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__functions.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__struct.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.c
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/detail/set_pose__type_support.h
 CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/identify_food.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/set_gripper.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/set_joint_angles.h
+CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend: rosidl_generator_c/raf_interfaces/srv/set_pose.h
 	cd /home/mcrr-lab/raf-deploy/build/raf_interfaces && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mcrr-lab/raf-deploy/src/raf_interfaces /home/mcrr-lab/raf-deploy/src/raf_interfaces /home/mcrr-lab/raf-deploy/build/raf_interfaces /home/mcrr-lab/raf-deploy/build/raf_interfaces /home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles/raf_interfaces__rosidl_generator_c.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/raf_interfaces__rosidl_generator_c.dir/depend
 

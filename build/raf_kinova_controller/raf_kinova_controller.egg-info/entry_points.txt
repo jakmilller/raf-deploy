@@ -1,0 +1,2 @@
+[console_scripts]
+kinova_controller = raf_kinova_controller.kinova_controller_node:main

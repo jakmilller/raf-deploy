@@ -68,20 +68,38 @@ include CMakeFiles/raf_interfaces__rosidl_generator_type_description.dir/progres
 
 CMakeFiles/raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json
 CMakeFiles/raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/IdentifyFood.json
+CMakeFiles/raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/SetGripper.json
+CMakeFiles/raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/SetJointAngles.json
+CMakeFiles/raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/SetPose.json
 
 rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json: /opt/ros/jazzy/lib/rosidl_generator_type_description/rosidl_generator_type_description
 rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json: /opt/ros/jazzy/lib/python3.12/site-packages/rosidl_generator_type_description/__init__.py
 rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json: rosidl_adapter/raf_interfaces/msg/DetectedFood.idl
 rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json: rosidl_adapter/raf_interfaces/srv/IdentifyFood.idl
+rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json: rosidl_adapter/raf_interfaces/srv/SetGripper.idl
+rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json: rosidl_adapter/raf_interfaces/srv/SetJointAngles.idl
+rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json: rosidl_adapter/raf_interfaces/srv/SetPose.idl
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating type hashes for ROS interfaces"
 	/home/mcrr-lab/deploy-env/bin/python3 /opt/ros/jazzy/lib/rosidl_generator_type_description/rosidl_generator_type_description --generator-arguments-file /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_type_description__arguments.json
 
 rosidl_generator_type_description/raf_interfaces/srv/IdentifyFood.json: rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_type_description/raf_interfaces/srv/IdentifyFood.json
 
+rosidl_generator_type_description/raf_interfaces/srv/SetGripper.json: rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_type_description/raf_interfaces/srv/SetGripper.json
+
+rosidl_generator_type_description/raf_interfaces/srv/SetJointAngles.json: rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_type_description/raf_interfaces/srv/SetJointAngles.json
+
+rosidl_generator_type_description/raf_interfaces/srv/SetPose.json: rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json
+	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_type_description/raf_interfaces/srv/SetPose.json
+
 raf_interfaces__rosidl_generator_type_description: CMakeFiles/raf_interfaces__rosidl_generator_type_description
 raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/msg/DetectedFood.json
 raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/IdentifyFood.json
+raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/SetGripper.json
+raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/SetJointAngles.json
+raf_interfaces__rosidl_generator_type_description: rosidl_generator_type_description/raf_interfaces/srv/SetPose.json
 raf_interfaces__rosidl_generator_type_description: CMakeFiles/raf_interfaces__rosidl_generator_type_description.dir/build.make
 .PHONY : raf_interfaces__rosidl_generator_type_description
 

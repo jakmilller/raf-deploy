@@ -9,6 +9,7 @@ find_package(rosidl_default_generators REQUIRED)
 # These should correspond to <depend> tags in your package.xml
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 # Add other find_package calls here if your interfaces use types from them (e.g., geometry_msgs)
 
 # Specify the message files
@@ -19,6 +20,9 @@ set(msg_files
 # Specify the service files
 set(srv_files
   "srv/IdentifyFood.srv"
+  "srv/SetGripper.srv"
+  "srv/SetJointAngles.srv"
+  "srv/SetPose.srv"
 )
 
 # Generate messages and services
@@ -27,7 +31,7 @@ set(srv_files
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
   ${srv_files}
-  DEPENDENCIES std_msgs sensor_msgs # Add other direct dependencies like geometry_msgs if needed
+  DEPENDENCIES std_msgs sensor_msgs geometry_msgs # Add other direct dependencies like geometry_msgs if needed
 )
 
 # ament_auto_package handles a lot of the boilerplate for exporting

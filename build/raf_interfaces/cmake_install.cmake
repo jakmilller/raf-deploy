@@ -55,6 +55,18 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_type_description/raf_interfaces/srv/SetGripper.json")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_type_description/raf_interfaces/srv/SetJointAngles.json")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_type_description/raf_interfaces/srv/SetPose.json")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/raf_interfaces/raf_interfaces" TYPE DIRECTORY FILES "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_c/raf_interfaces/" REGEX "/[^/]*\\.h$")
 endif()
 
@@ -375,6 +387,18 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/srv/SetGripper.idl")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/srv/SetJointAngles.idl")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_adapter/raf_interfaces/srv/SetPose.idl")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/msg" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/src/raf_interfaces/msg/DetectedFood.msg")
 endif()
 
@@ -383,7 +407,15 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/mcrr-lab/raf-deploy/src/raf_interfaces/include/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/src/raf_interfaces/srv/SetGripper.srv")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/src/raf_interfaces/srv/SetJointAngles.srv")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/raf_interfaces/srv" TYPE FILE FILES "/home/mcrr-lab/raf-deploy/src/raf_interfaces/srv/SetPose.srv")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)

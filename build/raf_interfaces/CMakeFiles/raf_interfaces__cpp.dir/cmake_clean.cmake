@@ -10,7 +10,22 @@ file(REMOVE_RECURSE
   "rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__struct.hpp"
   "rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__traits.hpp"
   "rosidl_generator_cpp/raf_interfaces/srv/detail/identify_food__type_support.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__builder.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__struct.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__traits.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_gripper__type_support.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__builder.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__struct.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__traits.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_joint_angles__type_support.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__builder.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__struct.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__traits.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/detail/set_pose__type_support.hpp"
   "rosidl_generator_cpp/raf_interfaces/srv/identify_food.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/set_gripper.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/set_joint_angles.hpp"
+  "rosidl_generator_cpp/raf_interfaces/srv/set_pose.hpp"
 )
 
 # Per-language clean rules from dependency scanning.

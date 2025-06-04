@@ -97,16 +97,64 @@ CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_inter
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c -o CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c.s
 
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o: rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c > CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c -o CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o: rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c > CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c -o CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.s
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/flags.make
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o: rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o -MF CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o.d -o CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o -c /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c > CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.i
+
+CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mcrr-lab/raf-deploy/build/raf_interfaces/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c -o CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.s
+
 # Object files for target raf_interfaces__rosidl_generator_py
 raf_interfaces__rosidl_generator_py_OBJECTS = \
 "CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/msg/_detected_food_s.c.o" \
-"CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c.o"
+"CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o" \
+"CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o"
 
 # External object files for target raf_interfaces__rosidl_generator_py
 raf_interfaces__rosidl_generator_py_EXTERNAL_OBJECTS =
 
 libraf_interfaces__rosidl_generator_py.so: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/msg/_detected_food_s.c.o
 libraf_interfaces__rosidl_generator_py.so: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_identify_food_s.c.o
+libraf_interfaces__rosidl_generator_py.so: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_gripper_s.c.o
+libraf_interfaces__rosidl_generator_py.so: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_joint_angles_s.c.o
+libraf_interfaces__rosidl_generator_py.so: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/rosidl_generator_py/raf_interfaces/srv/_set_pose_s.c.o
 libraf_interfaces__rosidl_generator_py.so: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/build.make
 libraf_interfaces__rosidl_generator_py.so: libraf_interfaces__rosidl_typesupport_c.so
 libraf_interfaces__rosidl_generator_py.so: /opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_fastrtps_c.so
@@ -161,7 +209,7 @@ libraf_interfaces__rosidl_generator_py.so: /opt/ros/jazzy/lib/libbuiltin_interfa
 libraf_interfaces__rosidl_generator_py.so: /opt/ros/jazzy/lib/librosidl_runtime_c.so
 libraf_interfaces__rosidl_generator_py.so: /opt/ros/jazzy/lib/librcutils.so
 libraf_interfaces__rosidl_generator_py.so: CMakeFiles/raf_interfaces__rosidl_generator_py.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C shared library libraf_interfaces__rosidl_generator_py.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mcrr-lab/raf-deploy/build/raf_interfaces/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C shared library libraf_interfaces__rosidl_generator_py.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/raf_interfaces__rosidl_generator_py.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
