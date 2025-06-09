@@ -1,0 +1,17 @@
+Objective: To determine the items on the plate.
+Available items: pretzel rods, pretzel bites, green grapes, fruit gummies
+
+
+You have been given an image of a plate. From the available items, what items are present, as a comma-separated list? Format your answer in one-line as follows: first_item, second_item, third_item. Do not list an item that is not in the given list of available items.
+Assume that everything on the plate is listed in the available items. Do not return a food item which is not present in the "Available Items" list. If 3 different food items are on the plate then the list should contain 3 food items. Make sure the number of distinguishable items detected is the number of elements in the list.
+Always return an item on the list, unless there is absolutely no object detected.
+
+Examples:
+Input: Picture of pretzel rods and green grapes
+Output: pretezl rods, green grapes
+
+Input: Picture of fruit gummies.
+Output: fruit gummies
+
+Input: Picture of green grapes.
+Output: green grapes
