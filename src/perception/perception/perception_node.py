@@ -1,8 +1,10 @@
 import rclpy
+import rclpy.duration
 from rclpy.node import Node
 from sensor_msgs.msg import Image, CameraInfo
 from std_srvs.srv import Trigger
 from cv_bridge import CvBridge
+from sklearn.neighbors import NearestNeighbors
 import cv2
 import os
 import torch
@@ -14,7 +16,9 @@ from PIL import Image as PILImage
 import base64
 import requests
 import tf2_ros
-from geometry_msgs.msg import Pose, Point, Quaternion
+import tf2_geometry_msgs
+from geometry_msgs.msg import Pose, Point, Quaternion, PoseStamped
+from std_msgs.msg import Float64
 from tf_transformations import quaternion_from_euler
 from dotenv import load_dotenv
 
@@ -52,10 +56,6 @@ class PerceptionNode(Node):
         self.sam2_model_config = "configs/sam2.1/sam2.1_hiera_l.yaml"
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         
-        # Robot-specific parameters (adjust based on your setup)
-        self.z_offset = 0.01
-        self.camera_offset = 0.002
-        
         # API headers
         self.openai_headers = {
             "Content-Type": "application/json",
@@ -69,13 +69,26 @@ class PerceptionNode(Node):
         # for Kinova-mounted arm: /camera/color/image_raw /camera/depth_registered/image_rect
         
         self.depth_sub = self.create_subscription(
-            Image, '/camera/camera/depth/image_rect_raw', self.depth_callback, 10)
+            Image, '/camera/camera/aligned_depth_to_color/image_raw', self.depth_callback, 10)
         self.camera_info_sub = self.create_subscription(
             CameraInfo, '/camera/camera/color/camera_info', self.camera_info_callback, 10)
         
         # Create service
         self.process_service = self.create_service(
             Trigger, 'process_image_pipeline', self.handle_process_request)
+        
+        # setup toold for calculating transform
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)  
+
+        # publisher for final food pose relative to base
+        self.food_pose_pub = self.create_publisher(
+            PoseStamped, '/food_pose_base_link', 10)
+        
+        # publisher for grip value
+        self.grip_val_pub = self.create_publisher(
+            Float64, '/grip_value',10)
+        
         
         # Initialize models
         self.setup_models()
@@ -204,8 +217,8 @@ class PerceptionNode(Node):
         cy = int(moments["m01"] / moments["m00"])
         return (cx, cy)
 
-    def pixel_to_world(self, pixel_x, pixel_y, depth_image):
-        """Convert pixel coordinates to 3D world coordinates in camera frame"""
+    def pixel_to_rs_frame(self, pixel_x, pixel_y, depth_image):
+        """Convert pixel coordinates to 3D coordinates relative to RealSense camera"""
         if self.camera_info is None:
             return None, False
             
@@ -227,31 +240,167 @@ class PerceptionNode(Node):
         z = depth
         
         return np.array([x, y, z]), True
+    
+    def rs_to_world(self, rs_point, orientation):
+        """Get position of food relative to base"""
+        try:
+            pose_stamped = PoseStamped()
+            pose_stamped.header.frame_id = 'realsense_link'
+            pose_stamped.header.stamp = rclpy.time.Time().to_msg()
+            pose_stamped.pose.position.x = float(rs_point[0])
+            pose_stamped.pose.position.y = float(rs_point[1]) 
+
+            # the transformation currently moves the tips of the gripper to the pose, but assumes that it is fully open
+            # for finger foods the gripper will be almost always closed, so tips are a different distance from the camera
+            # adjust for this with dimensions from Robotiq documentation
+            robotiq_offset = 0.0225
+            pose_stamped.pose.position.z = float(rs_point[2]-robotiq_offset)
+
+            quat = quaternion_from_euler(0, 0, orientation)
+            pose_stamped.pose.orientation.x = quat[0]
+            pose_stamped.pose.orientation.y = quat[1]
+            pose_stamped.pose.orientation.z = quat[2]
+            pose_stamped.pose.orientation.w = quat[3]
+
+            # wait for transform to be available (does this cause lag?)
+            if not self.tf_buffer.can_transform('base_link', 'realsense_link', 
+                                               rclpy.time.Time()):
+                self.get_logger().warn("Transform from realsense_link to base_link not available")
+                return None
+
+            transformed_pose = self.tf_buffer.transform(pose_stamped,'base_link')
+
+            return transformed_pose
+
+        except Exception as e:
+            self.get_logger().error(f"Transform to base frame failed: {str(e)}")
+            return None
+
+    def print_pose_info(self, pose_stamped):
+        """Helper function to print pose information"""
+        if pose_stamped is None:
+            self.get_logger().error("Pose is None")
+            return
+            
+        pos = pose_stamped.pose.position
+        ori = pose_stamped.pose.orientation
+        
+        self.get_logger().info(f"Food pose relative to base:")
+        self.get_logger().info(f"  Position: x={pos.x:.3f}, y={pos.y:.3f}, z={pos.z:.3f}")
+        self.get_logger().info(f"  Orientation: x={ori.x:.3f}, y={ori.y:.3f}, z={ori.z:.3f}, w={ori.w:.3f}")
+        
+        # Convert quaternion to Euler angles for easier understanding
+        from tf_transformations import euler_from_quaternion
+        euler = euler_from_quaternion([ori.x, ori.y, ori.z, ori.w])
+        roll, pitch, yaw = euler
+        self.get_logger().info(f"  Euler angles: roll={np.degrees(roll):.1f}°, pitch={np.degrees(pitch):.1f}°, yaw={np.degrees(yaw):.1f}°")
 
     def calculate_orientation_from_mask(self, mask):
         """Calculate orientation angle from mask shape using PCA"""
-        # Find contours
+        # find object boundary
         contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if not contours:
             return 0.0
             
-        # Get the largest contour
+        # get largest contour
         largest_contour = max(contours, key=cv2.contourArea)
         
-        # Fit ellipse to get orientation
+        # fit ellipse to contour
         if len(largest_contour) >= 5:
             ellipse = cv2.fitEllipse(largest_contour)
-            angle = ellipse[2]  # Angle in degrees
-            return np.radians(angle)  # Convert to radians
+            angle = ellipse[2]  # degrees
+
+            # change so that postive angles are clockwise, negative angles are counterclockwise
+            # if angle>=90 and angle<=180:
+            #     angle = angle-180
+            return np.radians(angle) 
         
         return 0.0
+    
+    def get_food_width(self,mask,depth_image):
+        # Convert mask to proper format for findContours
+        if mask.dtype != np.uint8:
+            mask = (mask * 255).astype(np.uint8)
 
-    def draw_pose_visualization(self, image, centroid, world_point, orientation_angle, confidence):
+        contours,hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        centroid = self.get_mask_centroid(mask)
+
+        if contours:
+            largest_contour = max(contours, key=cv2.contourArea)
+
+        # get a rotated rectangle around the segmentation
+        rect = cv2.minAreaRect(largest_contour)
+        # get the box points of the rectangle and convert to integers
+        box = cv2.boxPoints(rect)
+        box = np.int0(box)
+
+        if np.linalg.norm(box[0]-box[1]) < np.linalg.norm(box[1]-box[2]):
+            # grab points for width calculation
+            p1 = (box[0]+box[1])/2
+            width_p1 = box[0]
+            width_p2 = box[1]
+        else:
+            p1 = (box[1]+box[2])/2
+            width_p1 = box[1]
+            width_p2 = box[2]
+
+        # for multi bit ill need to change this from centroid
+        dist = tuple(a-b for a,b in zip(p1, centroid))
+
+        # get locations of the grasp points on the rotated rectangle
+        width_p1 = tuple(a-b for a,b in zip(width_p1, dist))
+        width_p2 = tuple(a-b for a,b in zip(width_p2, dist))
+
+        # Convert midpoints to integers and find the nearest point on the mask
+        width_p1 = self.proj_pix2mask(tuple(map(int, width_p1)),mask)
+        width_p2 = self.proj_pix2mask(tuple(map(int, width_p2)),mask)
+
+        # get the coordinates relative to RealSense of width points
+        rs_width_p1, success = self.pixel_to_rs_frame(width_p1[0],width_p1[1],depth_image)
+        rs_width_p2, success = self.pixel_to_rs_frame(width_p2[0],width_p2[1],depth_image)
+
+        # get true distances of points from each other (ignore depth for accuracy)
+        rs_width_p1_2d = rs_width_p1[:2]
+        rs_width_p2_2d = rs_width_p2[:2]
+        
+        # Calculate the Euclidean distance between points
+        width = np.linalg.norm(rs_width_p1_2d - rs_width_p2_2d)
+        self.get_logger().info(f"Width of food item={width:.3f} m")
+
+        # cubic regression function mapping gripper width to grip value
+        grip_val = -0.0215894*width**3 + 0.471771*width**2 - 9.18925*width + 98.07416
+
+        # add insurance factor to ensure gripper can fit around food 
+        grip_val = grip_val-3.159 # goes an extra .35 cm
+
+        # make sure it doesn't exceed kinova limits
+        if grip_val > 98:
+            grip_val = 98
+        elif grip_val < 0:
+            grip_val = 0
+        
+        grip_val = round(grip_val)/100
+        self.get_logger().info(f"Grip value={grip_val}")
+
+        return grip_val, width_p1, width_p2
+
+    def proj_pix2mask(self,px, mask):
+        ys, xs = np.where(mask > 0)
+        if not len(ys):
+            return px
+        mask_pixels = np.vstack((xs,ys)).T
+        neigh = NearestNeighbors()
+        neigh.fit(mask_pixels)
+        dists, idxs = neigh.kneighbors(np.array(px).reshape(1,-1), 1, return_distance=True)
+        projected_px = mask_pixels[idxs.squeeze()]
+        return projected_px
+
+    def draw_pose_visualization(self, image, centroid, rs_point, orientation_angle, confidence, width_p1=None, width_p2=None):
         """Draw pose visualization on the image"""
         vis_image = image.copy()
         
         # Draw centroid
-        cv2.circle(vis_image, centroid, 8, (0, 255, 0), -1)
+        cv2.circle(vis_image, centroid, 5, (255, 0, 0), -1)
         
         # Draw orientation arrow
         arrow_length = 50
@@ -259,26 +408,22 @@ class PerceptionNode(Node):
         end_y = int(centroid[1] + arrow_length * np.sin(orientation_angle))
         cv2.arrowedLine(vis_image, centroid, (end_x, end_y), (255, 0, 0), 3, tipLength=0.3)
         
-        # Draw coordinate frame (smaller arrows for x, y, z axes)
-        frame_length = 30
-        
-        # X-axis (red)
-        x_end = (int(centroid[0] + frame_length), centroid[1])
-        cv2.arrowedLine(vis_image, centroid, x_end, (0, 0, 255), 2, tipLength=0.3)
-        cv2.putText(vis_image, 'X', (x_end[0] + 5, x_end[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
-        
-        # Y-axis (green)
-        y_end = (centroid[0], int(centroid[1] + frame_length))
-        cv2.arrowedLine(vis_image, centroid, y_end, (0, 255, 0), 2, tipLength=0.3)
-        cv2.putText(vis_image, 'Y', (y_end[0] + 5, y_end[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        # Draw width points if provided
+        if width_p1 is not None and width_p2 is not None:
+            # Draw width points as circles
+            cv2.circle(vis_image, tuple(width_p1), 5, (255, 255, 0), -1)  # Cyan circles
+            cv2.circle(vis_image, tuple(width_p2), 5, (255, 255, 0), -1)
+            
+            # Draw line connecting width points
+            cv2.line(vis_image, tuple(width_p1), tuple(width_p2), (255, 255, 0), 2)  # Cyan line
         
         # Add text information
-        if world_point is not None:
+        if rs_point is not None:
             info_text = [
                 f"Confidence: {confidence:.2f}",
-                f"World X: {world_point[0]:.3f}m",
-                f"World Y: {world_point[1]:.3f}m", 
-                f"World Z: {world_point[2]:.3f}m",
+                f"RealSense X: {rs_point[0]:.3f}m",
+                f"RealSense Y: {rs_point[1]:.3f}m", 
+                f"RealSense Z: {rs_point[2]:.3f}m",
                 f"Orientation: {np.degrees(orientation_angle):.1f}°"
             ]
             
@@ -306,7 +451,7 @@ class PerceptionNode(Node):
         }
 
     def visualize_results_with_pose(self, image_path, input_boxes, masks, class_names, confidences, class_ids):
-        """Visualize results with pose information for highest confidence object"""
+        """Visualize results with pose information for highest confidence object, but also handles general perception flow"""
         try:
             img = cv2.imread(image_path)
             
@@ -331,35 +476,52 @@ class PerceptionNode(Node):
                 self.get_logger().error("Could not find centroid")
                 return False
                 
-            # Calculate 3D world coordinates
-            world_point, valid = self.pixel_to_world(centroid[0], centroid[1], depth_image)
-            if not valid or world_point is None:
-                self.get_logger().error("Could not convert to world coordinates")
-                world_point = None
+            # Calculate 3D coordinates relative to RealSense
+            rs_point, valid = self.pixel_to_rs_frame(centroid[0], centroid[1], depth_image)
+            if not valid or rs_point is None:
+                self.get_logger().error("Could not convert to RealSense coordinates")
+                rs_point = None
             else:
-                self.get_logger().info(f"World coordinates: x={world_point[0]:.3f}, y={world_point[1]:.3f}, z={world_point[2]:.3f}")
+                self.get_logger().info(f"RealSense coordinates: x={rs_point[0]:.3f}, y={rs_point[1]:.3f}, z={rs_point[2]:.3f}")
             
             # Calculate orientation
             orientation_angle = self.calculate_orientation_from_mask(highest_obj['mask'])
             self.get_logger().info(f"Orientation angle: {np.degrees(orientation_angle):.1f} degrees")
-            
+
+            # Calculate pose relative to base
+            world_pose = self.rs_to_world(rs_point,orientation_angle)
+            if world_pose is not None:
+                self.print_pose_info(world_pose)
+                self.food_pose_pub.publish(world_pose)
+                self.get_logger().info("Published food pose to /food_pose_base_link")
+            else:
+                self.get_logger().error("Failed to transform pose to base_link")
+                return False
+
+            # Get grip value and width points
+            grip_val, width_p1, width_p2 = self.get_food_width(highest_obj['mask'],depth_image)
+            grip_msg = Float64()
+            grip_msg.data = grip_val
+            self.grip_val_pub.publish(grip_msg)
+
             # Draw all detections first
-            labels = [f"{class_name} {confidence:.2f}" for class_name, confidence in zip(class_names, confidences)]
-            detections = sv.Detections(xyxy=input_boxes, mask=masks.astype(bool), class_id=class_ids)
+            # labels = [f"{class_name} {confidence:.2f}" for class_name, confidence in zip(class_names, confidences)]
+            # detections = sv.Detections(xyxy=input_boxes, mask=masks.astype(bool), class_id=class_ids)
             
             # Annotate with boxes and masks
-            box_annotator = sv.BoxAnnotator()
-            annotated_frame = box_annotator.annotate(scene=img.copy(), detections=detections)
+            # box_annotator = sv.BoxAnnotator()
+            # annotated_frame = box_annotator.annotate(scene=img.copy(), detections=detections)
             
-            label_annotator = sv.LabelAnnotator()
-            annotated_frame = label_annotator.annotate(scene=annotated_frame, detections=detections, labels=labels)
+            # label_annotator = sv.LabelAnnotator()
+            # annotated_frame = label_annotator.annotate(scene=annotated_frame, detections=detections, labels=labels)
             
-            mask_annotator = sv.MaskAnnotator()
-            annotated_frame = mask_annotator.annotate(scene=annotated_frame, detections=detections)
+            annotated_frame = img.copy()
+            # mask_annotator = sv.MaskAnnotator()
+            # annotated_frame = mask_annotator.annotate(scene=annotated_frame, detections=detections)
             
             # Add pose visualization for highest confidence object
             pose_vis = self.draw_pose_visualization(
-                annotated_frame, centroid, world_point, orientation_angle, highest_obj['confidence'])
+                annotated_frame, centroid, rs_point, orientation_angle, highest_obj['confidence'], width_p1, width_p2)
             
             # Display result
             cv2.imshow('Food Detection with Pose', pose_vis)
