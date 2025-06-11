@@ -23,9 +23,12 @@ class KinovaRobotControllerROS2(Node):
         
 
         # robot positions
-        self.single_bite_transfer = config['joint_positions']['bite_transfer']
+        self.overlook = config['joint_positions']['overlook']
+        self.bite_transfer = config['joint_positions']['bite_transfer']
+        self.cup_scan = config['joint_positions']['cup_scan']
         self.multi_bite_transfer = config['joint_positions']['multi_bite_transfer']
-        self.cup_feed_pose = config['joint_positions']['cup_feed_pose']
+        self.sip = config['joint_positions']['sip']
+
         
 
         # Create service clients
@@ -41,19 +44,19 @@ class KinovaRobotControllerROS2(Node):
         self.get_logger().info('Kinova Robot Controller ROS2 initialized')
 
     def wait_for_services(self):
-        """Wait for all required services to be available"""
-        services = [
-            (self.set_joint_position_client, '/my_gen3/set_joint_position'),
-            (self.set_joint_velocity_client, '/my_gen3/set_joint_velocity'),
-            (self.set_pose_client, '/my_gen3/set_pose'),
-            (self.set_gripper_client, '/my_gen3/set_gripper'),
-            (self.set_joint_waypoints_client, '/my_gen3/set_joint_waypoints')
-        ]
-        
-        for client, service_name in services:
-            while not client.wait_for_service(timeout_sec=1.0):
-                self.get_logger().info(f'Waiting for service {service_name}...')
-    
+          """Wait for all required services to be available"""
+          services = [
+              (self.set_joint_position_client, '/my_gen3/set_joint_position'),
+              (self.set_joint_velocity_client, '/my_gen3/set_joint_velocity'),
+              (self.set_pose_client, '/my_gen3/set_pose'),
+              (self.set_gripper_client, '/my_gen3/set_gripper'),
+              (self.set_joint_waypoints_client, '/my_gen3/set_joint_waypoints')
+          ]
+
+          for client, service_name in services:
+              while not client.wait_for_service(timeout_sec=1.0):
+                  self.get_logger().info(f'Waiting for service {service_name}...')
+
     async def call_service(self, client: Client, request):
         """Generic service call with error handling"""
         try:
