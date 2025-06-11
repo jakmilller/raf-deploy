@@ -3,10 +3,12 @@ feeding:
   mode: "manual"  # Currently only manual mode implemented
   
   # Movement parameters
-  z_down_offset: 0.05      # How much to move down to grasp food (meters)
-  z_up_offset: 0.1         # How much to move up after grasping (meters)
-  grip_close_adjustment: 0.1  # Additional grip closure beyond calculated value
+  z_down_offset: 0.01      # How much to move down to grasp food (meters)
+  z_up_offset: 0.15         # How much to move up after grasping (meters)
+  grip_close: 0.035  # Additional grip closure beyond calculated value
   
+  dist_from_table: 0.324
+
   # Timeouts
   service_timeout: 20    # Timeout for service calls (seconds)
   

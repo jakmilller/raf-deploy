@@ -16,6 +16,7 @@ from PIL import Image as PILImage
 import base64
 import requests
 import tf2_ros
+import math
 import tf2_geometry_msgs
 from geometry_msgs.msg import Pose, Point, Quaternion, PoseStamped
 from std_msgs.msg import Float64
@@ -237,7 +238,12 @@ class PerceptionNode(Node):
         # Convert to 3D camera coordinates
         x = (pixel_x - cx) * depth / fx
         y = (pixel_y - cy) * depth / fy
-        z = depth
+
+        # the transformation currently moves the tips of the gripper to the pose, but assumes that it is fully open
+        # for finger foods the gripper will be almost always closed, so tips are a different distance from the camera
+        # adjust for this with dimensions from Robotiq documentation
+        robotiq_offset = 0.0285
+        z = depth - robotiq_offset
         
         return np.array([x, y, z]), True
     
@@ -249,14 +255,15 @@ class PerceptionNode(Node):
             pose_stamped.header.stamp = rclpy.time.Time().to_msg()
             pose_stamped.pose.position.x = float(rs_point[0])
             pose_stamped.pose.position.y = float(rs_point[1]) 
+            pose_stamped.pose.position.z = float(rs_point[2])
+            
+            # dont ask
+            if orientation<0:
+                orientation+=180
+            else:
+                orientation-=180
 
-            # the transformation currently moves the tips of the gripper to the pose, but assumes that it is fully open
-            # for finger foods the gripper will be almost always closed, so tips are a different distance from the camera
-            # adjust for this with dimensions from Robotiq documentation
-            robotiq_offset = 0.0225
-            pose_stamped.pose.position.z = float(rs_point[2]-robotiq_offset)
-
-            quat = quaternion_from_euler(0, 0, orientation)
+            quat = quaternion_from_euler(0, 0, math.radians(orientation))
             pose_stamped.pose.orientation.x = quat[0]
             pose_stamped.pose.orientation.y = quat[1]
             pose_stamped.pose.orientation.z = quat[2]
@@ -269,6 +276,8 @@ class PerceptionNode(Node):
                 return None
 
             transformed_pose = self.tf_buffer.transform(pose_stamped,'base_link')
+
+            transformed_pose.pose.position.y += 0.012
 
             return transformed_pose
 
@@ -336,24 +345,29 @@ class PerceptionNode(Node):
 
         if np.linalg.norm(box[0]-box[1]) < np.linalg.norm(box[1]-box[2]):
             # grab points for width calculation
-            p1 = (box[0]+box[1])/2
-            width_p1 = box[0]
-            width_p2 = box[1]
-        else:
             p1 = (box[1]+box[2])/2
-            width_p1 = box[1]
-            width_p2 = box[2]
+            p2 = (box[3]+box[0])/2
+            
+            # really jank way of getting orientation
+            p_orient = (box[0]+box[1])/2
+        else:
+            p1 = (box[0]+box[1])/2
+            p2 = (box[2]+box[3])/2
+
+            p_orient = (box[1]+box[2])/2
+            # width_p1 = box[0]
+            # width_p2 = box[1]
 
         # for multi bit ill need to change this from centroid
-        dist = tuple(a-b for a,b in zip(p1, centroid))
+        # dist = tuple(a-b for a,b in zip(p1, centroid))
 
-        # get locations of the grasp points on the rotated rectangle
-        width_p1 = tuple(a-b for a,b in zip(width_p1, dist))
-        width_p2 = tuple(a-b for a,b in zip(width_p2, dist))
+        # # get locations of the grasp points on the rotated rectangle
+        # width_p1 = tuple(a-b for a,b in zip(width_p1, dist))
+        # width_p2 = tuple(a-b for a,b in zip(width_p2, dist))
 
         # Convert midpoints to integers and find the nearest point on the mask
-        width_p1 = self.proj_pix2mask(tuple(map(int, width_p1)),mask)
-        width_p2 = self.proj_pix2mask(tuple(map(int, width_p2)),mask)
+        width_p1 = self.proj_pix2mask(tuple(map(int, p1)),mask)
+        width_p2 = self.proj_pix2mask(tuple(map(int, p2)),mask)
 
         # get the coordinates relative to RealSense of width points
         rs_width_p1, success = self.pixel_to_rs_frame(width_p1[0],width_p1[1],depth_image)
@@ -366,9 +380,9 @@ class PerceptionNode(Node):
         # Calculate the Euclidean distance between points
         width = np.linalg.norm(rs_width_p1_2d - rs_width_p2_2d)
         self.get_logger().info(f"Width of food item={width:.3f} m")
-
+        width_cm = width*100
         # cubic regression function mapping gripper width to grip value
-        grip_val = -0.0215894*width**3 + 0.471771*width**2 - 9.18925*width + 98.07416
+        grip_val = -0.0292658*width_cm**3 + 0.253614*width_cm**2 - 7.10566*width_cm + 95.17439
 
         # add insurance factor to ensure gripper can fit around food 
         grip_val = grip_val-3.159 # goes an extra .35 cm
@@ -382,7 +396,35 @@ class PerceptionNode(Node):
         grip_val = round(grip_val)/100
         self.get_logger().info(f"Grip value={grip_val}")
 
-        return grip_val, width_p1, width_p2
+        food_angle = self.get_food_angle(centroid,p_orient)
+
+        return grip_val, width_p1, width_p2, food_angle
+    
+    def get_food_angle(self,centroid,end):
+        center_y = centroid[1]
+        end_y = end[1]
+
+        if center_y<end_y:
+            p2 = centroid
+            p1 = end
+        else:
+            p1 = centroid
+            p2 = end
+
+        a = abs(p2[0]-p1[0])
+        b = abs(p2[1]-p1[1])
+        if b == 0:
+            b=0.001
+
+        food_angle = math.degrees(math.atan(a/b))
+
+        if p1[0]>p2[0]:
+            food_angle = -food_angle
+
+        print(f'FOOD ANGLE IS {food_angle} DEG')
+        return food_angle
+
+
 
     def proj_pix2mask(self,px, mask):
         ys, xs = np.where(mask > 0)
@@ -403,16 +445,16 @@ class PerceptionNode(Node):
         cv2.circle(vis_image, centroid, 5, (255, 0, 0), -1)
         
         # Draw orientation arrow
-        arrow_length = 50
-        end_x = int(centroid[0] + arrow_length * np.cos(orientation_angle))
-        end_y = int(centroid[1] + arrow_length * np.sin(orientation_angle))
-        cv2.arrowedLine(vis_image, centroid, (end_x, end_y), (255, 0, 0), 3, tipLength=0.3)
+        # arrow_length = 50
+        # end_x = int(centroid[0] + arrow_length * np.cos(orientation_angle))
+        # end_y = int(centroid[1] + arrow_length * np.sin(orientation_angle))
+        # cv2.arrowedLine(vis_image, centroid, (end_x, end_y), (255, 0, 0), 3, tipLength=0.3)
         
         # Draw width points if provided
         if width_p1 is not None and width_p2 is not None:
             # Draw width points as circles
-            cv2.circle(vis_image, tuple(width_p1), 5, (255, 255, 0), -1)  # Cyan circles
-            cv2.circle(vis_image, tuple(width_p2), 5, (255, 255, 0), -1)
+            cv2.circle(vis_image, tuple(width_p1), 3, (255, 255, 0), -1)  # Cyan circles
+            cv2.circle(vis_image, tuple(width_p2), 3, (255, 255, 0), -1)
             
             # Draw line connecting width points
             cv2.line(vis_image, tuple(width_p1), tuple(width_p2), (255, 255, 0), 2)  # Cyan line
@@ -485,11 +527,19 @@ class PerceptionNode(Node):
                 self.get_logger().info(f"RealSense coordinates: x={rs_point[0]:.3f}, y={rs_point[1]:.3f}, z={rs_point[2]:.3f}")
             
             # Calculate orientation
-            orientation_angle = self.calculate_orientation_from_mask(highest_obj['mask'])
-            self.get_logger().info(f"Orientation angle: {np.degrees(orientation_angle):.1f} degrees")
+            # orientation_angle = self.calculate_orientation_from_mask(highest_obj['mask'])
+            # self.get_logger().info(f"Orientation angle: {np.degrees(orientation_angle):.1f} degrees")
+
+
+            # Get grip value and width points
+            grip_val, width_p1, width_p2, food_angle = self.get_food_width(highest_obj['mask'],depth_image)
+            self.get_logger().info(f'Food Angle: {food_angle} deg')
+            grip_msg = Float64()
+            grip_msg.data = grip_val
+            self.grip_val_pub.publish(grip_msg)
 
             # Calculate pose relative to base
-            world_pose = self.rs_to_world(rs_point,orientation_angle)
+            world_pose = self.rs_to_world(rs_point,food_angle)
             if world_pose is not None:
                 self.print_pose_info(world_pose)
                 self.food_pose_pub.publish(world_pose)
@@ -497,12 +547,6 @@ class PerceptionNode(Node):
             else:
                 self.get_logger().error("Failed to transform pose to base_link")
                 return False
-
-            # Get grip value and width points
-            grip_val, width_p1, width_p2 = self.get_food_width(highest_obj['mask'],depth_image)
-            grip_msg = Float64()
-            grip_msg.data = grip_val
-            self.grip_val_pub.publish(grip_msg)
 
             # Draw all detections first
             # labels = [f"{class_name} {confidence:.2f}" for class_name, confidence in zip(class_names, confidences)]
@@ -521,7 +565,7 @@ class PerceptionNode(Node):
             
             # Add pose visualization for highest confidence object
             pose_vis = self.draw_pose_visualization(
-                annotated_frame, centroid, rs_point, orientation_angle, highest_obj['confidence'], width_p1, width_p2)
+                annotated_frame, centroid, rs_point, food_angle, highest_obj['confidence'], width_p1, width_p2)
             
             # Display result
             cv2.imshow('Food Detection with Pose', pose_vis)
