@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.client import Client
 import yaml
-import time
+import asyncio
 from typing import List
 
 # Import custom interfaces
@@ -27,6 +27,7 @@ class KinovaRobotControllerROS2(Node):
         self.cup_scan = config['joint_positions']['cup_scan']
         self.multi_bite_transfer = config['joint_positions']['multi_bite_transfer']
         self.sip = config['joint_positions']['sip']
+        self.intermediate = config['joint_positions']['intermediate']
 
         # Create service clients
         self.set_joint_position_client = self.create_client(SetJointAngles, '/my_gen3/set_joint_position')
@@ -54,43 +55,55 @@ class KinovaRobotControllerROS2(Node):
             while not client.wait_for_service(timeout_sec=1.0):
                 self.get_logger().info(f'Waiting for service {service_name}...')
 
-    def call_service_sync(self, client: Client, request):
-        """Generic synchronous service call with error handling"""
+    async def call_service_async(self, client: Client, request):
+        """Generic async service call with error handling"""
         try:
             future = client.call_async(request)
-            rclpy.spin_until_future_complete(self, future)
+            
+            # Wait for completion without blocking
+            while not future.done():
+                await asyncio.sleep(0.01)
+                rclpy.spin_once(self, timeout_sec=0)
+            
             return future.result()
         except Exception as e:
             self.get_logger().error(f'Service call failed: {str(e)}')
             return None
 
-    # Custom calls for pre-set positions (now synchronous)
-    def reset(self):
+    # Custom calls for pre-set positions
+    async def reset(self):
         """Reset robot to overlook pose"""
-        self.get_logger().info('Moving to overlook position')
-        return self.set_joint_position(self.overlook)
+        self.get_logger().info('Resetting')
 
-    def move_to_bite_transfer(self):
+        return await self.set_joint_position(self.overlook)
+
+
+    async def move_to_bite_transfer(self):
         """Move to bite transfer position"""
         self.get_logger().info('Moving to bite transfer position')
-        return self.set_joint_position(self.bite_transfer)
+        return await self.set_joint_position(self.bite_transfer)
 
-    def move_to_cup_scan(self):
+    async def move_to_cup_scan(self):
         """Move to cup scanning position"""
         self.get_logger().info('Moving to cup scan position')
-        return self.set_joint_position(self.cup_scan)
+        return await self.set_joint_position(self.cup_scan)
 
-    def move_to_sip(self):
+    async def move_to_sip(self):
         """Moving to sipping position"""
         self.get_logger().info('Moving to sip position')
-        return self.set_joint_position(self.sip)
+        return await self.set_joint_position(self.sip)
 
-    def move_to_multi_bite_transfer(self):
+    async def move_to_multi_bite_transfer(self):
         """Moving bite transfer position (multi-bite)"""
         self.get_logger().info('Moving to multi-bite transfer position')
-        return self.set_joint_position(self.multi_bite_transfer)
+        return await self.set_joint_position(self.multi_bite_transfer)
+    
+    async def move_to_intermediate(self):
+        """Moving to intermediate (between acquisition and transfer)"""
+        self.get_logger().info('Moving to intermediate position')
+        return await self.set_joint_position(self.intermediate)
 
-    def move_to_pose(self, pose: Pose, force_threshold: List[float] = None):
+    async def move_to_pose(self, pose: Pose, force_threshold: List[float] = None):
         """Move to a specific pose"""
         if force_threshold is None:
             force_threshold = self.DEFAULT_FORCE_THRESHOLD
@@ -101,26 +114,26 @@ class KinovaRobotControllerROS2(Node):
         request.target_pose = pose
         request.force_threshold = force_threshold
         
-        response = self.call_service_sync(self.set_pose_client, request)
+        response = await self.call_service_async(self.set_pose_client, request)
         if response:
             self.get_logger().info(f"Response: {response.success}")
             return response.success
         return False
 
-    def set_joint_position(self, joint_position: List[float]):
+    async def set_joint_position(self, joint_position: List[float]):
         """Set joint positions"""
         self.get_logger().info(f"Calling set_joint_positions")
         
         request = SetJointAngles.Request()
         request.joint_angles = joint_position
         
-        response = self.call_service_sync(self.set_joint_position_client, request)
+        response = await self.call_service_async(self.set_joint_position_client, request)
         if response:
             self.get_logger().info(f"Response: {response.success}")
             return response.success
         return False
 
-    def set_joint_velocity(self, joint_velocity: List[float], duration: float = 3.5):
+    async def set_joint_velocity(self, joint_velocity: List[float], duration: float = 3.5):
         """Set joint velocities"""
         self.get_logger().info(f"Calling set_joint_velocity with joint_velocity: {joint_velocity}")
         
@@ -129,14 +142,14 @@ class KinovaRobotControllerROS2(Node):
         request.command = joint_velocity
         request.timeout = duration
         
-        response = self.call_service_sync(self.set_joint_velocity_client, request)
+        response = await self.call_service_async(self.set_joint_velocity_client, request)
         if response:
             self.get_logger().info(f"Response: {response.success}")
             return response.success
         return False
 
-    def set_joint_waypoints(self, joint_waypoints: List[List[float]]):
-        """Set joint waypoints (synchronous)"""
+    async def set_joint_waypoints(self, joint_waypoints: List[List[float]]):
+        """Set joint waypoints (async)"""
         self.get_logger().info("Calling set_joint_waypoints")
         
         target_waypoints = JointTrajectory()
@@ -151,19 +164,19 @@ class KinovaRobotControllerROS2(Node):
         request.target_waypoints = target_waypoints
         request.timeout = 100.0
         
-        response = self.call_service_sync(self.set_joint_waypoints_client, request)
+        response = await self.call_service_async(self.set_joint_waypoints_client, request)
         if response:
             return response.success
         return False
 
-    def set_gripper(self, gripper_value: float):
+    async def set_gripper(self, gripper_value: float):
         """Set gripper position"""
         self.get_logger().info(f"Setting gripper to: {gripper_value}")
         
         request = SetGripper.Request()
         request.position = gripper_value
         
-        response = self.call_service_sync(self.set_gripper_client, request)
+        response = await self.call_service_async(self.set_gripper_client, request)
         if response:
             self.get_logger().info(f"Gripper response: {response.success}")
             return response.success

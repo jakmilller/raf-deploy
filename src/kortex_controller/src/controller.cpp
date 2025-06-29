@@ -94,16 +94,44 @@ Controller::Controller() : Node("controller")
     }
 
     // Create services
+    RCLCPP_INFO(this->get_logger(), "Creating API clients...");
     mBase = new k_api::Base::BaseClient(m_tcp_router);
+    RCLCPP_INFO(this->get_logger(), "BaseClient created");
+    
     mBaseCyclic = new k_api::BaseCyclic::BaseCyclicClient(m_tcp_router);
+    RCLCPP_INFO(this->get_logger(), "BaseCyclicClient created");
+    
     mActuatorConfig = new k_api::ActuatorConfig::ActuatorConfigClient(m_tcp_router);
+    RCLCPP_INFO(this->get_logger(), "ActuatorConfigClient created");
+    
     mServoingMode = k_api::Base::ServoingModeInformation();
     mControlModeMessage = k_api::ActuatorConfig::ControlModeInformation();
 
+    // Test basic API calls before proceeding
+    RCLCPP_INFO(this->get_logger(), "Testing basic API calls...");
+    try {
+        RCLCPP_INFO(this->get_logger(), "Testing GetActuatorCount...");
+        auto count = mBase->GetActuatorCount();
+        RCLCPP_INFO(this->get_logger(), "Actuator count: %d", count.count());
+        
+        RCLCPP_INFO(this->get_logger(), "Testing RefreshFeedback...");
+        auto feedback = mBaseCyclic->RefreshFeedback();
+        RCLCPP_INFO(this->get_logger(), "RefreshFeedback successful");
+        
+    } catch (k_api::KDetailedException& ex) {
+        RCLCPP_ERROR(this->get_logger(), "API test failed: %s", ex.what());
+        RCLCPP_ERROR(this->get_logger(), "Error sub-code: %s", 
+            k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
+    } catch (...) {
+        RCLCPP_ERROR(this->get_logger(), "Unknown error during API test");
+    }
+
     // Clearing faults
+    RCLCPP_INFO(this->get_logger(), "Clearing faults...");
     try
     {
         mBase->ClearFaults();
+        RCLCPP_INFO(this->get_logger(), "Faults cleared successfully");
     }
     catch(...)
     {
@@ -111,16 +139,21 @@ Controller::Controller() : Node("controller")
     }
 
     // Initialize ROS2 publishers
+    RCLCPP_INFO(this->get_logger(), "Creating publishers...");
     mJointStatePub = this->create_publisher<sensor_msgs::msg::JointState>("/my_gen3/robot_joint_states", 10);
     mCartesianStatePub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/my_gen3/robot_cartesian_state", 10);
+    RCLCPP_INFO(this->get_logger(), "Publishers created");
     
     // Initialize ROS2 subscribers
+    RCLCPP_INFO(this->get_logger(), "Creating subscribers...");
     mTareFTSensorSub = this->create_subscription<std_msgs::msg::Bool>(
         "/my_gen3/tare_ft_sensor", 10, std::bind(&Controller::tareFTSensorCallback, this, _1));
     mEStopSub = this->create_subscription<std_msgs::msg::Bool>(
         "/my_gen3/estop", 10, std::bind(&Controller::eStopCallback, this, _1));
+    RCLCPP_INFO(this->get_logger(), "Subscribers created");
     
     // Initialize ROS2 services
+    RCLCPP_INFO(this->get_logger(), "Creating services...");
     mSetJointPositionService = this->create_service<raf_interfaces::srv::SetJointAngles>(
         "/my_gen3/set_joint_position", std::bind(&Controller::setJointPosition, this, _1, _2));
     mSetJointVelocityService = this->create_service<raf_interfaces::srv::SetJointVelocity>(
@@ -133,18 +166,33 @@ Controller::Controller() : Node("controller")
         "/my_gen3/set_gripper", std::bind(&Controller::setGripper, this, _1, _2));
     mSetTwistService = this->create_service<raf_interfaces::srv::SetTwist>(
         "/my_gen3/set_twist", std::bind(&Controller::setTwist, this, _1, _2));
-
-    // Initialize timer for state publishing
-    mRobotStateTimer = this->create_wall_timer(
-        std::chrono::milliseconds(10), std::bind(&Controller::publishState, this));
+    RCLCPP_INFO(this->get_logger(), "Services created");
 
     // Initialize force/torque sensor variables
-    mZeroFTSensorValues = std::vector<double>(6, 0.0);
-    mFTSensorValues = std::vector<double>(6, 0.0);
-    mForceThreshold = std::vector<double>(6, 1000.0);
+    RCLCPP_INFO(this->get_logger(), "Initializing F/T sensor variables...");
+    mZeroFTSensorValues = std::vector<double>(6, 0.0);  // Changed back to 6
+    mFTSensorValues = std::vector<double>(6, 0.0);      // Changed back to 6
+    mForceThreshold = std::vector<double>(6, 1000.0);   // Changed back to 6
     mWatchdogActive = true;
+    RCLCPP_INFO(this->get_logger(), "F/T sensor variables initialized");
 
-    RCLCPP_INFO(this->get_logger(), "Controller initialized");
+    // Test publishState manually once before starting timer
+    RCLCPP_INFO(this->get_logger(), "Testing publishState manually...");
+    try {
+        publishState();
+        RCLCPP_INFO(this->get_logger(), "Manual publishState test completed successfully");
+        
+        // If manual test works, start the timer
+        RCLCPP_INFO(this->get_logger(), "Starting state publishing timer...");
+        mRobotStateTimer = this->create_wall_timer(
+            std::chrono::milliseconds(100), std::bind(&Controller::publishState, this)); // Increased interval to 100ms for debugging
+        RCLCPP_INFO(this->get_logger(), "Timer started");
+        
+    } catch (...) {
+        RCLCPP_ERROR(this->get_logger(), "Manual publishState test failed - timer will NOT be started");
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Controller initialized successfully");
 }
 
 Controller::~Controller()
@@ -216,85 +264,120 @@ void Controller::tareFTSensorCallback(const std_msgs::msg::Bool::SharedPtr /* ms
 
 void Controller::publishState()
 {
-    auto start_time = this->now();
-    mLastFeedback = mBaseCyclic->RefreshFeedback();
-
-    int actuator_count = mBase->GetActuatorCount().count();
+    RCLCPP_DEBUG(this->get_logger(), "publishState() called");
     
-    auto joint_state = sensor_msgs::msg::JointState();
-    joint_state.header.stamp = this->now();
-    for (int i = 0; i < actuator_count; ++i)
-    {
-        joint_state.name.push_back("joint_" + std::to_string(i + 1));
-        double pos = degreesToRadians(double(mLastFeedback.actuators(i).position()));
-        if (pos > M_PI)
-            pos -= 2*M_PI;
-        joint_state.position.push_back(pos);
-        joint_state.velocity.push_back(degreesToRadians(double(mLastFeedback.actuators(i).velocity())));
-        joint_state.effort.push_back(double(mLastFeedback.actuators(i).torque()));
-    }
+    try {
+        auto start_time = this->now();
+        RCLCPP_DEBUG(this->get_logger(), "About to call RefreshFeedback...");
+        
+        mLastFeedback = mBaseCyclic->RefreshFeedback();
+        RCLCPP_DEBUG(this->get_logger(), "RefreshFeedback successful");
 
-    // Read finger state
-    joint_state.name.push_back("finger_joint");
-    joint_state.position.push_back(0.8*mLastFeedback.interconnect().gripper_feedback().motor()[0].position() / 100.0);
-    joint_state.velocity.push_back(0.8*mLastFeedback.interconnect().gripper_feedback().motor()[0].velocity() / 100.0);
-    joint_state.effort.push_back(mLastFeedback.interconnect().gripper_feedback().motor()[0].current_motor());
+        RCLCPP_DEBUG(this->get_logger(), "Getting actuator count...");
+        int actuator_count = mBase->GetActuatorCount().count();
+        RCLCPP_DEBUG(this->get_logger(), "Actuator count: %d", actuator_count);
+        
+        auto joint_state = sensor_msgs::msg::JointState();
+        joint_state.header.stamp = this->now();
+        
+        RCLCPP_DEBUG(this->get_logger(), "Processing joint states...");
+        for (int i = 0; i < actuator_count; ++i)
+        {
+            joint_state.name.push_back("joint_" + std::to_string(i + 1));
+            double pos = degreesToRadians(double(mLastFeedback.actuators(i).position()));
+            if (pos > M_PI)
+                pos -= 2*M_PI;
+            joint_state.position.push_back(pos);
+            joint_state.velocity.push_back(degreesToRadians(double(mLastFeedback.actuators(i).velocity())));
+            joint_state.effort.push_back(double(mLastFeedback.actuators(i).torque()));
+        }
 
-    mJointStatePub->publish(joint_state);
+        RCLCPP_DEBUG(this->get_logger(), "Processing gripper state...");
+        // Read finger state - add error checking
+        if (mLastFeedback.has_interconnect() && 
+            mLastFeedback.interconnect().has_gripper_feedback() &&
+            mLastFeedback.interconnect().gripper_feedback().motor_size() > 0) {
+            
+            joint_state.name.push_back("finger_joint");
+            joint_state.position.push_back(0.8*mLastFeedback.interconnect().gripper_feedback().motor()[0].position() / 100.0);
+            joint_state.velocity.push_back(0.8*mLastFeedback.interconnect().gripper_feedback().motor()[0].velocity() / 100.0);
+            joint_state.effort.push_back(mLastFeedback.interconnect().gripper_feedback().motor()[0].current_motor());
+        } else {
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 5000, "No gripper feedback available");
+        }
 
-    // Publish cartesian state
-    auto cartesian_state = geometry_msgs::msg::PoseStamped();
-    cartesian_state.header.stamp = this->now();
-    cartesian_state.header.frame_id = "base_link";
+        RCLCPP_DEBUG(this->get_logger(), "Publishing joint state...");
+        mJointStatePub->publish(joint_state);
 
-    cartesian_state.pose.position.x = mLastFeedback.base().tool_pose_x();
-    cartesian_state.pose.position.y = mLastFeedback.base().tool_pose_y();
-    cartesian_state.pose.position.z = mLastFeedback.base().tool_pose_z();
+        RCLCPP_DEBUG(this->get_logger(), "Processing cartesian state...");
+        // Publish cartesian state
+        auto cartesian_state = geometry_msgs::msg::PoseStamped();
+        cartesian_state.header.stamp = this->now();
+        cartesian_state.header.frame_id = "base_link";
 
-    tf2::Quaternion quat;
-    quat.setRPY(degreesToRadians(mLastFeedback.base().tool_pose_theta_x()), 
-                degreesToRadians(mLastFeedback.base().tool_pose_theta_y()), 
-                degreesToRadians(mLastFeedback.base().tool_pose_theta_z()));
-    cartesian_state.pose.orientation = tf2::toMsg(quat);
+        cartesian_state.pose.position.x = mLastFeedback.base().tool_pose_x();
+        cartesian_state.pose.position.y = mLastFeedback.base().tool_pose_y();
+        cartesian_state.pose.position.z = mLastFeedback.base().tool_pose_z();
 
-    mCartesianStatePub->publish(cartesian_state);
+        tf2::Quaternion quat;
+        quat.setRPY(degreesToRadians(mLastFeedback.base().tool_pose_theta_x()), 
+                    degreesToRadians(mLastFeedback.base().tool_pose_theta_y()), 
+                    degreesToRadians(mLastFeedback.base().tool_pose_theta_z()));
+        cartesian_state.pose.orientation = tf2::toMsg(quat);
 
-    // Update force/torque sensor data
-    mFTSensorValues[0] = mLastFeedback.base().tool_external_wrench_force_x();
-    mFTSensorValues[1] = mLastFeedback.base().tool_external_wrench_force_y();
-    mFTSensorValues[2] = mLastFeedback.base().tool_external_wrench_force_z();
-    mFTSensorValues[3] = mLastFeedback.base().tool_external_wrench_torque_x();
-    mFTSensorValues[4] = mLastFeedback.base().tool_external_wrench_torque_y();
-    mFTSensorValues[5] = mLastFeedback.base().tool_external_wrench_torque_z();
+        RCLCPP_DEBUG(this->get_logger(), "Publishing cartesian state...");
+        mCartesianStatePub->publish(cartesian_state);
 
-    if (mTareFTSensor.load())
-    {
-        mZeroFTSensorValues = mFTSensorValues;
-        mTareFTSensor.store(false);
-    }
+        RCLCPP_DEBUG(this->get_logger(), "Processing F/T sensor data...");
+        // Update force/torque sensor data
+        mFTSensorValues[0] = mLastFeedback.base().tool_external_wrench_force_x();
+        mFTSensorValues[1] = mLastFeedback.base().tool_external_wrench_force_y();
+        mFTSensorValues[2] = mLastFeedback.base().tool_external_wrench_force_z();
+        mFTSensorValues[3] = mLastFeedback.base().tool_external_wrench_torque_x();
+        mFTSensorValues[4] = mLastFeedback.base().tool_external_wrench_torque_y();
+        mFTSensorValues[5] = mLastFeedback.base().tool_external_wrench_torque_z();
 
-    if(mUpdateForceThreshold.load())
-    {
-        mForceThreshold = mNewForceThreshold;
-        mUpdateForceThreshold.store(false);
-    }
+        if (mTareFTSensor.load())
+        {
+            mZeroFTSensorValues = mFTSensorValues;
+            mTareFTSensor.store(false);
+        }
 
-    // Check force thresholds
-    if( std::abs(mFTSensorValues[0] - mZeroFTSensorValues[0]) > std::abs(mForceThreshold[0])
-        or std::abs(mFTSensorValues[1] - mZeroFTSensorValues[1]) > std::abs(mForceThreshold[1])
-        or std::abs(mFTSensorValues[2] - mZeroFTSensorValues[2]) > std::abs(mForceThreshold[2])
-        or std::abs(mFTSensorValues[3] - mZeroFTSensorValues[3]) > std::abs(mForceThreshold[3])
-        or std::abs(mFTSensorValues[4] - mZeroFTSensorValues[4]) > std::abs(mForceThreshold[4])
-        or std::abs(mFTSensorValues[5] - mZeroFTSensorValues[5]) > std::abs(mForceThreshold[5]))
-    {   
-        RCLCPP_INFO(this->get_logger(), "Force threshold exceeded");
-        RCLCPP_INFO(this->get_logger(), "Measured force:");
-        RCLCPP_INFO(this->get_logger(), "Fx: %f", mFTSensorValues[0] - mZeroFTSensorValues[0]);
-        RCLCPP_INFO(this->get_logger(), "Fy: %f", mFTSensorValues[1] - mZeroFTSensorValues[1]);
-        RCLCPP_INFO(this->get_logger(), "Fz: %f", mFTSensorValues[2] - mZeroFTSensorValues[2]);
-        RCLCPP_INFO(this->get_logger(), "Tx: %f", mFTSensorValues[3] - mZeroFTSensorValues[3]);
-        RCLCPP_INFO(this->get_logger(), "Ty: %f", mFTSensorValues[4] - mZeroFTSensorValues[4]);
-        RCLCPP_INFO(this->get_logger(), "Tz: %f", mFTSensorValues[5] - mZeroFTSensorValues[5]);
+        if(mUpdateForceThreshold.load())
+        {
+            mForceThreshold = mNewForceThreshold;
+            mUpdateForceThreshold.store(false);
+        }
+
+        RCLCPP_DEBUG(this->get_logger(), "Checking force thresholds...");
+        // Check force thresholds
+        if( std::abs(mFTSensorValues[0] - mZeroFTSensorValues[0]) > std::abs(mForceThreshold[0])
+            or std::abs(mFTSensorValues[1] - mZeroFTSensorValues[1]) > std::abs(mForceThreshold[1])
+            or std::abs(mFTSensorValues[2] - mZeroFTSensorValues[2]) > std::abs(mForceThreshold[2])
+            or std::abs(mFTSensorValues[3] - mZeroFTSensorValues[3]) > std::abs(mForceThreshold[3])
+            or std::abs(mFTSensorValues[4] - mZeroFTSensorValues[4]) > std::abs(mForceThreshold[4])
+            or std::abs(mFTSensorValues[5] - mZeroFTSensorValues[5]) > std::abs(mForceThreshold[5]))
+        {   
+            RCLCPP_INFO(this->get_logger(), "Force threshold exceeded");
+            RCLCPP_INFO(this->get_logger(), "Measured force:");
+            RCLCPP_INFO(this->get_logger(), "Fx: %f", mFTSensorValues[0] - mZeroFTSensorValues[0]);
+            RCLCPP_INFO(this->get_logger(), "Fy: %f", mFTSensorValues[1] - mZeroFTSensorValues[1]);
+            RCLCPP_INFO(this->get_logger(), "Fz: %f", mFTSensorValues[2] - mZeroFTSensorValues[2]);
+            RCLCPP_INFO(this->get_logger(), "Tx: %f", mFTSensorValues[3] - mZeroFTSensorValues[3]);
+            RCLCPP_INFO(this->get_logger(), "Ty: %f", mFTSensorValues[4] - mZeroFTSensorValues[4]);
+            RCLCPP_INFO(this->get_logger(), "Tz: %f", mFTSensorValues[5] - mZeroFTSensorValues[5]);
+        }
+        
+        RCLCPP_DEBUG(this->get_logger(), "publishState() completed successfully");
+        
+    } catch (k_api::KDetailedException& ex) {
+        RCLCPP_ERROR(this->get_logger(), "Kortex exception in publishState: %s", ex.what());
+        RCLCPP_ERROR(this->get_logger(), "Error sub-code: %s", 
+            k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
+    } catch (std::exception& ex) {
+        RCLCPP_ERROR(this->get_logger(), "Standard exception in publishState: %s", ex.what());
+    } catch (...) {
+        RCLCPP_ERROR(this->get_logger(), "Unknown exception in publishState");
     }
 }
 
@@ -389,13 +472,14 @@ void Controller::setJointVelocity(const std::shared_ptr<raf_interfaces::srv::Set
     }
 
     k_api::Base::JointSpeeds joint_speeds;
+    
     int actuator_count = mBase->GetActuatorCount().count();
     for (int i = 0; i < actuator_count && i < static_cast<int>(request->command.size()); ++i)
     {
         auto joint_speed = joint_speeds.add_joint_speeds();
         joint_speed->set_joint_identifier(i);
         joint_speed->set_value(radiansToDegrees(request->command[i]));
-        joint_speed->set_duration(1);
+        // Temporarily remove duration - may not be needed in API 2.7
     }
     mBase->SendJointSpeedsCommand(joint_speeds);
 

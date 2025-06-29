@@ -73,13 +73,12 @@ enum ModelId {
   MODEL_ID_UNSPECIFIED = 0,
   MODEL_ID_L53 = 1,
   MODEL_ID_L31 = 2,
-  MODEL_ID_HDK = 3,
   ModelId_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   ModelId_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool ModelId_IsValid(int value);
 const ModelId ModelId_MIN = MODEL_ID_UNSPECIFIED;
-const ModelId ModelId_MAX = MODEL_ID_HDK;
+const ModelId ModelId_MAX = MODEL_ID_L31;
 const int ModelId_ARRAYSIZE = ModelId_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ModelId_descriptor();
@@ -97,13 +96,12 @@ enum BaseType {
   BASE_TYPE_L53_QUICK_CONNECT = 1,
   BASE_TYPE_L53_FIXED = 2,
   BASE_TYPE_L31_FIXED = 3,
-  BASE_TYPE_HDK_FIXED = 4,
   BaseType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   BaseType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool BaseType_IsValid(int value);
 const BaseType BaseType_MIN = BASE_TYPE_UNSPECIFIED;
-const BaseType BaseType_MAX = BASE_TYPE_HDK_FIXED;
+const BaseType BaseType_MAX = BASE_TYPE_L31_FIXED;
 const int BaseType_ARRAYSIZE = BaseType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* BaseType_descriptor();
@@ -236,14 +234,12 @@ inline bool WristType_Parse(
 enum BrakeType {
   BRAKE_TYPE_UNSPECIFIED = 0,
   BRAKE_TYPE_NOT_INSTALLED = 1,
-  BRAKE_TYPE_SPOKE = 2,
-  BRAKE_TYPE_CLUTCH = 3,
   BrakeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   BrakeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool BrakeType_IsValid(int value);
 const BrakeType BrakeType_MIN = BRAKE_TYPE_UNSPECIFIED;
-const BrakeType BrakeType_MAX = BRAKE_TYPE_CLUTCH;
+const BrakeType BrakeType_MAX = BRAKE_TYPE_NOT_INSTALLED;
 const int BrakeType_ARRAYSIZE = BrakeType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* BrakeType_descriptor();

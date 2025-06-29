@@ -336,14 +336,12 @@ enum SafetyIdentifierBankA {
   UNRELIABLE_CAPACITIVE_SENSOR = 16777216,
   UNEXPECTED_GEAR_RATIO = 33554432,
   HALL_MAGNETIC_MISMATCH = 67108864,
-  BRAKE_DRIVE_FAULT = 134217728,
-  BRAKE_RELEASE_MOTION_OUT_OF_RANGE = 268435456,
   SafetyIdentifierBankA_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   SafetyIdentifierBankA_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool SafetyIdentifierBankA_IsValid(int value);
 const SafetyIdentifierBankA SafetyIdentifierBankA_MIN = UNSPECIFIED_ACTUATOR_SAFETY_IDENTIFIER_BANK_A;
-const SafetyIdentifierBankA SafetyIdentifierBankA_MAX = BRAKE_RELEASE_MOTION_OUT_OF_RANGE;
+const SafetyIdentifierBankA SafetyIdentifierBankA_MAX = HALL_MAGNETIC_MISMATCH;
 const int SafetyIdentifierBankA_ARRAYSIZE = SafetyIdentifierBankA_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* SafetyIdentifierBankA_descriptor();

@@ -95,7 +95,6 @@ namespace Api
 			eUidUnsubscribe = 0x20061,
 			eUidConfigurationChangeTopic = 0x20062,
 			eUidMappingInfoTopic = 0x20063,
-			eUidControlModeTopic = 0x20064,
 			eUidOperatingModeTopic = 0x20065,
 			eUidSequenceInfoTopic = 0x20066,
 			eUidProtectionZoneTopic = 0x20067,
@@ -123,7 +122,6 @@ namespace Api
 			eUidSetOperatingMode = 0x2008d,
 			eUidApplyEmergencyStop = 0x20091,
 			eUidClearFaults = 0x20092,
-			eUidGetControlMode = 0x20096,
 			eUidGetOperatingMode = 0x20097,
 			eUidSetServoingMode = 0x20098,
 			eUidGetServoingMode = 0x20099,
@@ -144,9 +142,7 @@ namespace Api
 			eUidGetWifiCountryCode = 0x200b3,
 			eUidSetCapSenseConfig = 0x200b4,
 			eUidGetCapSenseConfig = 0x200b5,
-			eUidGetAllJointsSpeedHardLimitation = 0x200b7,
 			eUidGetAllJointsTorqueHardLimitation = 0x200b8,
-			eUidGetTwistHardLimitation = 0x200b9,
 			eUidGetWrenchHardLimitation = 0x200ba,
 			eUidSendJointSpeedsJoystickCommand = 0x200bb,
 			eUidSendSelectedJointSpeedJoystickCommand = 0x200bc,
@@ -159,9 +155,7 @@ namespace Api
 			eUidUpdateEndEffectorTypeConfiguration = 0x200c9,
 			eUidRestoreFactoryProductConfiguration = 0x200ce,
 			eUidGetTrajectoryErrorReport = 0x200cf,
-			eUidGetAllJointsSpeedSoftLimitation = 0x200d0,
 			eUidGetAllJointsTorqueSoftLimitation = 0x200d1,
-			eUidGetTwistSoftLimitation = 0x200d2,
 			eUidGetWrenchSoftLimitation = 0x200d3,
 			eUidSetControllerConfigurationMode = 0x200d4,
 			eUidGetControllerConfigurationMode = 0x200d5,
@@ -431,8 +425,6 @@ namespace Api
 
 			Kinova::Api::Common::NotificationHandle OnNotificationMappingInfoTopic(std::function< void (MappingInfoNotification) > callback, const Kinova::Api::Common::NotificationOptions& notificationoptions, uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 
-			DEPRECATED_MSG("This function may be removed in a future release. It has been moved to ControlConfig service.") Kinova::Api::Common::NotificationHandle OnNotificationControlModeTopic(std::function< void (ControlModeNotification) > callback, const Kinova::Api::Common::NotificationOptions& notificationoptions, uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-
 			Kinova::Api::Common::NotificationHandle OnNotificationOperatingModeTopic(std::function< void (OperatingModeNotification) > callback, const Kinova::Api::Common::NotificationOptions& notificationoptions, uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 
 			Kinova::Api::Common::NotificationHandle OnNotificationSequenceInfoTopic(std::function< void (SequenceInfoNotification) > callback, const Kinova::Api::Common::NotificationOptions& notificationoptions, uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
@@ -527,10 +519,6 @@ namespace Api
 			void ClearFaults_callback(std::function< void (const Error&) > callback, uint32_t deviceId = 0);
 			std::future<void> ClearFaults_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 
-			DEPRECATED_MSG("This function may be removed in a future release. It has been moved to ControlConfig service.") ControlModeInformation GetControlMode(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-			DEPRECATED_MSG("This function may be removed in a future release. It has been moved to ControlConfig service.") void GetControlMode_callback(std::function< void (const Error&, const ControlModeInformation&) > callback, uint32_t deviceId = 0);
-			DEPRECATED_MSG("This function may be removed in a future release. It has been moved to ControlConfig service.") std::future<ControlModeInformation> GetControlMode_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-
 			OperatingModeInformation GetOperatingMode(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 			void GetOperatingMode_callback(std::function< void (const Error&, const OperatingModeInformation&) > callback, uint32_t deviceId = 0);
 			std::future<OperatingModeInformation> GetOperatingMode_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
@@ -603,17 +591,9 @@ namespace Api
 			void GetCapSenseConfig_callback(std::function< void (const Error&, const CapSenseConfig&) > callback, uint32_t deviceId = 0);
 			std::future<CapSenseConfig> GetCapSenseConfig_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicHardLimits from the ControlConfig service instead.") JointsLimitationsList GetAllJointsSpeedHardLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicHardLimits from the ControlConfig service instead.") void GetAllJointsSpeedHardLimitation_callback(std::function< void (const Error&, const JointsLimitationsList&) > callback, uint32_t deviceId = 0);
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicHardLimits from the ControlConfig service instead.") std::future<JointsLimitationsList> GetAllJointsSpeedHardLimitation_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-
 			DEPRECATED JointsLimitationsList GetAllJointsTorqueHardLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 			DEPRECATED void GetAllJointsTorqueHardLimitation_callback(std::function< void (const Error&, const JointsLimitationsList&) > callback, uint32_t deviceId = 0);
 			DEPRECATED std::future<JointsLimitationsList> GetAllJointsTorqueHardLimitation_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicHardLimits from the ControlConfig service instead.") TwistLimitation GetTwistHardLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicHardLimits from the ControlConfig service instead.") void GetTwistHardLimitation_callback(std::function< void (const Error&, const TwistLimitation&) > callback, uint32_t deviceId = 0);
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicHardLimits from the ControlConfig service instead.") std::future<TwistLimitation> GetTwistHardLimitation_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 
 			DEPRECATED WrenchLimitation GetWrenchHardLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 			DEPRECATED void GetWrenchHardLimitation_callback(std::function< void (const Error&, const WrenchLimitation&) > callback, uint32_t deviceId = 0);
@@ -663,17 +643,9 @@ namespace Api
 			void GetTrajectoryErrorReport_callback(std::function< void (const Error&, const TrajectoryErrorReport&) > callback, uint32_t deviceId = 0);
 			std::future<TrajectoryErrorReport> GetTrajectoryErrorReport_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicSoftLimits from the ControlConfig service instead.") JointsLimitationsList GetAllJointsSpeedSoftLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicSoftLimits from the ControlConfig service instead.") void GetAllJointsSpeedSoftLimitation_callback(std::function< void (const Error&, const JointsLimitationsList&) > callback, uint32_t deviceId = 0);
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicSoftLimits from the ControlConfig service instead.") std::future<JointsLimitationsList> GetAllJointsSpeedSoftLimitation_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-
 			DEPRECATED JointsLimitationsList GetAllJointsTorqueSoftLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 			DEPRECATED void GetAllJointsTorqueSoftLimitation_callback(std::function< void (const Error&, const JointsLimitationsList&) > callback, uint32_t deviceId = 0);
 			DEPRECATED std::future<JointsLimitationsList> GetAllJointsTorqueSoftLimitation_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicSoftLimits from the ControlConfig service instead.") TwistLimitation GetTwistSoftLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicSoftLimits from the ControlConfig service instead.") void GetTwistSoftLimitation_callback(std::function< void (const Error&, const TwistLimitation&) > callback, uint32_t deviceId = 0);
-			DEPRECATED_MSG("This function will be removed in a future release. Use GetKinematicSoftLimits from the ControlConfig service instead.") std::future<TwistLimitation> GetTwistSoftLimitation_async(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 
 			DEPRECATED WrenchLimitation GetWrenchSoftLimitation(uint32_t deviceId = 0, const RouterClientSendOptions& options = {false, 0, 3000});
 			DEPRECATED void GetWrenchSoftLimitation_callback(std::function< void (const Error&, const WrenchLimitation&) > callback, uint32_t deviceId = 0);

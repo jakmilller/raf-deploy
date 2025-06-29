@@ -77,6 +77,7 @@ install(DIRECTORY launch
 # Install Python scripts
 install(PROGRAMS
   scripts/robot_controller_ros2.py
+  scripts/orchestrator.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
