@@ -1,4 +1,5 @@
 import rclpy
+import random
 import rclpy.duration
 from rclpy.node import Node
 from sensor_msgs.msg import Image, CameraInfo
@@ -21,7 +22,9 @@ import tf2_geometry_msgs
 from geometry_msgs.msg import Pose, Point, Quaternion, PoseStamped
 from std_msgs.msg import Float64
 from tf_transformations import quaternion_from_euler
+from raf_interfaces.srv import ProcessImage
 from dotenv import load_dotenv
+import yaml
 
 # GroundedSAM2 imports
 from dds_cloudapi_sdk import Config, Client
@@ -37,6 +40,7 @@ class PerceptionNode(Node):
         self.latest_color_image = None
         self.latest_depth_image = None
         self.camera_info = None
+        self.single_bite = True
         
         # API keys
         load_dotenv(os.path.expanduser('~/raf-deploy/.env'))
@@ -50,6 +54,14 @@ class PerceptionNode(Node):
                 self.identification_prompt = f.read().strip()
         except:
             self.identification_prompt = "Identify all food items in this image. List them separated by commas."
+
+        config_path = os.path.expanduser('~/raf-deploy/config.yaml')
+        
+        # load config variables
+        with open(config_path, 'r') as file:
+            self.config = yaml.safe_load(file)
+        self.dist_from_table = self.config['feeding']['dist_from_table']
+        self.robotiq_offset = self.config['feeding']['robotiq_offset']
         
         # SAM2 configuration
         self.sam2_base_path = '/home/mcrr-lab/Grounded-SAM-2'
@@ -76,7 +88,7 @@ class PerceptionNode(Node):
         
         # Create service
         self.process_service = self.create_service(
-            Trigger, 'process_image_pipeline', self.handle_process_request)
+            ProcessImage, 'process_image_pipeline', self.handle_process_request)
         
         # setup toold for calculating transform
         self.tf_buffer = tf2_ros.Buffer()
@@ -90,6 +102,9 @@ class PerceptionNode(Node):
         self.grip_val_pub = self.create_publisher(
             Float64, '/grip_value',10)
         
+        self.food_height_pub = self.create_publisher(
+            Float64, '/food_height', 10
+        )
         
         # Initialize models
         self.setup_models()
@@ -210,12 +225,13 @@ class PerceptionNode(Node):
 
     def get_mask_centroid(self, mask):
         """Find the centroid of a binary mask"""
+
         moments = cv2.moments(mask.astype(np.uint8))
         if moments["m00"] == 0:
-            return None
-            
+            return None 
         cx = int(moments["m10"] / moments["m00"])
         cy = int(moments["m01"] / moments["m00"])
+
         return (cx, cy)
 
     def pixel_to_rs_frame(self, pixel_x, pixel_y, depth_image):
@@ -231,6 +247,7 @@ class PerceptionNode(Node):
         
         # Get depth value at pixel
         depth = depth_image[int(pixel_y), int(pixel_x)] / 1000.0  # Convert mm to m
+
         
         if depth <= 0:
             return None, False
@@ -240,10 +257,9 @@ class PerceptionNode(Node):
         y = (pixel_y - cy) * depth / fy
 
         # the transformation currently moves the tips of the gripper to the pose, but assumes that it is fully open
-        # for finger foods the gripper will be almost always closed, so tips are a different distance from the camera
+        # for finger foods the gripper will be almost always semi-closed, so tips are a different distance from the camera
         # adjust for this with dimensions from Robotiq documentation
-        robotiq_offset = 0.0285
-        z = depth - robotiq_offset
+        z = depth - self.robotiq_offset
         
         return np.array([x, y, z]), True
     
@@ -326,79 +342,143 @@ class PerceptionNode(Node):
         
         return 0.0
     
-    def get_food_width(self,mask,depth_image):
+    def get_food_width(self, mask, depth_image, single_bite):
         # Convert mask to proper format for findContours
         if mask.dtype != np.uint8:
             mask = (mask * 255).astype(np.uint8)
 
-        contours,hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         centroid = self.get_mask_centroid(mask)
 
-        if contours:
-            largest_contour = max(contours, key=cv2.contourArea)
+        if not contours:
+            self.get_logger().error("No contours found in mask")
+            return None, None, None, None
+
+        if centroid is None:
+            self.get_logger().error("Could not calculate centroid")
+            return None, None, None, None
+
+        largest_contour = max(contours, key=cv2.contourArea)
+
+        # Check if contour has enough points for minAreaRect
+        if len(largest_contour) < 5:
+            self.get_logger().error("Contour has insufficient points for minAreaRect")
+            return None, None, None, None
 
         # get a rotated rectangle around the segmentation
         rect = cv2.minAreaRect(largest_contour)
+        if rect is None:
+            self.get_logger().error("minAreaRect returned None")
+            return None, None, None, None
+
         # get the box points of the rectangle and convert to integers
         box = cv2.boxPoints(rect)
+        if box is None or len(box) != 4:
+            self.get_logger().error("boxPoints returned invalid data")
+            return None, None, None, None
+
         box = np.int0(box)
 
-        if np.linalg.norm(box[0]-box[1]) < np.linalg.norm(box[1]-box[2]):
-            # grab points for width calculation
-            p1 = (box[1]+box[2])/2
-            p2 = (box[3]+box[0])/2
-            
-            # really jank way of getting orientation
-            p_orient = (box[0]+box[1])/2
-        else:
-            p1 = (box[0]+box[1])/2
-            p2 = (box[2]+box[3])/2
+        try:
+            if np.linalg.norm(box[0]-box[1]) < np.linalg.norm(box[1]-box[2]):
+                # grab points for width calculation
+                p1 = (box[1]+box[2])/2
+                p2 = (box[3]+box[0])/2
 
-            p_orient = (box[1]+box[2])/2
-            # width_p1 = box[0]
-            # width_p2 = box[1]
+                if not single_bite:
+                    # lower point has the higher pixel y value
+                    if box[1][1]>box[2][1]:
+                        lower1 = box[1]
+                    else:
+                        lower1 = box[2]
 
-        # for multi bit ill need to change this from centroid
-        # dist = tuple(a-b for a,b in zip(p1, centroid))
+                    if box[3][1]>box[0][1]:
+                        lower2 = box[3]
+                    else:
+                        lower2 = box[0]
+                    
+                    # divide it more to get the lower half for grasping multibite foods
+                    p1 = (p1+lower1)/2
+                    p2 = (p2+lower2)/2
+                    centroid = tuple(map(int, (p1+p2)/2))
 
-        # # get locations of the grasp points on the rotated rectangle
-        # width_p1 = tuple(a-b for a,b in zip(width_p1, dist))
-        # width_p2 = tuple(a-b for a,b in zip(width_p2, dist))
+                # really jank way of getting orientation
+                p_orient = (box[0]+box[1])/2
+            else:
+                p1 = (box[0]+box[1])/2
+                p2 = (box[2]+box[3])/2
 
-        # Convert midpoints to integers and find the nearest point on the mask
-        width_p1 = self.proj_pix2mask(tuple(map(int, p1)),mask)
-        width_p2 = self.proj_pix2mask(tuple(map(int, p2)),mask)
+                if not single_bite:
+                    # lower point has the higher pixel y value
+                    if box[0][1]>box[1][1]:
+                        lower1 = box[0]
+                    else:
+                        lower1 = box[1]
 
-        # get the coordinates relative to RealSense of width points
-        rs_width_p1, success = self.pixel_to_rs_frame(width_p1[0],width_p1[1],depth_image)
-        rs_width_p2, success = self.pixel_to_rs_frame(width_p2[0],width_p2[1],depth_image)
+                    if box[2][1]>box[3][1]:
+                        lower2 = box[2]
+                    else:
+                        lower2 = box[3]
+                    
+                    # divide it more to get the lower half for grasping multibite foods
+                    p1 = (p1+lower1)/2
+                    p2 = (p2+lower2)/2
+                    centroid = tuple(map(int, (p1+p2)/2))
 
-        # get true distances of points from each other (ignore depth for accuracy)
-        rs_width_p1_2d = rs_width_p1[:2]
-        rs_width_p2_2d = rs_width_p2[:2]
-        
-        # Calculate the Euclidean distance between points
-        width = np.linalg.norm(rs_width_p1_2d - rs_width_p2_2d)
-        self.get_logger().info(f"Width of food item={width:.3f} m")
-        width_cm = width*100
-        # cubic regression function mapping gripper width to grip value
-        grip_val = -0.0292658*width_cm**3 + 0.253614*width_cm**2 - 7.10566*width_cm + 95.17439
+                p_orient = (box[1]+box[2])/2
 
-        # add insurance factor to ensure gripper can fit around food 
-        grip_val = grip_val-3.159 # goes an extra .35 cm
+            # Convert midpoints to integers and find the nearest point on the mask
+            width_p1 = self.proj_pix2mask(tuple(map(int, p1)), mask)
+            width_p2 = self.proj_pix2mask(tuple(map(int, p2)), mask)
 
-        # make sure it doesn't exceed kinova limits
-        if grip_val > 98:
-            grip_val = 98
-        elif grip_val < 0:
-            grip_val = 0
-        
-        grip_val = round(grip_val)/100
-        self.get_logger().info(f"Grip value={grip_val}")
+            if width_p1 is None or width_p2 is None:
+                self.get_logger().error("Could not project points to mask")
+                return None, None, None, None
 
-        food_angle = self.get_food_angle(centroid,p_orient)
+            # get the coordinates relative to RealSense of width points
+            rs_width_p1, success1 = self.pixel_to_rs_frame(width_p1[0], width_p1[1], depth_image)
+            rs_width_p2, success2 = self.pixel_to_rs_frame(width_p2[0], width_p2[1], depth_image)
 
-        return grip_val, width_p1, width_p2, food_angle
+            if not success1 or not success2 or rs_width_p1 is None or rs_width_p2 is None:
+                self.get_logger().error("Could not convert width points to RealSense coordinates")
+                return None, None, None, None
+
+            # get true distances of points from each other (ignore depth for accuracy)
+            rs_width_p1_2d = rs_width_p1[:2]
+            rs_width_p2_2d = rs_width_p2[:2]
+
+            # Calculate the Euclidean distance between points
+            width = np.linalg.norm(rs_width_p1_2d - rs_width_p2_2d)
+            self.get_logger().info(f"Width of food item={width:.3f} m")
+            #width_cm = width*100
+            width_mm = width*1000
+
+            # cubic regression function mapping gripper width to grip value
+            # grip_val = -0.0292658*width_cm**3 + 0.253614*width_cm**2 - 7.10566*width_cm + 95.17439 # for 3d printed gripper
+
+            grip_val = -0.0000246123*width_mm**3 + 0.00342851*width_mm**2 -0.667919*width_mm +80.44066
+
+
+            # the grip value will move the gripper to the exact width of the food, but you'll want the insurance if it being a little wider so it grasps successfully
+
+            grip_val = grip_val-4
+
+            # make sure it doesn't break fingers
+            if grip_val > 80:
+                grip_val = 80
+            elif grip_val < 0:
+                grip_val = 0
+
+            grip_val = round(grip_val)/100
+            self.get_logger().info(f"Grip value={grip_val}")
+
+            food_angle = self.get_food_angle(centroid, p_orient)
+
+            return grip_val, width_p1, width_p2, food_angle, centroid
+
+        except Exception as e:
+            self.get_logger().error(f"Error in get_food_width: {str(e)}")
+            return None, None, None, None
     
     def get_food_angle(self,centroid,end):
         center_y = centroid[1]
@@ -421,7 +501,7 @@ class PerceptionNode(Node):
         if p1[0]>p2[0]:
             food_angle = -food_angle
 
-        print(f'FOOD ANGLE IS {food_angle} DEG')
+        #print(f'FOOD ANGLE IS {food_angle} DEG')
         return food_angle
 
 
@@ -513,13 +593,27 @@ class PerceptionNode(Node):
             self.get_logger().info(f"Highest confidence object: {highest_obj['class_name']} ({highest_obj['confidence']:.2f})")
             
             # Find centroid of highest confidence mask
-            centroid = self.get_mask_centroid(highest_obj['mask'])
-            if centroid is None:
-                self.get_logger().error("Could not find centroid")
-                return False
+
+            # Get grip value and width points
+            grip_val, width_p1, width_p2, food_angle, centroid = self.get_food_width(highest_obj['mask'],depth_image, self.single_bite)
+            self.get_logger().info(f'Food Angle: {food_angle} deg')
+            grip_msg = Float64()
+            grip_msg.data = grip_val
+            self.grip_val_pub.publish(grip_msg)
+
                 
             # Calculate 3D coordinates relative to RealSense
             rs_point, valid = self.pixel_to_rs_frame(centroid[0], centroid[1], depth_image)
+
+            # publish the food height of the centroid
+            food_height_msg = Float64()
+
+            # this is not the best way, but the original function pixel2rs_frame will return a pose for the robot, not the exact distance
+            # add the offset back to get the true distance of the food from the camera
+            food_height_msg.data = self.dist_from_table - (rs_point[2] + self.robotiq_offset)
+
+            self.food_height_pub.publish(food_height_msg)
+
             if not valid or rs_point is None:
                 self.get_logger().error("Could not convert to RealSense coordinates")
                 rs_point = None
@@ -531,12 +625,7 @@ class PerceptionNode(Node):
             # self.get_logger().info(f"Orientation angle: {np.degrees(orientation_angle):.1f} degrees")
 
 
-            # Get grip value and width points
-            grip_val, width_p1, width_p2, food_angle = self.get_food_width(highest_obj['mask'],depth_image)
-            self.get_logger().info(f'Food Angle: {food_angle} deg')
-            grip_msg = Float64()
-            grip_msg.data = grip_val
-            self.grip_val_pub.publish(grip_msg)
+
 
             # Calculate pose relative to base
             world_pose = self.rs_to_world(rs_point,food_angle)
@@ -582,42 +671,64 @@ class PerceptionNode(Node):
             response.success = False
             response.message = "No color image available"
             return response
-            
+
         if self.latest_depth_image is None:
             response.success = False
             response.message = "No depth image available"
             return response
-            
+
+        detection_type = request.detection_type  # "food" or "cup"
+
         try:
-            self.get_logger().info("Processing image with pose visualization...")
-            
-            # Identify objects
-            identified_objects = self.identify_with_chatgpt(self.latest_color_image)
-            if not identified_objects:
-                response.success = False
-                response.message = "Failed to identify objects"
-                return response
-            
-            self.get_logger().info(f"Identified: {', '.join(identified_objects)}")
-            
+            self.get_logger().info(f"Processing image for {detection_type} detection...")
+
+            if detection_type == "cup":
+                self.single_bite = True
+                # For cup: skip ChatGPT, use direct prompt
+                text_prompt = "cup ."
+                self.get_logger().info("Using direct cup prompt")
+            else:
+                # For food: use existing ChatGPT identification
+                identified_objects = self.identify_with_chatgpt(self.latest_color_image)
+                if not identified_objects:
+                    response.success = False
+                    response.message = "Failed to identify objects"
+                    return response
+                
+                self.get_logger().info(f"GPT 4o output: {identified_objects}")
+                selected_item = random.choice(identified_objects)
+                self.get_logger().info(f"Randomly selected: {selected_item}")
+
+                parts = selected_item.rsplit(' ',1)
+                item_name = parts[0]
+                bite_number = int(parts[1])
+
+                # this handles single/multi bite capabilities
+                if bite_number>1:
+                    self.single_bite = False
+                else:
+                    self.single_bite = True
+
+
+                text_prompt = item_name + " ."
+
             # Save temp image
             cv_image = self.bridge.imgmsg_to_cv2(self.latest_color_image, "bgr8")
             with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmpfile:
                 temp_path = tmpfile.name
             cv2.imwrite(temp_path, cv_image)
-            
+
             # Detect with DINOX
-            text_prompt = " . ".join(identified_objects) + " ."
             input_boxes, confidences, class_names, class_ids = self.detect_with_dinox(temp_path, text_prompt)
-            
+
             if input_boxes is None or len(input_boxes) == 0:
                 os.remove(temp_path)
                 response.success = False
-                response.message = "No objects detected"
+                response.message = f"No {detection_type} detected"
                 return response
-            
+
             self.get_logger().info(f"Detected {len(input_boxes)} objects")
-            
+
             # Segment with SAM2
             masks, scores = self.segment_with_sam2(temp_path, input_boxes)
             if masks is None:
@@ -625,25 +736,103 @@ class PerceptionNode(Node):
                 response.success = False
                 response.message = "Segmentation failed"
                 return response
-            
-            # Visualize with pose information
-            success = self.visualize_results_with_pose(temp_path, input_boxes, masks, class_names, confidences, class_ids)
+
+            # Handle cup vs food processing
+            if detection_type == "cup":
+                success = self.process_cup_detection(temp_path, input_boxes, masks, class_names, confidences, class_ids)
+            else:
+                success = self.visualize_results_with_pose(temp_path, input_boxes, masks, class_names, confidences, class_ids)
+
             os.remove(temp_path)
-            
+
             if success:
                 response.success = True
-                response.message = f"Success! Processed {len(class_names)} objects with pose visualization"
-                self.get_logger().info("Pipeline with pose visualization completed successfully")
+                response.message = f"Success! Processed {detection_type} detection"
+                self.get_logger().info(f"{detection_type.capitalize()} detection completed successfully")
             else:
                 response.success = False
-                response.message = "Visualization failed"
-                
+                response.message = f"{detection_type.capitalize()} processing failed"
+
         except Exception as e:
             response.success = False
             response.message = f"Pipeline failed: {str(e)}"
             self.get_logger().error(f"Pipeline error: {str(e)}")
-            
+
         return response
+    
+    def process_cup_detection(self, image_path, input_boxes, masks, class_names, confidences, class_ids):
+        """Process cup detection - simpler than food, only need centroid"""
+        try:
+            img = cv2.imread(image_path)
+
+            # Get depth image
+            if self.latest_depth_image is None:
+                self.get_logger().error("No depth image available")
+                return False
+
+            depth_image = self.bridge.imgmsg_to_cv2(self.latest_depth_image, desired_encoding='passthrough')
+
+            # Get highest confidence object
+            highest_obj = self.get_highest_confidence_object(input_boxes, masks, confidences, class_names, class_ids)
+            if highest_obj is None:
+                self.get_logger().error("No cup found")
+                return False
+
+            self.get_logger().info(f"Detected cup with confidence: {highest_obj['confidence']:.2f}")
+
+            # Find centroid of cup mask
+            centroid = self.get_mask_centroid(highest_obj['mask'])
+            if centroid is None:
+                self.get_logger().error("Could not find cup centroid")
+                return False
+
+            # Calculate 3D coordinates relative to RealSense
+            rs_point, valid = self.pixel_to_rs_frame(centroid[0], centroid[1], depth_image)
+            if not valid or rs_point is None:
+                self.get_logger().error("Could not convert cup to RealSense coordinates")
+                return False
+
+            self.get_logger().info(f"Cup RealSense coordinates: x={rs_point[0]:.3f}, y={rs_point[1]:.3f}, z={rs_point[2]:.3f}")
+
+            # Use simple 0-degree orientation (no rotation needed)
+            cup_orientation = 0.0
+
+            # this is how deep to grab the cup (how many meters past gripper midpoint to grasp the cup)
+            rs_point[2]+=0.0675
+
+            # Calculate pose relative to base
+            world_pose = self.rs_to_world(rs_point, cup_orientation)
+            if world_pose is not None:
+                self.print_pose_info(world_pose)
+                self.food_pose_pub.publish(world_pose)  # Reuse same topic
+                self.get_logger().info("Published cup pose to /food_pose_base_link")
+
+                # Publish hardcoded grip value for cup (no width calculation needed)
+                cup_grip_value = 0.58  # Hardcoded grip value for cup
+                grip_msg = Float64()
+                grip_msg.data = cup_grip_value
+                self.grip_val_pub.publish(grip_msg)
+                self.get_logger().info(f"Published cup grip value: {cup_grip_value}")
+            else:
+                self.get_logger().error("Failed to transform cup pose to base_link")
+                return False
+
+            # Simple visualization for cup
+            vis_image = img.copy()
+            cv2.circle(vis_image, centroid, 8, (0, 255, 0), -1)  # Green circle for cup centroid
+            cv2.putText(vis_image, f"Cup: {highest_obj['confidence']:.2f}", 
+                       (centroid[0] + 10, centroid[1] - 10), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
+            # Display result
+            cv2.imshow('Cup Detection', vis_image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+
+            return True
+        except Exception as e:
+            self.get_logger().error(f"Cup processing failed: {str(e)}")
+            return False
 
 def main(args=None):
     rclpy.init(args=args)
