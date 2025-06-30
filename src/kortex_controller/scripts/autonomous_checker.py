@@ -160,6 +160,7 @@ class AutonomousChecker(Node):
         start_time = time.time()
         
         while rclpy.ok() and (time.time() - start_time) < timeout:
+            rclpy.spin_once(self, timeout_sec = 30)
             removed = self.is_object_removed()
             
             if removed:

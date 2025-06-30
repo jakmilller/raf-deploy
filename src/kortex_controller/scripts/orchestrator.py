@@ -13,6 +13,7 @@ import asyncio
 import sys
 import yaml
 import time
+import pygame
 
 # import controller/autonomous checks
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -24,6 +25,9 @@ class RAFOrchestrator(Node):
         super().__init__('raf_orchestrator')
         
         config_path = os.path.expanduser('~/raf-deploy/config.yaml')
+        
+        pygame.mixer.init()
+        self.play_sound("/home/mcrr-lab/raf-deploy/utils/sounds/startup.mp3")
         
         # load config
         with open(config_path, 'r') as file:
@@ -53,6 +57,9 @@ class RAFOrchestrator(Node):
             PoseStamped, '/food_pose_base_link', self.food_pose_callback, 10)
         self.grip_value_sub = self.create_subscription(
             Float64, '/grip_value', self.grip_value_callback, 10)
+        self.food_height_sub = self.create_subscription(
+            Float64, '/food_height', self.food_height_callback, 10
+        )
         
         # wait for perception to start up
         while not self.perception_client.wait_for_service(timeout_sec=1.0):
@@ -74,6 +81,11 @@ class RAFOrchestrator(Node):
         """Callback for grip value"""
         self.grip_value = msg.data
         self.get_logger().info(f"Received grip value: {self.grip_value}")
+
+    def food_height_callback(self, msg):
+        """Callback for food height"""
+        self.food_height = msg.data
+        self.get_logger().info(f"Received food height: {self.food_height} m")
     
     def wait_for_keypress(self, message="Press any key to continue..."):
         """Wait for user keypress (manual mode only)"""
@@ -81,6 +93,15 @@ class RAFOrchestrator(Node):
             self.get_logger().info(message)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
+
+    def play_sound(self, file_path):
+        pygame.mixer.init()
+        pygame.mixer.music.load(file_path)
+        pygame.mixer.music.play()
+
+        # Wait for the sound to finish
+        while pygame.mixer.music.get_busy():
+            time.sleep(0.1)
 
     def validate_with_user(self, question):
         """Get user input for manual confirmations"""
@@ -90,57 +111,45 @@ class RAFOrchestrator(Node):
                 user_input = input(question + "(y/n): ")
             return user_input == "y"
         else:
-            # in autonomous mode ts assumed true except for grasp/removal
+            # in autonomous mode its assumed true except for grasp/removal
             return True
 
-    async def wait_for_grasp_confirmation(self):
-        # confirm if the food has been picked up (can be manual or autonomous confirmation)
+    def wait_for_grasp_confirmation(self):
+        """Confirm if the food has been picked up (can be manual or autonomous confirmation)"""
         if self.mode == "autonomous":
             if self.autonomous_checker is None:
                 self.get_logger().error("Autonomous checker not initialized!")
                 return False
             
             self.get_logger().info("Checking if food was picked up autonomously...")
-            # Run autonomous check in a way that doesn't block the async loop
-            return await self.run_autonomous_check(self.autonomous_checker.check_object_grasped)
+            # Spin the autonomous checker a few times to get latest data
+            for _ in range(10):
+                rclpy.spin_once(self.autonomous_checker, timeout_sec=0.1)
+                time.sleep(0.1)
+            
+            return self.autonomous_checker.check_object_grasped()
         else:
             return self.validate_with_user('Did the robot pick up the food?')
 
-    async def wait_for_removal_confirmation(self):
-        # confirm when food has been removed from gripper in bite acquisition pose
+    def wait_for_removal_confirmation(self):
+        """Confirm when food has been removed from gripper in bite acquisition pose"""
         if self.mode == "autonomous":
             if self.autonomous_checker is None:
                 self.get_logger().error("Autonomous checker not initialized!")
                 return False
             
-            self.get_logger().info("Checking if food was removed autonomously...")
-            # Run autonomous check in a way that doesn't block the async loop
-            return await self.run_autonomous_check(self.autonomous_checker.check_object_removed)
+            # self.get_logger().info("Checking if food was removed autonomously...")
+            # # Spin the autonomous checker a few times to get latest data
+            # for _ in range(10):
+            #     rclpy.spin_once(self.autonomous_checker, timeout_sec=0.1)
+            #     time.sleep(0.1)
+            
+            return self.autonomous_checker.check_object_removed()
         else:
             self.validate_with_user('Has the food been removed?')
             return True
 
-    async def run_autonomous_check(self, check_function):
-        """Run autonomous check without blocking the async event loop"""
-        
-        # In autonomous mode, we need to make sure the autonomous checker 
-        # is receiving depth images, so we spin it a few times first
-        if self.autonomous_checker:
-            for _ in range(10):  # Spin a few times to get latest data
-                rclpy.spin_once(self.autonomous_checker, timeout_sec=0.1)
-                await asyncio.sleep(0.1)
-        
-        loop = asyncio.get_event_loop()
-        
-        # Run the blocking autonomous check in a thread pool
-        try:
-            result = await loop.run_in_executor(None, check_function)
-            return result
-        except Exception as e:
-            self.get_logger().error(f"Autonomous check failed: {str(e)}")
-            return False
-
-    async def take_picture_and_get_pose(self):
+    def take_picture_and_get_pose(self):
         """Step 2: Take picture and get food pose"""
         self.get_logger().info("Step 2: Taking picture and processing...")
 
@@ -151,39 +160,45 @@ class RAFOrchestrator(Node):
         # Call perception service for food detection
         request = ProcessImage.Request()
         request.detection_type = "food"  # Specify food detection
-        future = self.perception_client.call_async(request)
+        
+        try:
+            future = self.perception_client.call_async(request)
+            
+            # Wait for perception to complete
+            while not future.done():
+                time.sleep(0.1)
+                rclpy.spin_once(self, timeout_sec=0)
 
-        # Wait for perception to complete without blocking
-        while not future.done():
-            await asyncio.sleep(0.1)
-            rclpy.spin_once(self, timeout_sec=0)
+            response = future.result()
+            if not response or not response.success:
+                self.get_logger().error(f"Perception failed: {response.message if response else 'No response'}")
+                return False
 
-        response = future.result()
-        if not response or not response.success:
-            self.get_logger().error(f"Perception failed: {response.message if response else 'No response'}")
+            self.get_logger().info("Perception service completed successfully")
+
+            # Wait for topics to update with timeout
+            timeout_count = 0
+            max_timeout = 50  # 5 seconds at 0.1s intervals
+
+            while (self.food_pose is None or self.grip_value is None) and timeout_count < max_timeout:
+                time.sleep(0.1)
+                rclpy.spin_once(self, timeout_sec=0)
+                timeout_count += 1
+
+            # Check if we got the data
+            if self.food_pose is None or self.grip_value is None:
+                self.get_logger().error("Did not receive food pose or grip value within timeout!")
+                self.get_logger().error(f"Food pose: {self.food_pose is not None}, Grip value: {self.grip_value is not None}")
+                return False
+
+            self.get_logger().info(f"Successfully got food pose and grip value: {self.grip_value}")
+            return True
+            
+        except Exception as e:
+            self.get_logger().error(f"Perception service call failed: {str(e)}")
             return False
-
-        self.get_logger().info("Perception service completed successfully")
-
-        # Wait for topics to update with timeout
-        timeout_count = 0
-        max_timeout = 50  # 5 seconds at 0.1s intervals
-
-        while (self.food_pose is None or self.grip_value is None) and timeout_count < max_timeout:
-            await asyncio.sleep(0.1)
-            rclpy.spin_once(self, timeout_sec=0)
-            timeout_count += 1
-
-        # Check if we got the data
-        if self.food_pose is None or self.grip_value is None:
-            self.get_logger().error("Did not receive food pose or grip value within timeout!")
-            self.get_logger().error(f"Food pose: {self.food_pose is not None}, Grip value: {self.grip_value is not None}")
-            return False
-
-        self.get_logger().info(f"Successfully got food pose and grip value: {self.grip_value}")
-        return True
     
-    async def take_picture_and_get_cup_pose(self):
+    def take_picture_and_get_cup_pose(self):
         """Take picture and get cup pose"""
         self.get_logger().info("Taking picture and processing cup...")
 
@@ -194,36 +209,42 @@ class RAFOrchestrator(Node):
         # Call perception service for cup detection
         request = ProcessImage.Request()
         request.detection_type = "cup"
-        future = self.perception_client.call_async(request)
+        
+        try:
+            future = self.perception_client.call_async(request)
 
-        # Wait for perception to complete without blocking
-        while not future.done():
-            await asyncio.sleep(0.1)
-            rclpy.spin_once(self, timeout_sec=0)
+            # Wait for perception to complete
+            while not future.done():
+                time.sleep(0.1)
+                rclpy.spin_once(self, timeout_sec=0)
 
-        response = future.result()
-        if not response or not response.success:
-            self.get_logger().error(f"Cup perception failed: {response.message if response else 'No response'}")
+            response = future.result()
+            if not response or not response.success:
+                self.get_logger().error(f"Cup perception failed: {response.message if response else 'No response'}")
+                return False
+
+            self.get_logger().info("Cup perception service completed successfully")
+
+            # Wait for topics to update with timeout
+            timeout_count = 0
+            max_timeout = 50  # 5 seconds at 0.1s intervals
+
+            while (self.food_pose is None or self.grip_value is None) and timeout_count < max_timeout:
+                time.sleep(0.1)
+                rclpy.spin_once(self, timeout_sec=0)
+                timeout_count += 1
+
+            # Check if we got the data
+            if self.food_pose is None or self.grip_value is None:
+                self.get_logger().error("Did not receive cup pose or grip value within timeout!")
+                return False
+
+            self.get_logger().info(f"Successfully got cup pose and grip value: {self.grip_value}")
+            return True
+            
+        except Exception as e:
+            self.get_logger().error(f"Cup perception service call failed: {str(e)}")
             return False
-
-        self.get_logger().info("Cup perception service completed successfully")
-
-        # Wait for topics to update with timeout
-        timeout_count = 0
-        max_timeout = 50  # 5 seconds at 0.1s intervals
-
-        while (self.food_pose is None or self.grip_value is None) and timeout_count < max_timeout:
-            await asyncio.sleep(0.1)
-            rclpy.spin_once(self, timeout_sec=0)
-            timeout_count += 1
-
-        # Check if we got the data
-        if self.food_pose is None or self.grip_value is None:
-            self.get_logger().error("Did not receive cup pose or grip value within timeout!")
-            return False
-
-        self.get_logger().info(f"Successfully got cup pose and grip value: {self.grip_value}")
-        return True
     
     async def run_feeding_cycle(self):
         """Main feeding cycle with autonomous/manual mode support"""
@@ -242,7 +263,7 @@ class RAFOrchestrator(Node):
                 # Step 2: Take picture and get pose
                 time.sleep(1)
 
-                if not await self.take_picture_and_get_pose():
+                if not self.take_picture_and_get_pose():
                     self.get_logger().error("Failed to get food pose!")
                     break
                 
@@ -251,40 +272,29 @@ class RAFOrchestrator(Node):
                     self.get_logger().info("Step 3: Image shown, waiting for keypress...")
                     self.wait_for_keypress("Image displayed. Press any key to continue to grasping...")
 
-                # Step 4 & 5: Set gripper and move to food position simultaneously
-                self.get_logger().info("Step 4-5: Setting gripper and moving to food position...")
-
-                # Start both operations concurrently
-                # gripper_task = asyncio.create_task(
-                #     self.robot_controller.set_gripper(self.grip_value)
-                # )
-
-                # move_task = asyncio.create_task(
-                #     self.robot_controller.move_to_pose(self.food_pose.pose)
-                # )
-
-                # # Wait for both to complete
-                # gripper_success, move_success = await asyncio.gather(gripper_task, move_task)
-
-
+                # Step 4: Set gripper
+                self.get_logger().info("Step 4: Setting gripper...")
                 gripper_success = await self.robot_controller.set_gripper(self.grip_value)
-
-                # wait for gripper to close
-                time.sleep(0.5)
-                
-                move_success = await self.robot_controller.move_to_pose(self.food_pose.pose)
                 if not gripper_success:
                     self.get_logger().error("Failed to set gripper!")
                     break
+
+                # Wait for gripper to open
+                time.sleep(0.5)
+                
+                # Step 5: Move to food position
+                self.get_logger().info("Step 5: Moving to food position...")
+                move_success = await self.robot_controller.move_to_pose(self.food_pose.pose)
                 if not move_success:
                     self.get_logger().error("Failed to move to food position!")
                     break
 
-
                 # Step 6: Move down to grasp
                 self.get_logger().info("Step 6: Moving down to grasp...")
                 grasp_pose = copy.deepcopy(self.food_pose.pose)
-                grasp_pose.position.z -= self.z_down_offset
+
+                # you want to go down the food's height to grab the food item
+                grasp_pose.position.z -= (self.food_height + 0.002)
 
                 if not await self.robot_controller.move_to_pose(grasp_pose):
                     self.get_logger().error("Failed to move down!")
@@ -307,7 +317,7 @@ class RAFOrchestrator(Node):
                 
                 # Step 8.5: Check if food was picked up (autonomous or manual)
                 self.get_logger().info("Step 8.5: Checking if food was picked up...")
-                if not await self.wait_for_grasp_confirmation():
+                if not self.wait_for_grasp_confirmation():
                     self.get_logger().warn("Food pickup not confirmed. Returning to overlook...")
                     continue
 
@@ -324,7 +334,7 @@ class RAFOrchestrator(Node):
                 
                 # Step 10: Check if food was removed (autonomous or manual)
                 self.get_logger().info("Step 10: Checking if food was removed...")
-                await self.wait_for_removal_confirmation()
+                self.wait_for_removal_confirmation()
 
                 # ask if they want a drink (manual mode)
                 if self.mode == "manual" and self.validate_with_user('Would you like a drink?'):
@@ -368,7 +378,7 @@ class RAFOrchestrator(Node):
 
             # Step 2: Take picture and get cup pose
             time.sleep(1)
-            if not await self.take_picture_and_get_cup_pose():
+            if not self.take_picture_and_get_cup_pose():
                 self.get_logger().error("Failed to get cup pose!")
                 return False
 
