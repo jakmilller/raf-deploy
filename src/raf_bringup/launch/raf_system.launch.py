@@ -24,7 +24,7 @@ def generate_launch_description():
     
     dof_arg = DeclareLaunchArgument(
         'dof',
-        default_value='6',
+        default_value='7',
         description="Robot's degrees of freedom"
     )
     
@@ -75,8 +75,8 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         arguments=[
-            '-0.0323',  # x offset (all offsets calculated from mounted RealSense)
-            '-0.001',    # y offset
+            '-0.0173',  # x offset (all offsets calculated from mounted RealSense)
+            '-0.006',    # y offset
             '0.0334',   # z offset
             '0.0',    # roll
             '0.0',    # pitch
@@ -133,5 +133,5 @@ def generate_launch_description():
         realsense_transform,
         controller_node,
         perception_node,
-        rviz_node,  # remove for no rviz
+        #rviz_node,  # remove for no rviz
     ])

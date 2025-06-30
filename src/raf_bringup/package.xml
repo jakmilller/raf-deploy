@@ -9,10 +9,15 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>rclpy</depend>
   <depend>robot_state_publisher</depend>
+
+  <!-- can maybe remove these after moveit switch -->
   <depend>kortex_description</depend>
   <depend>tf2_ros</depend>
   <depend>kortex_controller</depend>
   <depend>perception</depend>
+
+  <depend>kinova_gen3_7dof_robotiq_2f_85_moveit_config</depend>
+  <depend>kortex_driver</depend>
   
   <export>
     <build_type>ament_cmake</build_type>
