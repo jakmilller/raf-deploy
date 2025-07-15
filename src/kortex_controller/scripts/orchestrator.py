@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import PoseStamped
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, String, Bool
 from raf_interfaces.srv import ProcessImage
 import cv2
 import copy
@@ -26,9 +26,6 @@ class RAFOrchestrator(Node):
         
         config_path = os.path.expanduser('~/raf-deploy/config.yaml')
         
-        pygame.mixer.init()
-        self.play_sound("/home/mcrr-lab/raf-deploy/utils/sounds/startup.mp3")
-        
         # load config
         with open(config_path, 'r') as file:
             self.config = yaml.safe_load(file)
@@ -44,6 +41,13 @@ class RAFOrchestrator(Node):
         else:
             self.autonomous_checker = None
             self.get_logger().info("Manual mode enabled")
+
+        # handle audio
+        pygame.mixer.init()
+        self.power_on = self.config['feeding']['power_on']
+        self.power_off = self.config['feeding']['power_off']
+        self.snap = self.config['feeding']['snap']
+        self.play_sound(self.power_on)
         
         # creates service client for perception node
         self.perception_client = self.create_client(ProcessImage, 'process_image_pipeline')
@@ -51,6 +55,8 @@ class RAFOrchestrator(Node):
         # these come from the perception node
         self.food_pose = None
         self.grip_value = None
+        self.drink_requested = False
+        self.drinking_complete = False
         
         # subscribe to perception topics
         self.food_pose_sub = self.create_subscription(
@@ -60,6 +66,31 @@ class RAFOrchestrator(Node):
         self.food_height_sub = self.create_subscription(
             Float64, '/food_height', self.food_height_callback, 10
         )
+        self.single_bite_sub = self.create_subscription(
+            Bool, '/single_bite', self.single_bite_callback, 10
+        )
+        self.drink_request_sub = self.create_subscription(
+            Bool, '/drink_request', self.drink_request_callback, 10
+        )
+        self.drink_complete_sub = self.create_subscription(
+            Bool, '/drinking_complete', self.drinking_complete_callback, 10
+        )
+
+        # create retry topic
+        self.retry_pub = self.create_publisher(
+            Bool, '/retry', 10
+        )
+
+        # create state publisher
+        # valid states: Scanning, Food Acquisition, Bite Transfer, Drink Acquisition, Sipping
+        self.robot_state_pub = self.create_publisher(
+            String, '/robot_state', 10
+        )
+
+        # # subscribe to voice commands
+        # self.voice_command_sub = self.create_subscription(
+        #     String, '/voice_command', self.voice_command_callback, 10
+        # )
         
         # wait for perception to start up
         while not self.perception_client.wait_for_service(timeout_sec=1.0):
@@ -86,6 +117,27 @@ class RAFOrchestrator(Node):
         """Callback for food height"""
         self.food_height = msg.data
         self.get_logger().info(f"Received food height: {self.food_height} m")
+
+    def single_bite_callback(self, msg):
+        """Callback for single/multibite foods"""
+        self.single_bite = msg.data
+        self.get_logger().info(f"Received single bite: {self.single_bite}")
+
+    def drink_request_callback(self, msg):
+        """Callback for drink request"""
+        self.drink_requested = msg.data
+        self.get_logger().info(f"Drink request: {self.drink_requested}")
+
+    def drinking_complete_callback(self, msg):
+        self.drinking_complete = msg.data
+        self.get_logger().info(f"Drinking complete: {self.drinking_complete}")
+
+    # def voice_command_callback(self, msg):
+    #     """Callback for voice commands"""
+    #     self.voice_command = msg.data
+        
+    #     self.get_logger().info(f"Received voice command height: {self.voice_command} m")
+
     
     def wait_for_keypress(self, message="Press any key to continue..."):
         """Wait for user keypress (manual mode only)"""
@@ -259,10 +311,14 @@ class RAFOrchestrator(Node):
                 if not await self.robot_controller.reset():
                     self.get_logger().error("Failed to reset robot!")
                     break
+                if not await self.robot_controller.set_gripper(0.25):
+                    self.get_logger().error("Failed to close gripper!")
+                    break   
                 
                 # Step 2: Take picture and get pose
                 time.sleep(1)
 
+                self.robot_state_pub.publish(String(data='scanning'))
                 if not self.take_picture_and_get_pose():
                     self.get_logger().error("Failed to get food pose!")
                     break
@@ -273,6 +329,7 @@ class RAFOrchestrator(Node):
                     self.wait_for_keypress("Image displayed. Press any key to continue to grasping...")
 
                 # Step 4: Set gripper
+                self.play_sound(self.snap)
                 self.get_logger().info("Step 4: Setting gripper...")
                 gripper_success = await self.robot_controller.set_gripper(self.grip_value)
                 if not gripper_success:
@@ -283,6 +340,8 @@ class RAFOrchestrator(Node):
                 time.sleep(0.5)
                 
                 # Step 5: Move to food position
+                
+                self.robot_state_pub.publish(String(data='bite acquisition'))
                 self.get_logger().info("Step 5: Moving to food position...")
                 move_success = await self.robot_controller.move_to_pose(self.food_pose.pose)
                 if not move_success:
@@ -294,7 +353,7 @@ class RAFOrchestrator(Node):
                 grasp_pose = copy.deepcopy(self.food_pose.pose)
 
                 # you want to go down the food's height to grab the food item
-                grasp_pose.position.z -= (self.food_height + 0.002)
+                grasp_pose.position.z -= (self.food_height + 0.003)
 
                 if not await self.robot_controller.move_to_pose(grasp_pose):
                     self.get_logger().error("Failed to move down!")
@@ -309,6 +368,8 @@ class RAFOrchestrator(Node):
                 
                 # Step 8: Move up with food
                 self.get_logger().info("Step 8: Moving up with food...")
+                self.robot_state_pub.publish(String(data='bite transfer'))
+
                 bring_up_pose = copy.deepcopy(self.food_pose.pose)
                 bring_up_pose.position.z += self.z_up_offset
                 if not await self.robot_controller.move_to_pose(bring_up_pose):
@@ -318,6 +379,7 @@ class RAFOrchestrator(Node):
                 # Step 8.5: Check if food was picked up (autonomous or manual)
                 self.get_logger().info("Step 8.5: Checking if food was picked up...")
                 if not self.wait_for_grasp_confirmation():
+                    self.retry_pub.publish(Bool(data=True))
                     self.get_logger().warn("Food pickup not confirmed. Returning to overlook...")
                     continue
 
@@ -326,11 +388,19 @@ class RAFOrchestrator(Node):
                 if not await self.robot_controller.move_to_intermediate():
                     self.get_logger().error("Failed to move to intermediate!")
                     break
+                
+                if self.single_bite: 
+                    self.get_logger().info("Step 9: Moving to single bite transfer position...")
+                    if not await self.robot_controller.move_to_bite_transfer():
+                        self.get_logger().error("Failed to move to bite transfer!")
+                        break
 
-                self.get_logger().info("Step 9: Moving to bite transfer position...")
-                if not await self.robot_controller.move_to_bite_transfer():
-                    self.get_logger().error("Failed to move to bite transfer!")
-                    break
+                else:
+                    self.get_logger().info("Step 9: Moving to multi-bite transfer position...")
+                    if not await self.robot_controller.move_to_multi_bite_transfer():
+                        self.get_logger().error("Failed to move to multi-bite transfer!")
+                        break
+                #self.play_sound("/home/mcrr-lab/raf-deploy/utils/sounds/startup.mp3")
                 
                 # Step 10: Check if food was removed (autonomous or manual)
                 self.get_logger().info("Step 10: Checking if food was removed...")
@@ -345,10 +415,12 @@ class RAFOrchestrator(Node):
                 
                 # Step 11: Return to overlook for next cycle
                 self.get_logger().info("Returning to overlook for next cycle...")
+                self.retry_pub.publish(Bool(data=False))
                 cycle_count += 1
 
             except KeyboardInterrupt:
                 self.get_logger().info("Feeding cycle interrupted by user")
+                
                 break
             except Exception as e:
                 self.get_logger().error(f"Error in feeding cycle: {str(e)}")
@@ -410,6 +482,8 @@ class RAFOrchestrator(Node):
 
             # Step 7: Move to sip position
             self.get_logger().info("Step 7: Moving to sip position...")
+            self.robot_state_pub.publish(String(data='sipping'))
+
             if not await self.robot_controller.move_to_sip():
                 self.get_logger().error("Failed to move to sip position!")
                 return False
@@ -418,10 +492,25 @@ class RAFOrchestrator(Node):
             if self.mode == "manual":
                 self.validate_with_user('Have you finished drinking? Press y when done.')
             else:
-                # In autonomous mode, wait a fixed time or implement autonomous detection
-                self.get_logger().info("Autonomous mode: Waiting 30 seconds for drinking...")
-                await asyncio.sleep(30)
-
+                # In autonomous mode, wait for drinking_complete signal
+                self.get_logger().info("Autonomous mode: Waiting for drinking complete signal...")
+                self.drinking_complete = False  # Reset the flag
+                
+                # Wait for the drinking_complete signal with timeout
+                timeout_counter = 0
+                max_timeout = 600  # 60 seconds timeout (at 0.1s intervals)
+                
+                while not self.drinking_complete and timeout_counter < max_timeout:
+                    await asyncio.sleep(0.1)
+                    rclpy.spin_once(self, timeout_sec=0)
+                    timeout_counter += 1
+                
+                if timeout_counter >= max_timeout:
+                    self.get_logger().warn("Timeout waiting for drinking complete signal")
+                    # Continue anyway - don't fail the cycle
+                else:
+                    self.get_logger().info("Received drinking complete signal!")
+    
             # Step 9: Return cup to original position
             self.get_logger().info("Step 9: Returning cup...")
             if not await self.robot_controller.move_to_pose(bring_up_pose):
@@ -441,6 +530,8 @@ class RAFOrchestrator(Node):
             if not await self.robot_controller.move_to_pose(bring_up_pose):
                 self.get_logger().error("Failed to move away from cup!")
                 return False
+            self.retry_pub.publish(Bool(data=False))
+            
 
             self.get_logger().info("Drinking cycle completed successfully!")
             return True
@@ -455,7 +546,14 @@ class RAFOrchestrator(Node):
             try:
                 if self.mode == "autonomous":
                     # In autonomous mode, just run feeding cycles continuously
-                    await self.run_feeding_cycle()
+                    if self.drink_requested:
+                        self.get_logger().info("Processing drink request in autonomous mode")
+                        self.drink_requested = False  # Reset flag
+                        # Move to overlook first for drink
+                        await self.robot_controller.reset()
+                        await self.run_drinking_cycle()
+                    else:
+                        await self.run_feeding_cycle()
                 else:
                     # Manual mode - ask user what they want
                     if self.validate_with_user('Would you like food? (n for drink)'):
