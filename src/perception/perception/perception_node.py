@@ -20,11 +20,15 @@ import tf2_ros
 import math
 import tf2_geometry_msgs
 from geometry_msgs.msg import Pose, Point, Quaternion, PoseStamped
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, String, Bool
 from tf_transformations import quaternion_from_euler
 from raf_interfaces.srv import ProcessImage
 from dotenv import load_dotenv
 import yaml
+from collections import deque
+# import pygame
+# import time
+
 
 # GroundedSAM2 imports
 from dds_cloudapi_sdk import Config, Client
@@ -62,6 +66,19 @@ class PerceptionNode(Node):
             self.config = yaml.safe_load(file)
         self.dist_from_table = self.config['feeding']['dist_from_table']
         self.robotiq_offset = self.config['feeding']['robotiq_offset']
+        self.mode = self.config['feeding']['mode']
+
+        # # for audio
+        # pygame.mixer.init()
+        # self.startup_sound = self.config['feeding']['startup_sound']
+        
+        # Voice control configuration
+        self.voice_enabled = self.config['feeding']['voice']
+        self.get_logger().info(f"Voice control enabled: {self.voice_enabled}")
+        
+        # Voice command queue system
+        self.voice_command_queue = deque(maxlen=10)
+        self.current_command = None
         
         # SAM2 configuration
         self.sam2_base_path = '/home/mcrr-lab/Grounded-SAM-2'
@@ -79,12 +96,25 @@ class PerceptionNode(Node):
         self.color_sub = self.create_subscription(
             Image, '/camera/camera/color/image_raw', self.color_callback, 10)
         
+        # subscribe to voice commands (only if voice is enabled)
+        if self.voice_enabled:
+            self.voice_command_sub = self.create_subscription(
+                String, '/voice_commands', self.voice_command_callback, 10
+            )
+        
         # for Kinova-mounted arm: /camera/color/image_raw /camera/depth_registered/image_rect
         
         self.depth_sub = self.create_subscription(
             Image, '/camera/camera/aligned_depth_to_color/image_raw', self.depth_callback, 10)
         self.camera_info_sub = self.create_subscription(
             CameraInfo, '/camera/camera/color/camera_info', self.camera_info_callback, 10)
+        
+        # to make sure retries use the same prompt as before
+        self.retry_sub = self.create_subscription(
+            Bool, '/retry', self.retry_callback, 10
+        )
+        self.previous_prompt = None
+        self.retry = False
         
         # Create service
         self.process_service = self.create_service(
@@ -98,14 +128,23 @@ class PerceptionNode(Node):
         self.food_pose_pub = self.create_publisher(
             PoseStamped, '/food_pose_base_link', 10)
         
-        # publisher for grip value
+        # publisher for grip valueeight
         self.grip_val_pub = self.create_publisher(
             Float64, '/grip_value',10)
         
         self.food_height_pub = self.create_publisher(
             Float64, '/food_height', 10
         )
+
+
+        self.single_bite_pub = self.create_publisher(
+            Bool, '/single_bite', 10
+        )
         
+        self.drink_request_pub = self.create_publisher(
+            Bool, '/drink_request', 10
+        )
+
         # Initialize models
         self.setup_models()
         
@@ -119,6 +158,60 @@ class PerceptionNode(Node):
         
     def camera_info_callback(self, msg):
         self.camera_info = msg
+
+    def retry_callback(self, msg):
+        self.retry = msg.data
+        self.get_logger().info(f"Retry status received: {self.retry}")
+
+    def voice_command_callback(self, msg):
+        """Add voice commands to the queue"""
+        if not self.voice_enabled:
+            return
+            
+        # split the commands up by comma
+        commands = [cmd.strip() for cmd in msg.data.split(',')]
+
+        for command in commands:
+            if command != 'clear':
+                # Add to queue (deque automatically handles maxlen=3)
+                self.voice_command_queue.append(command)
+                self.get_logger().info(f"Added voice command to queue: '{command}' "
+                                     f"(Queue size: {len(self.voice_command_queue)})")
+            else:
+                self.voice_command_queue.clear()
+                self.get_logger().info("Voice command queue cleared!")
+            
+    
+    def get_voice_command(self):
+        """Get the next command from queue or return None if empty"""
+        if self.voice_enabled and len(self.voice_command_queue) > 0:
+            command = self.voice_command_queue.popleft()
+
+            if command == "drink":
+                self.drink_request_pub.publish(Bool(data=True))
+                self.get_logger().info("Drink requested! Sending to orchestrator")
+            else:
+                self.drink_request_pub.publish(Bool(data=False))
+
+            
+            self.get_logger().info(f"Processing voice command: '{command}' "
+                                 f"(Remaining in queue: {len(self.voice_command_queue)})")
+            return command
+        return None
+    
+    # def check_for_new_voice_command(self):
+    #     """Check if a new voice command arrived during processing"""
+    #     if not self.voice_enabled:
+    #         return None
+            
+    #     # Check if queue has commands and current command is different
+    #     if len(self.voice_command_queue) > 0:
+    #         # If we have a newer command, use it instead
+    #         new_command = self.voice_command_queue.popleft()
+    #         self.get_logger().info(f"Interrupting with new voice command: '{new_command}' "
+    #                              f"(Remaining in queue: {len(self.voice_command_queue)})")
+    #         return new_command
+    #     return None
 
     def setup_models(self):
         # Setup DINOX
@@ -310,15 +403,15 @@ class PerceptionNode(Node):
         pos = pose_stamped.pose.position
         ori = pose_stamped.pose.orientation
         
-        self.get_logger().info(f"Food pose relative to base:")
-        self.get_logger().info(f"  Position: x={pos.x:.3f}, y={pos.y:.3f}, z={pos.z:.3f}")
-        self.get_logger().info(f"  Orientation: x={ori.x:.3f}, y={ori.y:.3f}, z={ori.z:.3f}, w={ori.w:.3f}")
+        # self.get_logger().info(f"Food pose relative to base:")
+        # self.get_logger().info(f"  Position: x={pos.x:.3f}, y={pos.y:.3f}, z={pos.z:.3f}")
+        # self.get_logger().info(f"  Orientation: x={ori.x:.3f}, y={ori.y:.3f}, z={ori.z:.3f}, w={ori.w:.3f}")
         
         # Convert quaternion to Euler angles for easier understanding
         from tf_transformations import euler_from_quaternion
         euler = euler_from_quaternion([ori.x, ori.y, ori.z, ori.w])
         roll, pitch, yaw = euler
-        self.get_logger().info(f"  Euler angles: roll={np.degrees(roll):.1f}°, pitch={np.degrees(pitch):.1f}°, yaw={np.degrees(yaw):.1f}°")
+        # self.get_logger().info(f"  Euler angles: roll={np.degrees(roll):.1f}°, pitch={np.degrees(pitch):.1f}°, yaw={np.degrees(yaw):.1f}°")
 
     def calculate_orientation_from_mask(self, mask):
         """Calculate orientation angle from mask shape using PCA"""
@@ -546,7 +639,7 @@ class PerceptionNode(Node):
                 f"RealSense X: {rs_point[0]:.3f}m",
                 f"RealSense Y: {rs_point[1]:.3f}m", 
                 f"RealSense Z: {rs_point[2]:.3f}m",
-                f"Orientation: {np.degrees(orientation_angle):.1f}°"
+                f"Orientation: {orientation_angle:.1f}°"
             ]
             
             for i, text in enumerate(info_text):
@@ -596,7 +689,7 @@ class PerceptionNode(Node):
 
             # Get grip value and width points
             grip_val, width_p1, width_p2, food_angle, centroid = self.get_food_width(highest_obj['mask'],depth_image, self.single_bite)
-            self.get_logger().info(f'Food Angle: {food_angle} deg')
+            # self.get_logger().info(f'Food Angle: {food_angle} deg')
             grip_msg = Float64()
             grip_msg.data = grip_val
             self.grip_val_pub.publish(grip_msg)
@@ -656,10 +749,11 @@ class PerceptionNode(Node):
             pose_vis = self.draw_pose_visualization(
                 annotated_frame, centroid, rs_point, food_angle, highest_obj['confidence'], width_p1, width_p2)
             
-            # Display result
-            cv2.imshow('Food Detection with Pose', pose_vis)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            # Display result if manual
+            if self.mode == 'manual':
+                cv2.imshow('Food Detection with Pose', pose_vis)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
             
             return True
         except Exception as e:
@@ -688,29 +782,96 @@ class PerceptionNode(Node):
                 text_prompt = "cup ."
                 self.get_logger().info("Using direct cup prompt")
             else:
-                # For food: use existing ChatGPT identification
-                identified_objects = self.identify_with_chatgpt(self.latest_color_image)
-                if not identified_objects:
-                    response.success = False
-                    response.message = "Failed to identify objects"
-                    return response
+                # For food: Check for voice commands first, then fall back to ChatGPT
+                voice_command = self.get_voice_command()
                 
-                self.get_logger().info(f"GPT 4o output: {identified_objects}")
-                selected_item = random.choice(identified_objects)
-                self.get_logger().info(f"Randomly selected: {selected_item}")
+                if voice_command:
+                    # Use voice command
+                    self.get_logger().info(f"Using voice command: '{voice_command}'")
+                    
+                    # Parse voice command for bite information
+                    parts = voice_command.rsplit(' ', 1)
+                    if len(parts) == 2 and parts[1].isdigit():
+                        item_name = parts[0]
+                        bite_number = int(parts[1])
+                    else:
+                        item_name = voice_command
+                        bite_number = 1  # Default to single bite
+                    
+                    # Set single/multi bite based on voice command
+                    self.single_bite = bite_number <= 1
+                    self.single_bite_pub.publish(Bool(data=self.single_bite))
+                    text_prompt = item_name + " ."
 
-                parts = selected_item.rsplit(' ',1)
-                item_name = parts[0]
-                bite_number = int(parts[1])
-
-                # this handles single/multi bite capabilities
-                if bite_number>1:
-                    self.single_bite = False
+                # move to top if retry should take priority over voice commands
+                elif self.retry:
+                    text_prompt = self.previous_prompt
+                    self.get_logger().info(f"Retrying using previous item: {self.previous_prompt}")
+                                    
                 else:
-                    self.single_bite = True
+                    # Fall back to ChatGPT identification
+                    self.get_logger().info("No voice commands in queue, using ChatGPT identification...")
+                    
+                    # # Check for new voice command before calling ChatGPT (I could probably remove this?)
+                    # interrupt_command = self.check_for_new_voice_command()
+                    # if interrupt_command:
+                    #     self.get_logger().info(f"Voice command interrupt: '{interrupt_command}'")
+                        
+                    #     # Parse interrupt command
+                    #     parts = interrupt_command.rsplit(' ', 1)
+                    #     if len(parts) == 2 and parts[1].isdigit():
+                    #         item_name = parts[0]
+                    #         bite_number = int(parts[1])
+                    #     else:
+                    #         item_name = interrupt_command
+                    #         bite_number = 1
+                        
+                    #     self.single_bite = bite_number <= 1
+                    #     text_prompt = item_name + " ."
 
+                
+                        # Use ChatGPT
+                    identified_objects = self.identify_with_chatgpt(self.latest_color_image)
+                    if not identified_objects:
+                        response.success = False
+                        response.message = "Failed to identify objects"
+                        return response
+                    
+                    self.get_logger().info(f"GPT 4o output: {identified_objects}")
+                    
+                    # Check for voice command interrupt after ChatGPT returns
+                    interrupt_command = self.get_voice_command()
+                    if interrupt_command:
+                        self.get_logger().info(f"ChatGPT overwritten with voice command: '{interrupt_command}'")
+                        
+                        # Parse final interrupt command
+                        parts = interrupt_command.rsplit(' ', 1)
+                        if len(parts) == 2 and parts[1].isdigit():
+                            item_name = parts[0]
+                            bite_number = int(parts[1])
+                        else:
+                            item_name = interrupt_command
+                            bite_number = 1
+                        
+                        self.single_bite = bite_number <= 1
+                        self.single_bite_pub.publish(Bool(data=self.single_bite))
 
-                text_prompt = item_name + " ."
+                        text_prompt = item_name + " ."
+                    else:
+                        # Use ChatGPT result
+                        selected_item = random.choice(identified_objects)
+                        self.get_logger().info(f"Randomly selected: {selected_item}")
+                        parts = selected_item.rsplit(' ', 1)
+                        if len(parts) == 2 and parts[1].isdigit():
+                            item_name = parts[0]
+                            bite_number = int(parts[1])
+                        else:
+                            item_name = selected_item
+                            bite_number = 1
+                        # Handle single/multi bite capabilities
+                        self.single_bite = bite_number <= 1
+                        self.single_bite_pub.publish(Bool(data=self.single_bite))
+                        text_prompt = item_name + " ."
 
             # Save temp image
             cv_image = self.bridge.imgmsg_to_cv2(self.latest_color_image, "bgr8")
@@ -718,8 +879,12 @@ class PerceptionNode(Node):
                 temp_path = tmpfile.name
             cv2.imwrite(temp_path, cv_image)
 
+            
+            print(f'THE FINAL PROMPT IS: {text_prompt}')
             # Detect with DINOX
             input_boxes, confidences, class_names, class_ids = self.detect_with_dinox(temp_path, text_prompt)
+
+            self.previous_prompt = text_prompt
 
             if input_boxes is None or len(input_boxes) == 0:
                 os.remove(temp_path)
@@ -808,7 +973,7 @@ class PerceptionNode(Node):
                 self.get_logger().info("Published cup pose to /food_pose_base_link")
 
                 # Publish hardcoded grip value for cup (no width calculation needed)
-                cup_grip_value = 0.58  # Hardcoded grip value for cup
+                cup_grip_value = 0.43  # Hardcoded grip value for cup
                 grip_msg = Float64()
                 grip_msg.data = cup_grip_value
                 self.grip_val_pub.publish(grip_msg)
@@ -825,9 +990,10 @@ class PerceptionNode(Node):
                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
             # Display result
-            cv2.imshow('Cup Detection', vis_image)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            if self.mode == 'manual':
+                cv2.imshow('Cup Detection', vis_image)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
 
             return True
         except Exception as e:
