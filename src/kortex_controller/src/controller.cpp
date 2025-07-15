@@ -94,37 +94,37 @@ Controller::Controller() : Node("controller")
     }
 
     // Create services
-    RCLCPP_INFO(this->get_logger(), "Creating API clients...");
+    // RCLCPP_INFO(this->get_logger(), "Creating API clients...");
     mBase = new k_api::Base::BaseClient(m_tcp_router);
-    RCLCPP_INFO(this->get_logger(), "BaseClient created");
+    // RCLCPP_INFO(this->get_logger(), "BaseClient created");
     
     mBaseCyclic = new k_api::BaseCyclic::BaseCyclicClient(m_tcp_router);
-    RCLCPP_INFO(this->get_logger(), "BaseCyclicClient created");
+    // RCLCPP_INFO(this->get_logger(), "BaseCyclicClient created");
     
     mActuatorConfig = new k_api::ActuatorConfig::ActuatorConfigClient(m_tcp_router);
-    RCLCPP_INFO(this->get_logger(), "ActuatorConfigClient created");
+    // RCLCPP_INFO(this->get_logger(), "ActuatorConfigClient created");
     
     mServoingMode = k_api::Base::ServoingModeInformation();
     mControlModeMessage = k_api::ActuatorConfig::ControlModeInformation();
 
     // Test basic API calls before proceeding
-    RCLCPP_INFO(this->get_logger(), "Testing basic API calls...");
-    try {
-        RCLCPP_INFO(this->get_logger(), "Testing GetActuatorCount...");
-        auto count = mBase->GetActuatorCount();
-        RCLCPP_INFO(this->get_logger(), "Actuator count: %d", count.count());
+    // RCLCPP_INFO(this->get_logger(), "Testing basic API calls...");
+    // try {
+    //     RCLCPP_INFO(this->get_logger(), "Testing GetActuatorCount...");
+    //     auto count = mBase->GetActuatorCount();
+    //     RCLCPP_INFO(this->get_logger(), "Actuator count: %d", count.count());
         
-        RCLCPP_INFO(this->get_logger(), "Testing RefreshFeedback...");
-        auto feedback = mBaseCyclic->RefreshFeedback();
-        RCLCPP_INFO(this->get_logger(), "RefreshFeedback successful");
+    //     RCLCPP_INFO(this->get_logger(), "Testing RefreshFeedback...");
+    //     auto feedback = mBaseCyclic->RefreshFeedback();
+    //     RCLCPP_INFO(this->get_logger(), "RefreshFeedback successful");
         
-    } catch (k_api::KDetailedException& ex) {
-        RCLCPP_ERROR(this->get_logger(), "API test failed: %s", ex.what());
-        RCLCPP_ERROR(this->get_logger(), "Error sub-code: %s", 
-            k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
-    } catch (...) {
-        RCLCPP_ERROR(this->get_logger(), "Unknown error during API test");
-    }
+    // } catch (k_api::KDetailedException& ex) {
+    //     RCLCPP_ERROR(this->get_logger(), "API test failed: %s", ex.what());
+    //     RCLCPP_ERROR(this->get_logger(), "Error sub-code: %s", 
+    //         k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
+    // } catch (...) {
+    //     RCLCPP_ERROR(this->get_logger(), "Unknown error during API test");
+    // }
 
     // Clearing faults
     RCLCPP_INFO(this->get_logger(), "Clearing faults...");
@@ -139,18 +139,18 @@ Controller::Controller() : Node("controller")
     }
 
     // Initialize ROS2 publishers
-    RCLCPP_INFO(this->get_logger(), "Creating publishers...");
+    // RCLCPP_INFO(this->get_logger(), "Creating publishers...");
     mJointStatePub = this->create_publisher<sensor_msgs::msg::JointState>("/my_gen3/robot_joint_states", 10);
     mCartesianStatePub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/my_gen3/robot_cartesian_state", 10);
-    RCLCPP_INFO(this->get_logger(), "Publishers created");
+    // RCLCPP_INFO(this->get_logger(), "Publishers created");
     
     // Initialize ROS2 subscribers
-    RCLCPP_INFO(this->get_logger(), "Creating subscribers...");
+    // RCLCPP_INFO(this->get_logger(), "Creating subscribers...");
     mTareFTSensorSub = this->create_subscription<std_msgs::msg::Bool>(
         "/my_gen3/tare_ft_sensor", 10, std::bind(&Controller::tareFTSensorCallback, this, _1));
     mEStopSub = this->create_subscription<std_msgs::msg::Bool>(
         "/my_gen3/estop", 10, std::bind(&Controller::eStopCallback, this, _1));
-    RCLCPP_INFO(this->get_logger(), "Subscribers created");
+    // RCLCPP_INFO(this->get_logger(), "Subscribers created");
     
     // Initialize ROS2 services
     RCLCPP_INFO(this->get_logger(), "Creating services...");
@@ -169,12 +169,12 @@ Controller::Controller() : Node("controller")
     RCLCPP_INFO(this->get_logger(), "Services created");
 
     // Initialize force/torque sensor variables
-    RCLCPP_INFO(this->get_logger(), "Initializing F/T sensor variables...");
+    // RCLCPP_INFO(this->get_logger(), "Initializing F/T sensor variables...");
     mZeroFTSensorValues = std::vector<double>(6, 0.0);  // Changed back to 6
     mFTSensorValues = std::vector<double>(6, 0.0);      // Changed back to 6
     mForceThreshold = std::vector<double>(6, 1000.0);   // Changed back to 6
     mWatchdogActive = true;
-    RCLCPP_INFO(this->get_logger(), "F/T sensor variables initialized");
+    // RCLCPP_INFO(this->get_logger(), "F/T sensor variables initialized");
 
     // Test publishState manually once before starting timer
     RCLCPP_INFO(this->get_logger(), "Testing publishState manually...");

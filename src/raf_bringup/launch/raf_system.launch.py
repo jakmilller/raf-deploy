@@ -75,8 +75,8 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         arguments=[
-            '-0.0173',  # x offset (all offsets calculated from mounted RealSense)
-            '-0.006',    # y offset
+            '-0.03',  # x offset (all offsets calculated from mounted RealSense)
+            '0.013',    # y offset
             '0.0334',   # z offset
             '0.0',    # roll
             '0.0',    # pitch

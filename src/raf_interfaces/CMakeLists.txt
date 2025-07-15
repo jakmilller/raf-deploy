@@ -27,6 +27,7 @@ set(srv_files
   "srv/SetJointVelocity.srv"
   "srv/SetJointWaypoints.srv" 
   "srv/SetTwist.srv"
+  "srv/ProcessImage.srv"
 )
 
 # Generate messages and services

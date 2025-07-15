@@ -1,0 +1,27 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: ""
+    relative_path: /home/mcrr-lab/gen3_7dof_robotiq_2f_140.urdf
+  srdf:
+    relative_path: config/kinova.srdf
+  package_settings:
+    author_name: Jacob Miller
+    author_email: jxm1536@case.edu
+    generated_timestamp: 1750365859
+  control_xacro:
+    command:
+      - position
+      - velocity
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+      - velocity
+    state:
+      - position
+      - velocity
