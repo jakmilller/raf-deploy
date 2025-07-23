@@ -78,6 +78,8 @@ install(DIRECTORY launch
 install(PROGRAMS
   scripts/robot_controller_ros2.py
   scripts/orchestrator.py
+  scripts/face_detection.py
+  scripts/visual_servoing.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

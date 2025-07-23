@@ -2,7 +2,7 @@ import rclpy
 import random
 import rclpy.duration
 from rclpy.node import Node
-from sensor_msgs.msg import Image, CameraInfo
+from sensor_msgs.msg import Image, CameraInfo, CompressedImage
 from std_srvs.srv import Trigger
 from cv_bridge import CvBridge
 from sklearn.neighbors import NearestNeighbors
@@ -128,7 +128,7 @@ class PerceptionNode(Node):
         self.food_pose_pub = self.create_publisher(
             PoseStamped, '/food_pose_base_link', 10)
         
-        # publisher for grip valueeight
+        # publisher for grip value
         self.grip_val_pub = self.create_publisher(
             Float64, '/grip_value',10)
         
@@ -143,6 +143,23 @@ class PerceptionNode(Node):
         
         self.drink_request_pub = self.create_publisher(
             Bool, '/drink_request', 10
+        )
+
+        # publishers for UI
+        self.current_item_pub = self.create_publisher(
+            String, '/currently_serving', 10
+        )
+
+        self.voice_command_queue_pub = self.create_publisher(
+            String, '/command_queue', 10
+        )
+
+        self.segmented_image_pub = self.create_publisher(
+            CompressedImage, '/segmented_image', 10
+        )
+
+        self.processing_locked_pub = self.create_publisher(
+            Bool, '/processing_locked', 10
         )
 
         # Initialize models
@@ -177,15 +194,34 @@ class PerceptionNode(Node):
                 self.voice_command_queue.append(command)
                 self.get_logger().info(f"Added voice command to queue: '{command}' "
                                      f"(Queue size: {len(self.voice_command_queue)})")
+                
+                # Remove trailing numbers from each command before publishing
+                queue_str = ", ".join([cmd.rsplit(' ', 1)[0] if cmd.rsplit(' ', 1)[-1].isdigit() else cmd for cmd in self.voice_command_queue])
+                queue_msg = String()
+                queue_msg.data = queue_str
+                self.voice_command_queue_pub.publish(queue_msg)
+                
             else:
                 self.voice_command_queue.clear()
                 self.get_logger().info("Voice command queue cleared!")
+
+        # Remove trailing numbers from each command before publishing
+        queue_str = ", ".join([cmd.rsplit(' ', 1)[0] if cmd.rsplit(' ', 1)[-1].isdigit() else cmd for cmd in self.voice_command_queue])
+        queue_msg = String()
+        queue_msg.data = queue_str
+        self.voice_command_queue_pub.publish(queue_msg)
+
             
     
     def get_voice_command(self):
         """Get the next command from queue or return None if empty"""
         if self.voice_enabled and len(self.voice_command_queue) > 0:
             command = self.voice_command_queue.popleft()
+
+            queue_str = ", ".join(self.voice_command_queue)
+            queue_msg = String()
+            queue_msg.data = queue_str
+            self.voice_command_queue_pub.publish(queue_msg)
 
             if command == "drink":
                 self.drink_request_pub.publish(Bool(data=True))
@@ -635,19 +671,17 @@ class PerceptionNode(Node):
         # Add text information
         if rs_point is not None:
             info_text = [
-                f"Confidence: {confidence:.2f}",
-                f"RealSense X: {rs_point[0]:.3f}m",
-                f"RealSense Y: {rs_point[1]:.3f}m", 
-                f"RealSense Z: {rs_point[2]:.3f}m",
-                f"Orientation: {orientation_angle:.1f}°"
+                f"Detected Item: {self.current_item.data}",
+                f"Confidence: {confidence:.2f}"
             ]
             
+    
             for i, text in enumerate(info_text):
-                cv2.putText(vis_image, text, (10, 30 + i * 25), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-                cv2.putText(vis_image, text, (10, 30 + i * 25), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
-        
+                cv2.putText(vis_image, text, (10, 40 + i * 40), 
+                            cv2.FONT_HERSHEY_DUPLEX, 0.7, (255, 255, 255), 3, cv2.LINE_AA)
+                cv2.putText(vis_image, text, (10, 40 + i * 40), 
+                            cv2.FONT_HERSHEY_DUPLEX, 0.7, (0, 0, 0), 1, cv2.LINE_AA)
+            
         return vis_image
 
     def get_highest_confidence_object(self, input_boxes, masks, confidences, class_names, class_ids):
@@ -748,6 +782,16 @@ class PerceptionNode(Node):
             # Add pose visualization for highest confidence object
             pose_vis = self.draw_pose_visualization(
                 annotated_frame, centroid, rs_point, food_angle, highest_obj['confidence'], width_p1, width_p2)
+            
+            try:
+                msg = CompressedImage()
+                msg.header.stamp = self.get_clock().now().to_msg()
+                msg.format = "jpeg"
+                msg.data = np.array(cv2.imencode('.jpg', pose_vis)[1]).tobytes()
+                self.segmented_image_pub.publish(msg)
+                self.get_logger().info("Published segmented image visualization")
+            except Exception as e:
+                self.get_logger().error(f"Failed to publish segmented image: {str(e)}")
             
             # Display result if manual
             if self.mode == 'manual':
@@ -873,6 +917,7 @@ class PerceptionNode(Node):
                         self.single_bite_pub.publish(Bool(data=self.single_bite))
                         text_prompt = item_name + " ."
 
+
             # Save temp image
             cv_image = self.bridge.imgmsg_to_cv2(self.latest_color_image, "bgr8")
             with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmpfile:
@@ -881,6 +926,15 @@ class PerceptionNode(Node):
 
             
             print(f'THE FINAL PROMPT IS: {text_prompt}')
+
+            self.current_item = String()
+            self.current_item.data = text_prompt.replace(' .', '')
+            self.current_item_pub.publish(self.current_item)
+
+
+            # too late to turn back for current cycle
+            self.processing_locked_pub.publish(Bool(data=True))
+
             # Detect with DINOX
             input_boxes, confidences, class_names, class_ids = self.detect_with_dinox(temp_path, text_prompt)
 

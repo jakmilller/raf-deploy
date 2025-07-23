@@ -6,6 +6,7 @@ from std_srvs.srv import Trigger
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Float64, String, Bool
 from raf_interfaces.srv import ProcessImage
+from sensor_msgs.msg import CompressedImage
 import cv2
 import copy
 import os
@@ -81,10 +82,21 @@ class RAFOrchestrator(Node):
             Bool, '/retry', 10
         )
 
+        self.processing_locked_pub = self.create_publisher(
+            Bool, '/processing_locked', 10
+        )
+
         # create state publisher
         # valid states: Scanning, Food Acquisition, Bite Transfer, Drink Acquisition, Sipping
         self.robot_state_pub = self.create_publisher(
             String, '/robot_state', 10
+        )
+        self.segmented_image_pub = self.create_publisher(
+            CompressedImage, '/segmented_image', 10
+        )
+
+        self.current_item_pub = self.create_publisher(
+            String, '/currently_serving', 10
         )
 
         # # subscribe to voice commands
@@ -154,6 +166,18 @@ class RAFOrchestrator(Node):
         # Wait for the sound to finish
         while pygame.mixer.music.get_busy():
             time.sleep(0.1)
+
+    def clear_segmented_image(self):
+        """Clear the segmented image display by publishing empty image"""
+        try:
+            msg = CompressedImage()
+            msg.header.stamp = self.get_clock().now().to_msg()
+            msg.format = "jpeg"
+            msg.data = b''  # Empty bytes - this will clear the image
+            self.segmented_image_pub.publish(msg)
+            self.get_logger().info("Published empty image to clear display")
+        except Exception as e:
+            self.get_logger().error(f"Failed to clear segmented image: {str(e)}")
 
     def validate_with_user(self, question):
         """Get user input for manual confirmations"""
@@ -405,6 +429,11 @@ class RAFOrchestrator(Node):
                 # Step 10: Check if food was removed (autonomous or manual)
                 self.get_logger().info("Step 10: Checking if food was removed...")
                 self.wait_for_removal_confirmation()
+                self.clear_segmented_image()
+                self.current_item_pub.publish(String(data=' '))
+
+                self.processing_locked_pub.publish(Bool(data=False))
+
 
                 # ask if they want a drink (manual mode)
                 if self.mode == "manual" and self.validate_with_user('Would you like a drink?'):

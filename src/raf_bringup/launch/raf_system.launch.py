@@ -133,5 +133,5 @@ def generate_launch_description():
         realsense_transform,
         controller_node,
         perception_node,
-        #rviz_node,  # remove for no rviz
+        rviz_node,  # remove for no rviz
     ])
