@@ -94,37 +94,12 @@ Controller::Controller() : Node("controller")
     }
 
     // Create services
-    // RCLCPP_INFO(this->get_logger(), "Creating API clients...");
     mBase = new k_api::Base::BaseClient(m_tcp_router);
-    // RCLCPP_INFO(this->get_logger(), "BaseClient created");
-    
     mBaseCyclic = new k_api::BaseCyclic::BaseCyclicClient(m_tcp_router);
-    // RCLCPP_INFO(this->get_logger(), "BaseCyclicClient created");
-    
     mActuatorConfig = new k_api::ActuatorConfig::ActuatorConfigClient(m_tcp_router);
-    // RCLCPP_INFO(this->get_logger(), "ActuatorConfigClient created");
     
     mServoingMode = k_api::Base::ServoingModeInformation();
     mControlModeMessage = k_api::ActuatorConfig::ControlModeInformation();
-
-    // Test basic API calls before proceeding
-    // RCLCPP_INFO(this->get_logger(), "Testing basic API calls...");
-    // try {
-    //     RCLCPP_INFO(this->get_logger(), "Testing GetActuatorCount...");
-    //     auto count = mBase->GetActuatorCount();
-    //     RCLCPP_INFO(this->get_logger(), "Actuator count: %d", count.count());
-        
-    //     RCLCPP_INFO(this->get_logger(), "Testing RefreshFeedback...");
-    //     auto feedback = mBaseCyclic->RefreshFeedback();
-    //     RCLCPP_INFO(this->get_logger(), "RefreshFeedback successful");
-        
-    // } catch (k_api::KDetailedException& ex) {
-    //     RCLCPP_ERROR(this->get_logger(), "API test failed: %s", ex.what());
-    //     RCLCPP_ERROR(this->get_logger(), "Error sub-code: %s", 
-    //         k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
-    // } catch (...) {
-    //     RCLCPP_ERROR(this->get_logger(), "Unknown error during API test");
-    // }
 
     // Clearing faults
     RCLCPP_INFO(this->get_logger(), "Clearing faults...");
@@ -139,18 +114,14 @@ Controller::Controller() : Node("controller")
     }
 
     // Initialize ROS2 publishers
-    // RCLCPP_INFO(this->get_logger(), "Creating publishers...");
     mJointStatePub = this->create_publisher<sensor_msgs::msg::JointState>("/my_gen3/robot_joint_states", 10);
     mCartesianStatePub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/my_gen3/robot_cartesian_state", 10);
-    // RCLCPP_INFO(this->get_logger(), "Publishers created");
     
     // Initialize ROS2 subscribers
-    // RCLCPP_INFO(this->get_logger(), "Creating subscribers...");
     mTareFTSensorSub = this->create_subscription<std_msgs::msg::Bool>(
         "/my_gen3/tare_ft_sensor", 10, std::bind(&Controller::tareFTSensorCallback, this, _1));
     mEStopSub = this->create_subscription<std_msgs::msg::Bool>(
         "/my_gen3/estop", 10, std::bind(&Controller::eStopCallback, this, _1));
-    // RCLCPP_INFO(this->get_logger(), "Subscribers created");
     
     // Initialize ROS2 services
     RCLCPP_INFO(this->get_logger(), "Creating services...");
@@ -169,12 +140,10 @@ Controller::Controller() : Node("controller")
     RCLCPP_INFO(this->get_logger(), "Services created");
 
     // Initialize force/torque sensor variables
-    // RCLCPP_INFO(this->get_logger(), "Initializing F/T sensor variables...");
-    mZeroFTSensorValues = std::vector<double>(6, 0.0);  // Changed back to 6
-    mFTSensorValues = std::vector<double>(6, 0.0);      // Changed back to 6
-    mForceThreshold = std::vector<double>(6, 1000.0);   // Changed back to 6
+    mZeroFTSensorValues = std::vector<double>(6, 0.0);
+    mFTSensorValues = std::vector<double>(6, 0.0);
+    mForceThreshold = std::vector<double>(6, 1000.0);
     mWatchdogActive = true;
-    // RCLCPP_INFO(this->get_logger(), "F/T sensor variables initialized");
 
     // Test publishState manually once before starting timer
     RCLCPP_INFO(this->get_logger(), "Testing publishState manually...");
@@ -185,7 +154,7 @@ Controller::Controller() : Node("controller")
         // If manual test works, start the timer
         RCLCPP_INFO(this->get_logger(), "Starting state publishing timer...");
         mRobotStateTimer = this->create_wall_timer(
-            std::chrono::milliseconds(100), std::bind(&Controller::publishState, this)); // Increased interval to 100ms for debugging
+            std::chrono::milliseconds(100), std::bind(&Controller::publishState, this));
         RCLCPP_INFO(this->get_logger(), "Timer started");
         
     } catch (...) {
@@ -293,7 +262,6 @@ void Controller::publishState()
         }
 
         RCLCPP_DEBUG(this->get_logger(), "Processing gripper state...");
-        // Read finger state - add error checking
         if (mLastFeedback.has_interconnect() && 
             mLastFeedback.interconnect().has_gripper_feedback() &&
             mLastFeedback.interconnect().gripper_feedback().motor_size() > 0) {
@@ -310,7 +278,6 @@ void Controller::publishState()
         mJointStatePub->publish(joint_state);
 
         RCLCPP_DEBUG(this->get_logger(), "Processing cartesian state...");
-        // Publish cartesian state
         auto cartesian_state = geometry_msgs::msg::PoseStamped();
         cartesian_state.header.stamp = this->now();
         cartesian_state.header.frame_id = "base_link";
@@ -329,7 +296,6 @@ void Controller::publishState()
         mCartesianStatePub->publish(cartesian_state);
 
         RCLCPP_DEBUG(this->get_logger(), "Processing F/T sensor data...");
-        // Update force/torque sensor data
         mFTSensorValues[0] = mLastFeedback.base().tool_external_wrench_force_x();
         mFTSensorValues[1] = mLastFeedback.base().tool_external_wrench_force_y();
         mFTSensorValues[2] = mLastFeedback.base().tool_external_wrench_force_z();
@@ -350,7 +316,6 @@ void Controller::publishState()
         }
 
         RCLCPP_DEBUG(this->get_logger(), "Checking force thresholds...");
-        // Check force thresholds
         if( std::abs(mFTSensorValues[0] - mZeroFTSensorValues[0]) > std::abs(mForceThreshold[0])
             or std::abs(mFTSensorValues[1] - mZeroFTSensorValues[1]) > std::abs(mForceThreshold[1])
             or std::abs(mFTSensorValues[2] - mZeroFTSensorValues[2]) > std::abs(mForceThreshold[2])
@@ -479,17 +444,14 @@ void Controller::setJointVelocity(const std::shared_ptr<raf_interfaces::srv::Set
         auto joint_speed = joint_speeds.add_joint_speeds();
         joint_speed->set_joint_identifier(i);
         joint_speed->set_value(radiansToDegrees(request->command[i]));
-        // Temporarily remove duration - may not be needed in API 2.7
     }
     mBase->SendJointSpeedsCommand(joint_speeds);
 
     int timeout = static_cast<int>(request->timeout * 1000);
     RCLCPP_INFO(this->get_logger(), "Will stop robot after %d ms", timeout);
 
-    // Wait for timeout seconds
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
     
-    // Stop the robot
     RCLCPP_INFO(this->get_logger(), "Stopping the robot");
     mBase->Stop();
 
@@ -513,7 +475,6 @@ void Controller::setJointWaypoints(const std::shared_ptr<raf_interfaces::srv::Se
             k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
     }
 
-    // Create the trajectory 
     k_api::Base::WaypointList wpts = k_api::Base::WaypointList();
 
     const int degreesOfFreedom = 7;
@@ -537,7 +498,6 @@ void Controller::setJointWaypoints(const std::shared_ptr<raf_interfaces::srv::Se
         RCLCPP_INFO(this->get_logger(), "Waypoint %zu created", index);     
     }
 
-    // Connect to notification action topic
     std::promise<k_api::Base::ActionEvent> finish_promise_cart;
     auto finish_future_cart = finish_promise_cart.get_future();
     auto promise_notification_handle_cart = mBase->OnNotificationActionTopic( create_event_listener_by_promise(finish_promise_cart),
@@ -546,7 +506,6 @@ void Controller::setJointWaypoints(const std::shared_ptr<raf_interfaces::srv::Se
     k_api::Base::WaypointValidationReport result;
     try
     {
-        // Verify validity of waypoints
         auto validationResult = mBase->ValidateWaypointList(wpts);
         result = validationResult;
     }
@@ -567,13 +526,10 @@ void Controller::setJointWaypoints(const std::shared_ptr<raf_interfaces::srv::Se
         return;
     }
     
-    // Trajectory error report always exists and we need to make sure no elements are found in order to validate the trajectory
     if(result.trajectory_error_report().trajectory_error_elements_size() == 0)
     {    
-        // Execute action
         try
         {
-            // Move arm with waypoints list
             RCLCPP_INFO(this->get_logger(), "Moving the arm creating a trajectory of %zu angular waypoints", 
                 request->target_waypoints.points.size());
             mBase->ExecuteWaypointTrajectory(wpts);
@@ -595,7 +551,6 @@ void Controller::setJointWaypoints(const std::shared_ptr<raf_interfaces::srv::Se
             return;
         }
         
-        // Wait for future value from promise
         const auto ang_status = finish_future_cart.wait_for(TIMEOUT_DURATION);
 
         mBase->Unsubscribe(promise_notification_handle_cart);
@@ -636,7 +591,6 @@ void Controller::setPose(const std::shared_ptr<raf_interfaces::srv::SetPose::Req
             k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
     }
 
-    // Update force threshold if provided
     if (!request->force_threshold.empty())
     {
         mNewForceThreshold = std::vector<double>(request->force_threshold.begin(), request->force_threshold.end());
@@ -670,7 +624,6 @@ void Controller::setPose(const std::shared_ptr<raf_interfaces::srv::SetPose::Req
     RCLCPP_INFO(this->get_logger(), "Theta Y: %f", pose->theta_y());
     RCLCPP_INFO(this->get_logger(), "Theta Z: %f", pose->theta_z());
 
-    // Connect to notification action topic
     k_api::Base::ActionEvent event = k_api::Base::ActionEvent::UNSPECIFIED_ACTION_EVENT;
     auto reference_notification_handle = mBase->OnNotificationActionTopic(
         create_event_listener_by_ref(event),
@@ -682,7 +635,6 @@ void Controller::setPose(const std::shared_ptr<raf_interfaces::srv::SetPose::Req
 
     RCLCPP_INFO(this->get_logger(), "Waiting for movement to finish ...");
 
-    // Wait for reference value to be set
     const auto timeout = std::chrono::system_clock::now() + TIMEOUT_DURATION;
     while(event == k_api::Base::ActionEvent::UNSPECIFIED_ACTION_EVENT &&
         std::chrono::system_clock::now() < timeout)
@@ -762,14 +714,75 @@ void Controller::setGripper(const std::shared_ptr<raf_interfaces::srv::SetGrippe
     response->message = "Gripper command completed successfully";
 }
 
-void Controller::setTwist(const std::shared_ptr<raf_interfaces::srv::SetTwist::Request> /* request */,
-                         std::shared_ptr<raf_interfaces::srv::SetTwist::Response> response)
+void Controller::setTwist(const std::shared_ptr<raf_interfaces::srv::SetTwist::Request> request,
+                          std::shared_ptr<raf_interfaces::srv::SetTwist::Response> response)
 {
-    RCLCPP_INFO(this->get_logger(), "Received twist command");
-    
-    // This is a placeholder implementation
-    // The original didn't have a full twist implementation either
-    response->success = true;
+    RCLCPP_DEBUG(this->get_logger(), "Received set twist command");
+
+    try
+    {
+        // For continuous control, we must be in SINGLE_LEVEL_SERVOING.
+        // It's more efficient to check the mode and only change it if necessary.
+        auto servoing_mode = mBase->GetServoingMode();
+        if (servoing_mode.servoing_mode() != k_api::Base::SINGLE_LEVEL_SERVOING)
+        {
+            RCLCPP_INFO(this->get_logger(), "Setting servoing mode to SINGLE_LEVEL_SERVOING for twist control.");
+            auto new_servoing_mode = k_api::Base::ServoingModeInformation();
+            new_servoing_mode.set_servoing_mode(k_api::Base::SINGLE_LEVEL_SERVOING);
+            mBase->SetServoingMode(new_servoing_mode);
+        }
+
+        // Create the TwistCommand
+        k_api::Base::TwistCommand twist_command;
+        twist_command.set_reference_frame(k_api::Common::CARTESIAN_REFERENCE_FRAME_TOOL);
+        
+        // A duration of 0 means the command will be active until a new command is sent or a stop is issued.
+        // This is the default behavior and what we want for continuous control.
+
+        // Populate the twist data from the request
+        auto twist = twist_command.mutable_twist();
+        twist->set_linear_x(request->twist.linear.x);
+        twist->set_linear_y(request->twist.linear.y);
+        twist->set_linear_z(request->twist.linear.z);
+        // Kortex API expects angular velocities in degrees/sec, ROS uses rad/sec
+        twist->set_angular_x(radiansToDegrees(request->twist.angular.x));
+        twist->set_angular_y(radiansToDegrees(request->twist.angular.y));
+        twist->set_angular_z(radiansToDegrees(request->twist.angular.z));
+
+        // Send the command to the robot. This command is now continuous.
+        // The robot will continue with this velocity until a new TwistCommand or a Stop command is sent.
+        mBase->SendTwistCommand(twist_command);
+        
+        // The timeout from the request is now ignored in this continuous control mode.
+        // We no longer sleep or stop here. The calling script is responsible for sending 
+        // a zero-twist command to stop the robot.
+        
+        response->success = true;
+        response->message = "Twist command sent successfully for continuous execution.";
+    }
+    catch (k_api::KDetailedException& ex)
+    {
+        RCLCPP_ERROR(this->get_logger(), "Kortex exception: %s. Description: %s", ex.what(), ex.getErrorInfo().getError().error_sub_string().c_str());
+        RCLCPP_ERROR(this->get_logger(), "Error sub-code: %s",
+            k_api::SubErrorCodes_Name(k_api::SubErrorCodes((ex.getErrorInfo().getError().error_sub_code()))).c_str());
+        response->success = false;
+        response->message = "Failed to execute twist command due to Kortex exception.";
+        return;
+    }
+    catch (const std::runtime_error& ex)
+    {
+        RCLCPP_ERROR(this->get_logger(), "Runtime error: %s", ex.what());
+        response->success = false;
+        response->message = "Failed to execute twist command due to runtime error.";
+        return;
+    }
+    catch (...)
+    {
+        RCLCPP_ERROR(this->get_logger(), "An unknown error occurred");
+        response->success = false;
+        response->message = "Failed to execute twist command due to an unknown error.";
+        return;
+    }
 }
 
 int main(int argc, char * argv[]) 

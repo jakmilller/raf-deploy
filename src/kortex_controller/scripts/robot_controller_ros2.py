@@ -8,8 +8,8 @@ import asyncio
 from typing import List
 
 # Import custom interfaces
-from raf_interfaces.srv import SetJointAngles, SetPose, SetGripper, SetJointVelocity, SetJointWaypoints
-from geometry_msgs.msg import Pose
+from raf_interfaces.srv import SetJointAngles, SetPose, SetGripper, SetJointVelocity, SetJointWaypoints, SetTwist
+from geometry_msgs.msg import Pose, Twist
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 class KinovaRobotControllerROS2(Node):
@@ -35,6 +35,7 @@ class KinovaRobotControllerROS2(Node):
         self.set_pose_client = self.create_client(SetPose, '/my_gen3/set_pose')
         self.set_gripper_client = self.create_client(SetGripper, '/my_gen3/set_gripper')
         self.set_joint_waypoints_client = self.create_client(SetJointWaypoints, '/my_gen3/set_joint_waypoints')
+        self.set_twist_client = self.create_client(SetTwist, '/my_gen3/set_twist')
         
         # Wait for services to be available
         self.wait_for_services()
@@ -48,7 +49,8 @@ class KinovaRobotControllerROS2(Node):
             (self.set_joint_velocity_client, '/my_gen3/set_joint_velocity'),
             (self.set_pose_client, '/my_gen3/set_pose'),
             (self.set_gripper_client, '/my_gen3/set_gripper'),
-            (self.set_joint_waypoints_client, '/my_gen3/set_joint_waypoints')
+            (self.set_joint_waypoints_client, '/my_gen3/set_joint_waypoints'),
+            (self.set_twist_client, '/my_gen3/set_twist') 
         ]
 
         for client, service_name in services:
@@ -179,5 +181,19 @@ class KinovaRobotControllerROS2(Node):
         response = await self.call_service_async(self.set_gripper_client, request)
         if response:
             self.get_logger().info(f"Gripper response: {response.success}")
+            return response.success
+        return False
+    
+    async def set_twist(self, twist: Twist, timeout: float):
+        """Set cartesian twist"""
+        self.get_logger().info(f"Calling set_twist with timeout: {timeout}")
+        
+        request = SetTwist.Request()
+        request.twist = twist
+        request.timeout = timeout
+        
+        response = await self.call_service_async(self.set_twist_client, request)
+        if response:
+            self.get_logger().info(f"Twist response: {response.success}, {response.message}")
             return response.success
         return False
