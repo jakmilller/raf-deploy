@@ -126,22 +126,12 @@ class VisualServoingRobot(Node):
             return
 
         try:
-            stamped_vector = Vector3Stamped()
-            stamped_vector.header.stamp = rclpy.time.Time().to_msg()
-            stamped_vector.header.frame_id = 'realsense_link' 
-            stamped_vector.vector = vector_msg
-            
-            # Look up the transform from the camera link to the end-effector link
-            transformed_vector = self.tf_buffer.transform(
-                stamped_vector,
-                'end_effector_link',
-                timeout=rclpy.duration.Duration(seconds=0.5)
-            )
+            vector = vector_msg
             
             twist = Twist()
-            twist.linear.x = self.gain_planar * transformed_vector.vector.x
-            twist.linear.y = self.gain_planar * transformed_vector.vector.y
-            twist.linear.z = self.gain_depth * transformed_vector.vector.z
+            twist.linear.x = self.gain_planar * vector.x
+            twist.linear.y = self.gain_planar * vector.y
+            twist.linear.z = self.gain_depth * vector.z
             twist.angular.x = 0.0
             twist.angular.y = 0.0
             twist.angular.z = 0.0
@@ -159,7 +149,7 @@ class VisualServoingRobot(Node):
             # Asynchronously call the service and wait for the result.
             await self.set_twist_client.call_async(request)
             
-            self.publish_base_vector_marker(transformed_vector)
+            #self.publish_base_vector_marker(transformed_vector)
             
             self.get_logger().info(f"Called SetTwist service: linear=({twist.linear.x:.3f}, {twist.linear.y:.3f}, {twist.linear.z:.3f})")
             

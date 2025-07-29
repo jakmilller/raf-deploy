@@ -2,6 +2,12 @@
 feeding:
   mode: "autonomous"  # need to add autonmous mode\
   voice: True
+
+  # for moving to the mouth via visual servoing
+  face_detection:
+    enabled: True
+    gain_planar: 0.25
+    gain_depth: 0.25
   
   # paths for audio cues
   power_on: "/home/mcrr-lab/raf-deploy/utils/sounds/power_on.mp3"

@@ -11,8 +11,10 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 from visualization_msgs.msg import Marker, MarkerArray
-from geometry_msgs.msg import Point, Vector3
+from geometry_msgs.msg import Point, Vector3, PointStamped
 from std_msgs.msg import Float64MultiArray
+import tf2_ros
+import tf2_geometry_msgs
 
 class FaceDetectionNode(Node):
     def __init__(self):
@@ -22,15 +24,17 @@ class FaceDetectionNode(Node):
         self.latest_color_image = None
         self.latest_depth_image = None
         
+        # TF2 for coordinate transformations
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
+        
         # Camera parameters
         self.camera_info = None
         self.fx = 615.0  # Default values, will be updated
         self.fy = 615.0
         self.cx = 320.0
         self.cy = 240.0
-        
-        # Target parameters
-        self.target_depth = 0.22  # Target depth in meters
+        self.camera_frame_id = 'realsense_link'
         
         # Initialize Mediapipe FaceLandmarker
         base_options = python.BaseOptions(model_asset_path='face_landmarker_v2_with_blendshapes.task')
@@ -91,6 +95,9 @@ class FaceDetectionNode(Node):
             10
         )
         
+        # Publisher for finger midpoint marker
+        self.midpoint_pub = self.create_publisher(Marker, 'finger_midpoint_marker', 10)
+        
         # Timer for processing
         self.timer = self.create_timer(0.1, self.process_frame)
         
@@ -142,67 +149,120 @@ class FaceDetectionNode(Node):
         
         return Point(x=x, y=y, z=z)
 
+    def get_finger_midpoint_in_end_effector_frame(self):
+        """Get the finger midpoint position in the end effector frame"""
+        try:
+            # Get finger pad positions in the end-effector frame
+            right_finger_transform = self.tf_buffer.lookup_transform(
+                'end_effector_link', 'right_inner_finger_pad', rclpy.time.Time())
+            left_finger_transform = self.tf_buffer.lookup_transform(
+                'end_effector_link', 'left_inner_finger_pad', rclpy.time.Time())
+                
+            # Calculate midpoint of finger pads in the end-effector frame
+            right_pos = right_finger_transform.transform.translation
+            left_pos = left_finger_transform.transform.translation
+            finger_midpoint = Point()
+            finger_midpoint.x = (right_pos.x + left_pos.x) / 2.0
+            finger_midpoint.y = (right_pos.y + left_pos.y) / 2.0
+            finger_midpoint.z = (right_pos.z + left_pos.z) / 2.0
+            # Add half the 2f 140 finger pad length to the z coordinate
+            finger_midpoint.z += 0.019  # Adjust based on your gripper's finger length
+            
+            return finger_midpoint
+            
+        except Exception as e:
+            self.get_logger().warn(f"Could not get finger midpoint: {e}", throttle_duration_sec=2.0)
+            return None
+
+    def transform_mouth_to_end_effector_frame(self, mouth_pixel_x, mouth_pixel_y, depth):
+        """Transform mouth position from camera frame to end effector frame"""
+        # Project pixel to 3D point in camera frame
+        mouth_z = depth
+        mouth_x = (mouth_pixel_x - self.cx) * depth / self.fx
+        mouth_y = (mouth_pixel_y - self.cy) * depth / self.fy
+
+        # Create a stamped point for transformation
+        mouth_stamped = PointStamped()
+        mouth_stamped.header.stamp = self.get_clock().now().to_msg()
+        mouth_stamped.header.frame_id = self.camera_frame_id
+        mouth_stamped.point.x = mouth_x
+        mouth_stamped.point.y = mouth_y
+        mouth_stamped.point.z = mouth_z
+
+        try:
+            # Transform mouth point to the end-effector frame
+            mouth_in_effector_frame = self.tf_buffer.transform(
+                mouth_stamped, 'end_effector_link', timeout=rclpy.duration.Duration(seconds=0.5))
+            return mouth_in_effector_frame.point
+        except Exception as e:
+            self.get_logger().warn(f"Could not transform mouth to end effector frame: {e}", throttle_duration_sec=2.0)
+            return None
+
     def publish_visualization_markers(self, mouth_center_x, mouth_center_y, depth_value):
         """Create and publish visualization markers for RViz"""
         marker_array = MarkerArray()
         current_time = rclpy.time.Time().to_msg()
         
-        # 1. Current mouth position (red sphere)
-        mouth_point_3d = None
+        # Get finger midpoint in end effector frame
+        finger_midpoint = self.get_finger_midpoint_in_end_effector_frame()
+        if finger_midpoint is None:
+            return None, None
+            
+        # Visualize the finger midpoint in RViz
+        finger_marker = Marker()
+        finger_marker.header.frame_id = "end_effector_link"
+        finger_marker.header.stamp = current_time
+        finger_marker.ns = "finger_midpoint"
+        finger_marker.id = 0
+        finger_marker.type = Marker.SPHERE
+        finger_marker.action = Marker.ADD
+        finger_marker.pose.position = finger_midpoint
+        finger_marker.pose.orientation.w = 1.0
+        finger_marker.scale.x = 0.01  # 1 cm sphere
+        finger_marker.scale.y = 0.01
+        finger_marker.scale.z = 0.01
+        finger_marker.color.a = 1.0  # Opaque
+        finger_marker.color.r = 1.0  # Red
+        finger_marker.color.g = 0.0
+        finger_marker.color.b = 0.0
+        self.midpoint_pub.publish(finger_marker)
+        
+        # Transform mouth position to end effector frame
+        mouth_in_effector = None
         if depth_value > 0:
-            mouth_point_3d = self.pixel_to_3d_point(mouth_center_x, mouth_center_y, depth_value)
-            if mouth_point_3d:
+            mouth_in_effector = self.transform_mouth_to_end_effector_frame(mouth_center_x, mouth_center_y, depth_value)
+            if mouth_in_effector:
+                # 1. Current mouth position (green sphere) in end effector frame
                 mouth_marker = Marker()
-                mouth_marker.header.frame_id = "realsense_link"  # Camera frame
+                mouth_marker.header.frame_id = "end_effector_link"
                 mouth_marker.header.stamp = current_time
                 mouth_marker.ns = "face_detection"
                 mouth_marker.id = 0
                 mouth_marker.type = Marker.SPHERE
                 mouth_marker.action = Marker.ADD
-                mouth_marker.pose.position = mouth_point_3d
+                mouth_marker.pose.position = mouth_in_effector
                 mouth_marker.pose.orientation.w = 1.0
                 mouth_marker.scale.x = 0.03
                 mouth_marker.scale.y = 0.03
                 mouth_marker.scale.z = 0.03
-                mouth_marker.color.r = 1.0
-                mouth_marker.color.g = 0.0
+                mouth_marker.color.r = 0.0
+                mouth_marker.color.g = 1.0
                 mouth_marker.color.b = 0.0
                 mouth_marker.color.a = 1.0
                 marker_array.markers.append(mouth_marker)
 
-        # 2. Desired target position (green sphere at image center)
-        target_point_3d = self.pixel_to_3d_point(534, 434, self.target_depth)
-        if target_point_3d:
-            target_marker = Marker()
-            target_marker.header.frame_id = "realsense_link"
-            target_marker.header.stamp = current_time
-            target_marker.ns = "face_detection"
-            target_marker.id = 1
-            target_marker.type = Marker.SPHERE
-            target_marker.action = Marker.ADD
-            target_marker.pose.position = target_point_3d
-            target_marker.pose.orientation.w = 1.0
-            target_marker.scale.x = 0.025
-            target_marker.scale.y = 0.025
-            target_marker.scale.z = 0.025
-            target_marker.color.r = 0.0
-            target_marker.color.g = 1.0
-            target_marker.color.b = 0.0
-            target_marker.color.a = 1.0
-            marker_array.markers.append(target_marker)
-
         # Publish markers
         self.marker_pub.publish(marker_array)
 
-        # Return the difference as a Vector3 (mouth_point_3d - target_point_3d) and mouth point
-        if depth_value > 0 and mouth_point_3d and target_point_3d:
+        # Calculate the vector from finger midpoint to mouth (both in end effector frame)
+        if mouth_in_effector and finger_midpoint:
             vector = Vector3(
-                x = mouth_point_3d.x - target_point_3d.x,
-                y = mouth_point_3d.y - target_point_3d.y,
-                z = mouth_point_3d.z - target_point_3d.z
+                x = mouth_in_effector.x - finger_midpoint.x,
+                y = mouth_in_effector.y - finger_midpoint.y,
+                z = mouth_in_effector.z - finger_midpoint.z
             )
-            return vector, mouth_point_3d
-        return None, mouth_point_3d
+            return vector, mouth_in_effector
+        return None, mouth_in_effector
 
     def publish_position_vector(self, position_vector):
         """Publish as vec3 and visualize in RViz"""
@@ -213,31 +273,30 @@ class FaceDetectionNode(Node):
             vector_msg.z = position_vector.z
             
             self.visual_servo_vector_pub.publish(vector_msg)
-            self.get_logger().info(f"Published visual servo vector: {vector_msg}")
+            self.get_logger().info(f"Published visual servo vector (finger->mouth): {vector_msg}")
         else:
             self.get_logger().warn("No valid position vector to publish.")
 
-    def publish_vector_marker(self, vector, target_point):
-        """Publish arrow marker from current point to target"""
-        if not vector or not target_point:
+    def publish_vector_marker(self, vector, mouth_point):
+        """Publish arrow marker from finger midpoint to mouth"""
+        if not vector or not mouth_point:
+            return
+        
+        finger_midpoint = self.get_finger_midpoint_in_end_effector_frame()
+        if not finger_midpoint:
             return
         
         marker_array = MarkerArray()
         arrow_marker = Marker()
-        arrow_marker.header.frame_id = "realsense_link"
+        arrow_marker.header.frame_id = "end_effector_link"
         arrow_marker.header.stamp = rclpy.time.Time().to_msg()
         arrow_marker.ns = "position_vector"
         arrow_marker.id = 0
         arrow_marker.type = Marker.ARROW
         arrow_marker.action = Marker.ADD
         
-        # Arrow points FROM current TO target (opposite of your current vector)
-        start_point = Point(
-            x=target_point.x - vector.x,  # Note: subtract because your vector goes current->target
-            y=target_point.y - vector.y,
-            z=target_point.z - vector.z
-        )
-        arrow_marker.points = [start_point, target_point]
+        # Arrow points FROM finger midpoint TO mouth
+        arrow_marker.points = [finger_midpoint, mouth_point]
         
         arrow_marker.scale.x = 0.01  # shaft width
         arrow_marker.scale.y = 0.02  # head width
@@ -288,17 +347,16 @@ class FaceDetectionNode(Node):
             # Get depth and publish visual servo data
             depth_value = self.get_depth_at_pixel(center_x, center_y)
             
-            # Always publish markers (points)
-            position_vector, mouth_point_3d = self.publish_visualization_markers(center_x, center_y, depth_value)
+            # Publish markers and get vector from finger midpoint to mouth
+            position_vector, mouth_point_in_effector = self.publish_visualization_markers(center_x, center_y, depth_value)
 
             # Publish position vector and markers
             servo_data = Float64MultiArray()
             servo_data.data = [float(center_x), float(center_y), depth_value]
             self.visual_servo_pub.publish(servo_data)
-            self.visual_servo_pub.publish(servo_data)
 
             self.publish_position_vector(position_vector)
-            self.publish_vector_marker(position_vector, mouth_point_3d)
+            self.publish_vector_marker(position_vector, mouth_point_in_effector)
 
             # Threshold to determine if the mouth is open
             if mouth_open_distance > 0.03:

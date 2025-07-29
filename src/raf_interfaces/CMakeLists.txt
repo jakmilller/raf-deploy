@@ -28,6 +28,7 @@ set(srv_files
   "srv/SetJointWaypoints.srv" 
   "srv/SetTwist.srv"
   "srv/ProcessImage.srv"
+  "srv/MoveToMouth.srv"
 )
 
 set(action_files
